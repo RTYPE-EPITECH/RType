@@ -33,7 +33,7 @@ public:
 	virtual void				_socket(int socket_family, int socket_type, int protocol);
 	virtual void				_bind(int socket_family, int port);
 	virtual void				_listen(int backlog) const;
-	virtual USocket				*_accept(void);
+	virtual USocket			*_accept(void);
 	virtual void				_select(int sec, int usec);
 	virtual void				_FD_ZERO(std::string mode);
 	virtual void				_FD_SET(std::string mode);
@@ -41,14 +41,16 @@ public:
 	virtual bool				_FD_ISSET(char mode) const;
 	virtual bool				_FD_ISSET(const ISocket *, char mode) const;
 	virtual void				_close(void);
-	virtual char *				_read(size_t size);
-	virtual void				_write(char *, size_t) const;
-	virtual std::string		_readCmd(void);
+	virtual char				*_recv(int);
+	virtual char				*_recv(size_t, int);
+	virtual std::string		_recvString(int);
+	virtual std::string		_recvString(size_t, int);
+	virtual void				_send(const char *, int);
+	virtual void				_send(const char *, size_t, int);
+	virtual void				_send(const std::string, int);
+	virtual void				_send(const std::string, size_t, int);
 
 	virtual int					getfd(void) const;
-
-	virtual USocket				&operator<<(const std::string &);
-	virtual USocket				&operator>>(std::string &);
 
 private:
 	int						_fd;

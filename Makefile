@@ -5,12 +5,12 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Tue Nov 17 18:33:43 2015 Florent BEAURAIN
+## Last update Tue Nov 17 19:14:05 2015 Florent BEAURAIN
 ##
 
 include			source.mk
 
-NAME			=	server
+NAME			=	binServer
 
 OBJS			=	$(SRC:.cpp=.o)
 

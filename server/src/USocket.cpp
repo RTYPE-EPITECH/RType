@@ -188,30 +188,66 @@ void					USocket::_close(void) {
 	return;
 }
 
-std::string			USocket::_recv(int flags) {
-	char				buffer[30721];
-	std::string		msg;
+char					*USocket::_recv(int flags) {
+	char				*msg = new char[30721];
 	ssize_t			ret;
 
-	if ((ret = recv(_fd, buffer, 30720, flags)) <= 0)
-		throw std::runetime_error(strerror(errno));
-	buffer[ret] = '\0';
-	msg.append(buffer);
+	if ((ret = recv(_fd, msg, 30720, flags)) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
 
 	return msg;
 }
 
-std::string			USocket::_recv(ssize_t size, int flags) {
-	char				buffer[size + 1];
-	std::string		msg;
+char					*USocket::_recv(size_t size, int flags) {
+	char				*msg = new char[size + 1];
 	ssize_t			ret;
 
-	if ((ret = recv(_fd, buffer, size, flags)) <= 0)
-		throw std::runetime_error(strerror(errno));
-	buffer[ret] = '\0';
-	msg.append(buffer);
+	if ((ret = recv(_fd, msg, size, flags)) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
 
 	return msg;
+}
+
+std::string			USocket::_recvString(int flags) {
+	char				msg[30721];
+	ssize_t			ret;
+
+	if ((ret = recv(_fd, msg, 30720, flags)) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	return msg;
+}
+
+std::string			USocket::_recvString(size_t size, int flags) {
+	char				msg[size + 1];
+	ssize_t			ret;
+
+	if ((ret = recv(_fd, msg, size, flags)) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	return msg;
+}
+
+void					USocket::_send(const char *msg, int flags) {
+	ssize_t			ret;
+
+	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					USocket::_send(const char *msg, size_t size, int flags) {
+	ssize_t			ret;
+
+	if ((ret = send(_fd, msg, size, flags)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
 }
 
 void					USocket::_send(const std::string msg, int flags) {
@@ -223,55 +259,11 @@ void					USocket::_send(const std::string msg, int flags) {
 	return;
 }
 
-void					USocket::_send(const std::string msg, ssize_t size, int flags) {
+void					USocket::_send(const std::string msg, size_t size, int flags) {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)
-		throw std::runetime_error(strerror(errno));
-
-	return;
-}
-
-std::string			USocket::_read(void) {
-	char				buffer[30721];
-	std::string		msg;
-	ssize_t			ret;
-
-	if ((ret = read(_fd, buffer, 30720)) <= 0)
-		throw std::runetime_error(strerror(errno));
-	buffer[ret] = '\0';
-	msg.append(buffer);
-
-	return msg;
-}
-
-std::string			USocket::_read(size_t size) {
-	char				buffer[size + 1];
-	std::string		msg;
-	ssize_t			ret;
-
-	if ((ret = read(_fd, buffer, size)) <= 0)
-		throw std::runetime_error(strerror(errno));
-	buffer[ret] = '\0';
-	msg.append(buffer);
-
-	return msg;
-}
-
-void					USocket::_write(const std::string msg) {
-	ssize_t			ret;
-
-	if ((ret = write(_fd, msg.c_str(), msg.size()) == -1)
-		throw std::runetime_error(strerror(errno));
-
-	return;
-}
-
-void					USocket::_write(const std::string msg, size_t size) {
-	ssize_t			ret;
-
-	if ((ret = write(_fd, msg.c_str(), size)) == -1)
-		throw std::runetime_error(strerror(errno));
+		throw std::runtime_error(strerror(errno));
 
 	return;
 }

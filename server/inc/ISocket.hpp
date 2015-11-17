@@ -18,9 +18,9 @@ public:
 	virtual ~ISocket(void) {}
 
 	virtual void				_socket(int socket_family, int socket_type, int protocol) = 0;
+	virtual ISocket			*_accept(void) = 0;
 	virtual void				_bind(int socket_family, int port) = 0;
 	virtual void				_listen(int backlog) const = 0;
-	virtual ISocket			*_accept(void) = 0;
 	virtual void				_select(int sec, int usec) = 0;
 	virtual void				_FD_ZERO(std::string mode) = 0;
 	virtual void				_FD_SET(std::string mode) = 0;

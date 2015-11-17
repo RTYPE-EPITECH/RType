@@ -31,9 +31,9 @@ public:
 	virtual ~USocket(void);
 
 	virtual void				_socket(int socket_family, int socket_type, int protocol);
+	virtual USocket			*_accept(void);
 	virtual void				_bind(int socket_family, int port);
 	virtual void				_listen(int backlog) const;
-	virtual USocket			*_accept(void);
 	virtual void				_select(int sec, int usec);
 	virtual void				_FD_ZERO(std::string mode);
 	virtual void				_FD_SET(std::string mode);

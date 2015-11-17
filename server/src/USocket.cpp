@@ -61,6 +61,20 @@ void					USocket::_socket(int socket_family, int socket_type, int protocol) {
 	return;
 }
 
+USocket				*USocket::_accept(void) {
+	int						fd;
+	struct sockaddr_in	s_in;
+	socklen_t            sin_len = sizeof(s_in);
+
+	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sin_len)) == -1)
+		throw std::runtime_error(strerror(errno));
+	if (_fd_max < fd)
+		_fd_max = fd;
+
+	USocket	*newConnection = new USocket(fd);
+	return newConnection;
+}
+
 void					USocket::_bind(int socket_family, int port) {
 	struct sockaddr_in	s_in;
 
@@ -80,19 +94,6 @@ void					USocket::_listen(int backlog) const {
 	return;
 }
 
-USocket				*USocket::_accept(void) {
-	int						fd;
-	struct sockaddr_in	s_in;
-	socklen_t            sin_len = sizeof(s_in);
-
-	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sin_len)) == -1)
-		throw std::runtime_error(strerror(errno));
-	if (_fd_max < fd)
-		_fd_max = fd;
-
-	USocket	*newConnection = new USocket(fd);
-	return newConnection;
-}
 
 void					USocket::_select(int sec, int usec) {
 	struct timeval	tv;

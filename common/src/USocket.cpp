@@ -36,21 +36,21 @@ int					USocket::getfd(void) const {
 ** Méthodes
 */
 
-void					USocket::_socket(const int socket_family, const int socket_type) {
+void					USocket::_socket(const int socketType) {
 	struct protoent		*pe;
 
-	if (socket_type == SOCK_STREAM) {
+	if (socketType == SOCK_STREAM) {
 		if ((pe = getprotobyname("TCP")) == NULL)
 			throw std::runtime_error(strerror(errno));
 	}
-	else if (socket_type == SOCK_DGRAM) {
+	else if (socketType == SOCK_DGRAM) {
 		if ((pe = getprotobyname("UDP")) == NULL)
 			throw std::runtime_error(strerror(errno));
 	}
 	else
 		throw std::runtime_error("[Error] : bad protocol");
 
-	if ((_fd = socket(socket_family, socket_type, pe->p_proto)) == -1) {
+	if ((_fd = socket(AF_INET, socketType, pe->p_proto)) == -1) {
 		throw std::runtime_error(strerror(errno));
 		}
 
@@ -60,7 +60,7 @@ void					USocket::_socket(const int socket_family, const int socket_type) {
 	return;
 }
 
-void					USocket::_connect(const int socketFamily, const char * const ip, const int port) const {
+void					USocket::_connect(const char * const ip, const int port) const {
 	struct sockaddr_in s_in;
 	struct in_addr		addr;
 	struct hostent		*h;
@@ -68,7 +68,7 @@ void					USocket::_connect(const int socketFamily, const char * const ip, const 
 	if ((h = gethostbyname(ip)) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = socketFamily;
+	s_in.sin_family = AF_INET;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
@@ -78,7 +78,7 @@ void					USocket::_connect(const int socketFamily, const char * const ip, const 
 	return;
 }
 
-void					USocket::_connect(const int socketFamily, const std::string &ip, const int port) const {
+void					USocket::_connect(const std::string &ip, const int port) const {
 	struct sockaddr_in s_in;
 	struct in_addr		addr;
 	struct hostent		*h;
@@ -86,7 +86,7 @@ void					USocket::_connect(const int socketFamily, const std::string &ip, const 
 	if ((h = gethostbyname(ip.c_str())) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = socketFamily;
+	s_in.sin_family = AF_INET;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
@@ -110,10 +110,10 @@ USocket				*USocket::_accept(void) {
 	return newConnection;
 }
 
-void					USocket::_bind(const int socketFamily, const int port) const {
+void					USocket::_bind(const int port) const {
 	struct sockaddr_in	s_in;
 
-	s_in.sin_family = socketFamily;
+	s_in.sin_family = AF_INET;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(_fd, reinterpret_cast<const struct sockaddr *>(&s_in), sizeof(s_in)) == -1)

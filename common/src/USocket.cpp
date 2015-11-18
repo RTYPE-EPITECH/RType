@@ -111,7 +111,6 @@ void					USocket::_listen(const int backlog) const {
 	return;
 }
 
-
 void					USocket::_select(const int sec, const int usec) {
 	struct timeval	tv;
 

@@ -19,6 +19,7 @@ public:
 
 	virtual void				_socket(const int socket_family, const int socket_type) = 0;
 	virtual void				_connect(const char * const ip, const int port, const int adressFamily) const = 0;
+	virtual void				_connect(const std::string &ip, const int port, const int adressFamily) const = 0;
 	virtual ISocket			*_accept(void) = 0;
 	virtual void				_bind(const int socket_family, const int port) const = 0;
 	virtual void				_listen(const int backlog) const = 0;

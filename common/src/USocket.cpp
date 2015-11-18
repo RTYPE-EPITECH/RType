@@ -78,6 +78,24 @@ void					USocket::_connect(const char * const ip, const int port, const int adre
 	return;
 }
 
+void					USocket::_connect(const std::string &ip, const int port, const int adressFamily) const {
+	struct sockaddr_in s_in;
+	struct in_addr		addr;
+	struct hostent		*h;
+
+	if ((h = gethostbyname(ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	s_in.sin_family = adressFamily;
+	s_in.sin_port = htons(port);
+	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (connect(_fd, (struct sockaddr *)&s_in, sizeof(struct sockaddr_in)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
 USocket				*USocket::_accept(void) {
 	int						fd;
 	struct sockaddr_in	s_in;

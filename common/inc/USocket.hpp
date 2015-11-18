@@ -32,6 +32,7 @@ public:
 
 	virtual void				_socket(const int socket_family, const int socket_type);
 	virtual void				_connect(const char * const ip, const int port, const int adressFamily) const;
+	virtual void				_connect(const std::string &ip, const int port, const int adressFamily) const;
 	virtual USocket			*_accept(void);
 	virtual void				_bind(const int socket_family, const int port) const;
 	virtual void				_listen(const int backlog) const;

@@ -60,7 +60,7 @@ void					USocket::_socket(const int socket_family, const int socket_type) {
 	return;
 }
 
-void					USocket::_connect(const char * const ip, const int port, const int adressFamily) const {
+void					USocket::_connect(const int socketFamily, const char * const ip, const int port) const {
 	struct sockaddr_in s_in;
 	struct in_addr		addr;
 	struct hostent		*h;
@@ -68,7 +68,7 @@ void					USocket::_connect(const char * const ip, const int port, const int adre
 	if ((h = gethostbyname(ip)) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = adressFamily;
+	s_in.sin_family = socketFamily;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
@@ -78,7 +78,7 @@ void					USocket::_connect(const char * const ip, const int port, const int adre
 	return;
 }
 
-void					USocket::_connect(const std::string &ip, const int port, const int adressFamily) const {
+void					USocket::_connect(const int socketFamily, const std::string &ip, const int port) const {
 	struct sockaddr_in s_in;
 	struct in_addr		addr;
 	struct hostent		*h;
@@ -86,7 +86,7 @@ void					USocket::_connect(const std::string &ip, const int port, const int adre
 	if ((h = gethostbyname(ip.c_str())) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = adressFamily;
+	s_in.sin_family = socketFamily;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
@@ -110,10 +110,10 @@ USocket				*USocket::_accept(void) {
 	return newConnection;
 }
 
-void					USocket::_bind(const int socket_family, const int port) const {
+void					USocket::_bind(const int socketFamily, const int port) const {
 	struct sockaddr_in	s_in;
 
-	s_in.sin_family = socket_family;
+	s_in.sin_family = socketFamily;
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(_fd, reinterpret_cast<const struct sockaddr *>(&s_in), sizeof(s_in)) == -1)

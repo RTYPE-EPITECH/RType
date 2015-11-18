@@ -31,10 +31,10 @@ public:
 	virtual ~USocket(void);
 
 	virtual void				_socket(const int socket_family, const int socket_type);
-	virtual void				_connect(const char * const ip, const int port, const int adressFamily) const;
-	virtual void				_connect(const std::string &ip, const int port, const int adressFamily) const;
+	virtual void				_connect(const int socketFamily, const char * const ip, const int port) const;
+	virtual void				_connect(const int socketFamily, const std::string &ip, const int port) const;
 	virtual USocket			*_accept(void);
-	virtual void				_bind(const int socket_family, const int port) const;
+	virtual void				_bind(const int socketFamily, const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
 	virtual void				_FD_ZERO(const std::string &mode);

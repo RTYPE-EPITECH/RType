@@ -211,28 +211,6 @@ char					*USocket::_recv(size_t size, int flags) {
 	return msg;
 }
 
-std::string			USocket::_recvString(int flags) {
-	char				msg[30721];
-	ssize_t			ret;
-
-	if ((ret = recv(_fd, msg, 30720, flags)) <= 0)
-		throw std::runtime_error(strerror(errno));
-	msg[ret] = '\0';
-
-	return msg;
-}
-
-std::string			USocket::_recvString(size_t size, int flags) {
-	char				msg[size + 1];
-	ssize_t			ret;
-
-	if ((ret = recv(_fd, msg, size, flags)) <= 0)
-		throw std::runtime_error(strerror(errno));
-	msg[ret] = '\0';
-
-	return msg;
-}
-
 void					USocket::_send(const char *msg, int flags) {
 	ssize_t			ret;
 

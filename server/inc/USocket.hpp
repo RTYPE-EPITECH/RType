@@ -43,8 +43,6 @@ public:
 	virtual void				_close(void);
 	virtual char				*_recv(int);
 	virtual char				*_recv(size_t, int);
-	virtual std::string		_recvString(int);
-	virtual std::string		_recvString(size_t, int);
 	virtual void				_send(const char *, int);
 	virtual void				_send(const char *, size_t, int);
 	virtual void				_send(const std::string, int);

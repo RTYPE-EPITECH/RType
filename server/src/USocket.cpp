@@ -75,7 +75,7 @@ USocket				*USocket::_accept(void) {
 	return newConnection;
 }
 
-void					USocket::_bind(int socket_family, int port) {
+void					USocket::_bind(int socket_family, int port) const {
 	struct sockaddr_in	s_in;
 
 	s_in.sin_family = socket_family;
@@ -182,14 +182,14 @@ bool					USocket::_FD_ISSET(const ISocket *socket, char mode) const {
 	return false;
 }
 
-void					USocket::_close(void) {
+void					USocket::_close(void) const {
 	if (close(_fd) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
-char					*USocket::_recv(int flags) {
+char					*USocket::_recv(int flags) const {
 	char				*msg = new char[30721];
 	ssize_t			ret;
 
@@ -200,7 +200,7 @@ char					*USocket::_recv(int flags) {
 	return msg;
 }
 
-char					*USocket::_recv(size_t size, int flags) {
+char					*USocket::_recv(size_t size, int flags) const {
 	char				*msg = new char[size + 1];
 	ssize_t			ret;
 
@@ -211,7 +211,7 @@ char					*USocket::_recv(size_t size, int flags) {
 	return msg;
 }
 
-void					USocket::_send(const char *msg, int flags) {
+void					USocket::_send(const char *msg, int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
@@ -220,7 +220,7 @@ void					USocket::_send(const char *msg, int flags) {
 	return;
 }
 
-void					USocket::_send(const char *msg, size_t size, int flags) {
+void					USocket::_send(const char *msg, size_t size, int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg, size, flags)) == -1)
@@ -229,7 +229,7 @@ void					USocket::_send(const char *msg, size_t size, int flags) {
 	return;
 }
 
-void					USocket::_send(const std::string msg, int flags) {
+void					USocket::_send(const std::string msg, int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
@@ -238,7 +238,7 @@ void					USocket::_send(const std::string msg, int flags) {
 	return;
 }
 
-void					USocket::_send(const std::string msg, size_t size, int flags) {
+void					USocket::_send(const std::string msg, size_t size, int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)

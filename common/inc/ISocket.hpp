@@ -26,16 +26,16 @@ public:
 	virtual void				_select(const int sec, const int usec) = 0;
 	virtual void				_FD_ZERO(const std::string &mode) = 0;
 	virtual void				_FD_SET(const std::string &mode) = 0;
-	virtual void				_FD_SET(const ISocket * const, const std::string &mode) = 0;
+	virtual void				_FD_SET(const ISocket * const socket, const std::string &mode) = 0;
 	virtual bool				_FD_ISSET(const char mode) const = 0;
-	virtual bool				_FD_ISSET(const ISocket * const, const char mode) const = 0;
+	virtual bool				_FD_ISSET(const ISocket * const socket, const char mode) const = 0;
 	virtual void				_close(void) const = 0;
-	virtual char				*_recv(const int) const = 0;
-	virtual char				*_recv(const size_t, const int) const = 0;
-	virtual void				_send(const char * const, const int) const = 0;
-	virtual void				_send(const char * const, const size_t, const int) const = 0;
-	virtual void				_send(const std::string &, const int) const = 0;
-	virtual void				_send(const std::string &, const size_t, const int) const = 0;
+	virtual char				*_recv(const int flags) const = 0;
+	virtual char				*_recv(const size_t size, const int flags) const = 0;
+	virtual void				_send(const char * const msg, const int flags) const = 0;
+	virtual void				_send(const char * const msg, const size_t size, const int flags) const = 0;
+	virtual void				_send(const std::string &msg, const int flags) const = 0;
+	virtual void				_send(const std::string &msg, const size_t size, const int flags) const = 0;
 
 	virtual int					getfd(void) const = 0;
 };

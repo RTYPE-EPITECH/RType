@@ -8,45 +8,45 @@
 // Last update Mon Oct 26 15:36:22 2015 Florent BEAURAIN
 //
 
-#ifndef						__USOCKET_HPP__
-# define					__USOCKET_HPP__
+#ifndef							__USOCKET_HPP__
+# define							__USOCKET_HPP__
 
-# include					<sys/socket.h>
-# include					<sys/types.h>
-# include					<netinet/in.h>
-# include					<arpa/inet.h>
-# include					<netdb.h>
-# include					<unistd.h>
-# include					<cstdlib>
-# include					<cerrno>
-# include					<cstring>
-# include					<exception>
-# include					<iostream>
-# include					<stdexcept>
-# include					"ISocket.hpp"
+# include						<sys/socket.h>
+# include						<sys/types.h>
+# include						<netinet/in.h>
+# include						<arpa/inet.h>
+# include						<netdb.h>
+# include						<unistd.h>
+# include						<cstdlib>
+# include						<cerrno>
+# include						<cstring>
+# include						<exception>
+# include						<iostream>
+# include						<stdexcept>
+# include						"ISocket.hpp"
 
-class						USocket : public ISocket {
+class								USocket : public ISocket {
 public:
-	USocket(int fd = -1);
+	USocket(const int fd = -1);
 	virtual ~USocket(void);
 
-	virtual void				_socket(int socket_family, int socket_type, int protocol);
+	virtual void				_socket(const int socket_family, const int socket_type, const int protocol);
 	virtual USocket			*_accept(void);
-	virtual void				_bind(int socket_family, int port) const;
-	virtual void				_listen(int backlog) const;
-	virtual void				_select(int sec, int usec);
-	virtual void				_FD_ZERO(std::string mode);
-	virtual void				_FD_SET(std::string mode);
-	virtual void				_FD_SET(const ISocket *, std::string mode);
-	virtual bool				_FD_ISSET(char mode) const;
-	virtual bool				_FD_ISSET(const ISocket *, char mode) const;
+	virtual void				_bind(const int socket_family, const int port) const;
+	virtual void				_listen(const int backlog) const;
+	virtual void				_select(const int sec, const int usec);
+	virtual void				_FD_ZERO(const std::string &mode);
+	virtual void				_FD_SET(const std::string &mode);
+	virtual void				_FD_SET(const ISocket * const, const std::string &mode);
+	virtual bool				_FD_ISSET(const char mode) const;
+	virtual bool				_FD_ISSET(const ISocket * const, const char mode) const;
 	virtual void				_close(void) const;
-	virtual char				*_recv(int) const;
-	virtual char				*_recv(size_t, int) const;
-	virtual void				_send(const char *, int) const;
-	virtual void				_send(const char *, size_t, int) const;
-	virtual void				_send(const std::string, int) const;
-	virtual void				_send(const std::string, size_t, int) const;
+	virtual char				*_recv(const int) const;
+	virtual char				*_recv(const size_t, const int) const;
+	virtual void				_send(const char * const, const int) const;
+	virtual void				_send(const char * const, const size_t, const int) const;
+	virtual void				_send(const std::string &, const int) const;
+	virtual void				_send(const std::string &, const size_t, const int) const;
 
 	virtual int					getfd(void) const;
 

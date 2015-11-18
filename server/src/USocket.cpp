@@ -14,7 +14,7 @@
 ** Constructeurs & Destructeurs
 */
 
-USocket::USocket(int fd) {
+USocket::USocket(const int fd) {
 	_fd = fd;
 	_fd_max = fd;
 	_FD_ZERO("rw");
@@ -36,7 +36,7 @@ int					USocket::getfd(void) const {
 ** Méthodes
 */
 
-void					USocket::_socket(int socket_family, int socket_type, int protocol) {
+void					USocket::_socket(const int socket_family, const int socket_type, const int protocol) {
 	struct protoent		*pe;
 	(void)protocol;
 
@@ -75,7 +75,7 @@ USocket				*USocket::_accept(void) {
 	return newConnection;
 }
 
-void					USocket::_bind(int socket_family, int port) const {
+void					USocket::_bind(const int socket_family, const int port) const {
 	struct sockaddr_in	s_in;
 
 	s_in.sin_family = socket_family;
@@ -87,7 +87,7 @@ void					USocket::_bind(int socket_family, int port) const {
 	return;
 }
 
-void					USocket::_listen(int backlog) const {
+void					USocket::_listen(const int backlog) const {
 	if (listen(_fd, backlog) == -1)
 		throw std::runtime_error(strerror(errno));
 
@@ -95,7 +95,7 @@ void					USocket::_listen(int backlog) const {
 }
 
 
-void					USocket::_select(int sec, int usec) {
+void					USocket::_select(const int sec, const int usec) {
 	struct timeval	tv;
 
   	tv.tv_sec = sec;
@@ -107,7 +107,7 @@ void					USocket::_select(int sec, int usec) {
 	return;
 }
 
-void					USocket::_FD_ZERO(std::string mode) {
+void					USocket::_FD_ZERO(const std::string &mode) {
 	if (mode == "r")
 		FD_ZERO(&_readfds);
 	else if (mode == "w")
@@ -122,7 +122,7 @@ void					USocket::_FD_ZERO(std::string mode) {
 	return;
 }
 
-void					USocket::_FD_SET(std::string mode) {
+void					USocket::_FD_SET(const std::string &mode) {
 	if (mode == "r")
 		FD_SET(_fd, &_readfds);
 	else if (mode == "w")
@@ -137,7 +137,7 @@ void					USocket::_FD_SET(std::string mode) {
 	return;
 }
 
-void					USocket::_FD_SET(const ISocket *socket, std::string mode) {
+void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
 	if (mode == "r")
 		FD_SET(socket->getfd(), &_readfds);
 	else if (mode == "w")
@@ -152,7 +152,7 @@ void					USocket::_FD_SET(const ISocket *socket, std::string mode) {
 	return;
 }
 
-bool					USocket::_FD_ISSET(char mode) const {
+bool					USocket::_FD_ISSET(const char mode) const {
 	if (mode == 'r') {
 			if (FD_ISSET(_fd, &_readfds))
 				return true;
@@ -167,7 +167,7 @@ bool					USocket::_FD_ISSET(char mode) const {
 	return false;
 }
 
-bool					USocket::_FD_ISSET(const ISocket *socket, char mode) const {
+bool					USocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
 	if (mode == 'r') {
 		if (FD_ISSET(socket->getfd(), &_readfds))
 			return true;
@@ -189,7 +189,7 @@ void					USocket::_close(void) const {
 	return;
 }
 
-char					*USocket::_recv(int flags) const {
+char					*USocket::_recv(const int flags) const {
 	char				*msg = new char[30721];
 	ssize_t			ret;
 
@@ -200,7 +200,7 @@ char					*USocket::_recv(int flags) const {
 	return msg;
 }
 
-char					*USocket::_recv(size_t size, int flags) const {
+char					*USocket::_recv(const size_t size, const int flags) const {
 	char				*msg = new char[size + 1];
 	ssize_t			ret;
 
@@ -211,7 +211,7 @@ char					*USocket::_recv(size_t size, int flags) const {
 	return msg;
 }
 
-void					USocket::_send(const char *msg, int flags) const {
+void					USocket::_send(const char * const msg, const int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
@@ -220,7 +220,7 @@ void					USocket::_send(const char *msg, int flags) const {
 	return;
 }
 
-void					USocket::_send(const char *msg, size_t size, int flags) const {
+void					USocket::_send(const char * const msg, const size_t size, const int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg, size, flags)) == -1)
@@ -229,7 +229,7 @@ void					USocket::_send(const char *msg, size_t size, int flags) const {
 	return;
 }
 
-void					USocket::_send(const std::string msg, int flags) const {
+void					USocket::_send(const std::string &msg, const int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
@@ -238,7 +238,7 @@ void					USocket::_send(const std::string msg, int flags) const {
 	return;
 }
 
-void					USocket::_send(const std::string msg, size_t size, int flags) const {
+void					USocket::_send(const std::string &msg, const size_t size, const int flags) const {
 	ssize_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)

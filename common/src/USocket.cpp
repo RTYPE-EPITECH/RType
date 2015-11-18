@@ -36,9 +36,8 @@ int					USocket::getfd(void) const {
 ** Méthodes
 */
 
-void					USocket::_socket(const int socket_family, const int socket_type, const int protocol) {
+void					USocket::_socket(const int socket_family, const int socket_type) {
 	struct protoent		*pe;
-	(void)protocol;
 
 	if (socket_type == SOCK_STREAM) {
 		if ((pe = getprotobyname("TCP")) == NULL)

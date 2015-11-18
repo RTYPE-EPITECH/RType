@@ -30,7 +30,7 @@ public:
 	USocket(const int fd = -1);
 	virtual ~USocket(void);
 
-	virtual void				_socket(const int socket_family, const int socket_type, const int protocol);
+	virtual void				_socket(const int socket_family, const int socket_type);
 	virtual USocket			*_accept(void);
 	virtual void				_bind(const int socket_family, const int port) const;
 	virtual void				_listen(const int backlog) const;

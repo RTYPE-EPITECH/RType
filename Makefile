@@ -5,20 +5,21 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Tue Nov 17 19:14:05 2015 Florent BEAURAIN
+## Last update Wed Nov 18 15:32:58 2015 Florent BEAURAIN
 ##
 
 include			source.mk
 
 NAME			=	binServer
 
-OBJS			=	$(SRC:.cpp=.o)
+OBJS_SERVER		=	$(SERVER:.cpp=.o)
+OBJS_COMMON		=	$(COMMON:.cpp=.o)
 
 CXX			?=	g++
 
 DEBUG			?=	no
 
-CXXFLAGS		+=	-Iserver/inc
+CXXFLAGS		+=	-Iserver/inc -Icommon/inc
 
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded
@@ -32,10 +33,10 @@ endif
 
 all:			$(NAME)
 
-$(NAME):		$(OBJS)
-			$(CXX) -o $(NAME) $(OBJS)
+$(NAME):		$(OBJS_SERVER) $(OBJS_COMMON)
+			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON)
 clean:
-			@rm -vf $(OBJS)
+			@rm -vf $(OBJS_SERVER) $(OBJS_COMMON)
 
 fclean:			clean
 			@rm -vf $(NAME)

@@ -5,10 +5,18 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Tue Nov 17 18:33:27 2015 Florent BEAURAIN
+## Last update Wed Nov 18 15:31:43 2015 Florent BEAURAIN
 ##
 
-DIR			=	server/src/
+## Server sources
 
-SRC			+=	$(DIR)main.cpp
-SRC			+=	$(DIR)USocket.cpp
+DIR_SERVER		=	server/src/
+
+SERVER			+=	$(DIR_SERVER)main.cpp
+
+
+## Common sources
+
+DIR_COMMON		=	common/src/
+
+COMMON			+=	$(DIR_COMMON)USocket.cpp

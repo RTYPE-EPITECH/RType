@@ -17,7 +17,7 @@ class								ISocket {
 public:
 	virtual ~ISocket(void) {}
 
-	virtual void				_socket(const int socket_family, const int socket_type, const int protocol) = 0;
+	virtual void				_socket(const int socket_family, const int socket_type) = 0;
 	virtual ISocket			*_accept(void) = 0;
 	virtual void				_bind(const int socket_family, const int port) const = 0;
 	virtual void				_listen(const int backlog) const = 0;

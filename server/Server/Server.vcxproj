@@ -121,10 +121,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Protocole.cpp" />
     <ClCompile Include="USocket.cpp" />
+    <ClCompile Include="WSocket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ISocket.hpp" />
     <ClInclude Include="Protocole.hpp" />
+    <ClInclude Include="WSocket.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

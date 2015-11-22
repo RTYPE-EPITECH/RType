@@ -21,9 +21,15 @@
     <ClInclude Include="Protocole.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="WSocket.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Protocole.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WSocket.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

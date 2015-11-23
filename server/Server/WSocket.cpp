@@ -8,140 +8,126 @@
 // Last update Mon Nov  2 13:04:11 2015 Florent BEAURAIN
 //
 
-#include		"USocket.hpp"
+#include		"WSocket.hpp"
 
 /*
 ** Constructeurs & Destructeurs
 */
 
-USocket::USocket(const int fd) {
-	_fd = fd;
-	_fd_max = fd;
+WSocket::WSocket(const int fd) {
+	_fd = (SOCKET)fd;
+	_fd_max = (SOCKET)fd;
 	_FD_ZERO("rw");
+	this->wVersionRequested = MAKEWORD(2, 2);
+	if (WSAStartup(this->wVersionRequested, &(this->wsaData)) != 0)
+		throw std::runtime_error("WSAStartup failed");
+	if (LOBYTE(this->wsaData.wVersion) != 2 || HIBYTE(this->wsaData.wVersion) != 2) {
+		throw std::runtime_error("Could not find a usable version of Winsock.dll");
+		WSACleanup();
+	}
+	std::cout << "The Winsock 2.2 dll was found okay" << std::endl;
 }
 
-USocket::~USocket(void) {
+WSocket::~WSocket(void) {
 	_close();
+	WSACleanup();
 }
 
 /*
 ** Getters
 */
 
-int					USocket::getfd(void) const {
-	return _fd;
+int						WSocket::getfd(void) const {
+	return (int)_fd;
 }
 
 /*
 ** Méthodes
 */
 
-void					USocket::_socket(const int socketType) {
-	struct protoent		*pe;
-
-	if (socketType == SOCK_STREAM) {
-		if ((pe = getprotobyname("TCP")) == NULL)
-			throw std::runtime_error(strerror(errno));
-	}
-	else if (socketType == SOCK_DGRAM) {
-		if ((pe = getprotobyname("UDP")) == NULL)
-			throw std::runtime_error(strerror(errno));
-	}
-	else
-		throw std::runtime_error("[Error] : bad protocol");
-
-	if ((_fd = socket(AF_INET, socketType, pe->p_proto)) == -1) {
-		throw std::runtime_error(strerror(errno));
-		}
-
+void					WSocket::_socket(const int socketType) {
+	if ((this->_fd = WSASocketW(AF_INET, socketType, IPPROTO_UDP, NULL, 0, 0)) == INVALID_SOCKET)
+		throw std::runtime_error("WSASocket function failed");
 	_fd_max = _fd;
 	_FD_ZERO("rw");
 
 	return;
 }
 
-void					USocket::_connect(const char * const ip, const int port) const {
-	struct sockaddr_in s_in;
-	struct in_addr		addr;
-	struct hostent		*h;
+void					WSocket::_connect(const char * const ip, const int port) const {
+	sockaddr_in			service;
 
-	if ((h = gethostbyname(ip)) == NULL)
+	service.sin_family = AF_INET;
+	service.sin_addr.s_addr = inet_addr(ip);
+	service.sin_port = htons(port);
+	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
 		throw std::runtime_error(strerror(errno));
-	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = AF_INET;
-	s_in.sin_port = htons(port);
-	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
-
-	if (connect(_fd, (struct sockaddr *)&s_in, sizeof(struct sockaddr_in)) == -1)
-		throw std::runtime_error(strerror(errno));
-
+		WSACleanup();
+	}
 	return;
 }
 
-void					USocket::_connect(const std::string &ip, const int port) const {
-	struct sockaddr_in s_in;
-	struct in_addr		addr;
-	struct hostent		*h;
+void					WSocket::_connect(const std::string &ip, const int port) const {
+	sockaddr_in			service;
 
-	if ((h = gethostbyname(ip.c_str())) == NULL)
+	service.sin_family = AF_INET;
+	service.sin_addr.s_addr = inet_addr(ip.c_str());
+	service.sin_port = htons(port);
+	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
 		throw std::runtime_error(strerror(errno));
-	memcpy(&addr, h->h_addr, sizeof(addr));
-	s_in.sin_family = AF_INET;
-	s_in.sin_port = htons(port);
-	s_in.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
-
-	if (connect(_fd, (struct sockaddr *)&s_in, sizeof(struct sockaddr_in)) == -1)
-		throw std::runtime_error(strerror(errno));
-
+		WSACleanup();
+	}
 	return;
+
 }
 
-USocket				*USocket::_accept(void) {
-	int						fd;
-	struct sockaddr_in	s_in;
-	socklen_t            sin_len = sizeof(s_in);
-
-	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sin_len)) == -1)
-		throw std::runtime_error(strerror(errno));
+WSocket				*WSocket::_accept(void) {
+	SOCKET			fd;
+	sockaddr_in		saClient;
+	int				iClientSize = sizeof(saClient);
+	if ((fd = WSAAccept(this->_fd, (SOCKADDR *)&saClient, &iClientSize, NULL, NULL)) == SOCKET_ERROR)
+		throw std::runtime_error("WSAAccept function failed");
 	if (_fd_max < fd)
 		_fd_max = fd;
 
-	USocket	*newConnection = new USocket(fd);
+	WSocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }
 
-void					USocket::_bind(const int port) const {
-	struct sockaddr_in	s_in;
-
-	s_in.sin_family = AF_INET;
-	s_in.sin_port = htons(port);
-	s_in.sin_addr.s_addr = htons(INADDR_ANY);
-	if (bind(_fd, reinterpret_cast<const struct sockaddr *>(&s_in), sizeof(s_in)) == -1)
-		throw std::runtime_error(strerror(errno));
-
-	return;
-}
-
-void					USocket::_listen(const int backlog) const {
-	if (listen(_fd, backlog) == -1)
-		throw std::runtime_error(strerror(errno));
-
-	return;
-}
-
-void					USocket::_select(const int sec, const int usec) {
-	struct timeval	tv;
-
-  	tv.tv_sec = sec;
-  	tv.tv_usec = usec;
-	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
-		throw std::runtime_error(strerror(errno));
+void					WSocket::_bind(const int port) const {
+	sockaddr_in			service;
+	service.sin_family = AF_INET;
+	service.sin_addr.s_addr = htons(INADDR_ANY);
+	service.sin_port = htons(port);
+	if (bind(this->_fd, (SOCKADDR *)&(service), sizeof(service)) == SOCKET_ERROR) {
+		throw std::runtime_error("bind funtion failed");
+		_close();
+		WSACleanup();
 	}
 
 	return;
 }
 
-void					USocket::_FD_ZERO(const std::string &mode) {
+void					WSocket::_listen(const int backlog) const {
+	if (listen(this->_fd, backlog) == -1)
+		throw std::runtime_error("listen function failed");
+
+	return;
+}
+
+void					WSocket::_select(const int sec, const int usec) {
+	struct timeval	tv;
+
+  	tv.tv_sec = sec;
+  	tv.tv_usec = usec;
+	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
+		throw std::runtime_error("Select function failed");
+	}
+
+	return;
+}
+
+void					WSocket::_FD_ZERO(const std::string &mode) {
 	if (mode == "r")
 		FD_ZERO(&_readfds);
 	else if (mode == "w")
@@ -156,7 +142,7 @@ void					USocket::_FD_ZERO(const std::string &mode) {
 	return;
 }
 
-void					USocket::_FD_SET(const std::string &mode) {
+void					WSocket::_FD_SET(const std::string &mode) {
 	if (mode == "r")
 		FD_SET(_fd, &_readfds);
 	else if (mode == "w")
@@ -171,7 +157,7 @@ void					USocket::_FD_SET(const std::string &mode) {
 	return;
 }
 
-void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
+void					WSocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
 	if (mode == "r")
 		FD_SET(socket->getfd(), &_readfds);
 	else if (mode == "w")
@@ -186,7 +172,7 @@ void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode)
 	return;
 }
 
-bool					USocket::_FD_ISSET(const char mode) const {
+bool					WSocket::_FD_ISSET(const char mode) const {
 	if (mode == 'r') {
 			if (FD_ISSET(_fd, &_readfds))
 				return true;
@@ -201,7 +187,7 @@ bool					USocket::_FD_ISSET(const char mode) const {
 	return false;
 }
 
-bool					USocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
+bool					WSocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
 	if (mode == 'r') {
 		if (FD_ISSET(socket->getfd(), &_readfds))
 			return true;
@@ -216,16 +202,16 @@ bool					USocket::_FD_ISSET(const ISocket * const socket, const char mode) const
 	return false;
 }
 
-void					USocket::_close(void) const {
-	if (close(_fd) == -1)
+void					WSocket::_close(void) const {
+	if (closesocket(_fd) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
-char					*USocket::_recv(const int flags) const {
+char					*WSocket::_recv(const int flags) const {
 	char				*msg = new char[30721];
-	ssize_t			ret;
+	size_t				ret;
 
 	if ((ret = recv(_fd, msg, 30720, flags)) <= 0)
 		throw std::runtime_error(strerror(errno));
@@ -234,9 +220,9 @@ char					*USocket::_recv(const int flags) const {
 	return msg;
 }
 
-char					*USocket::_recv(const size_t size, const int flags) const {
+char					*WSocket::_recv(const size_t size, const int flags) const {
 	char				*msg = new char[size + 1];
-	ssize_t			ret;
+	size_t			ret;
 
 	if ((ret = recv(_fd, msg, size, flags)) <= 0)
 		throw std::runtime_error(strerror(errno));
@@ -245,8 +231,8 @@ char					*USocket::_recv(const size_t size, const int flags) const {
 	return msg;
 }
 
-void					USocket::_send(const char * const msg, const int flags) const {
-	ssize_t			ret;
+void					WSocket::_send(const char * const msg, const int flags) const {
+	size_t			ret;
 
 	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
 		throw std::runtime_error(strerror(errno));
@@ -254,8 +240,8 @@ void					USocket::_send(const char * const msg, const int flags) const {
 	return;
 }
 
-void					USocket::_send(const char * const msg, const size_t size, const int flags) const {
-	ssize_t			ret;
+void					WSocket::_send(const char * const msg, const size_t size, const int flags) const {
+	size_t			ret;
 
 	if ((ret = send(_fd, msg, size, flags)) == -1)
 		throw std::runtime_error(strerror(errno));
@@ -263,8 +249,8 @@ void					USocket::_send(const char * const msg, const size_t size, const int fla
 	return;
 }
 
-void					USocket::_send(const std::string &msg, const int flags) const {
-	ssize_t			ret;
+void					WSocket::_send(const std::string &msg, const int flags) const {
+	size_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
 		throw std::runtime_error(strerror(errno));
@@ -272,8 +258,8 @@ void					USocket::_send(const std::string &msg, const int flags) const {
 	return;
 }
 
-void					USocket::_send(const std::string &msg, const size_t size, const int flags) const {
-	ssize_t			ret;
+void					WSocket::_send(const std::string &msg, const size_t size, const int flags) const {
+	size_t			ret;
 
 	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)
 		throw std::runtime_error(strerror(errno));

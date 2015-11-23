@@ -120,7 +120,6 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Protocole.cpp" />
-    <ClCompile Include="USocket.cpp" />
     <ClCompile Include="WSocket.cpp" />
   </ItemGroup>
   <ItemGroup>

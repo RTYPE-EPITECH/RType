@@ -11,14 +11,21 @@
 #ifndef							__WSOCKET_HPP__
 # define						__WSOCKET_HPP__
 
-# include						<sys/types.h>
-# include						<cstdlib>
-# include						<cerrno>
-# include						<cstring>
+# define						_WINSOCK_DEPRECATED_NO_WARNINGS
+# define						_CRT_SECURE_NO_WARNINGS
+# define						SEND_COUNT 10
+
+# include						<WinSock2.h>
+# include						<Windows.h>
+# include						<winsock.h>
+# include						<WS2tcpip.h>
+# include						<stdio.h>
 # include						<exception>
 # include						<iostream>
 # include						<stdexcept>
 # include						"ISocket.hpp"
+
+# pragma comment(lib, "ws2_32.lib")
 
 class								WSocket : public ISocket {
 public:
@@ -28,7 +35,7 @@ public:
 	virtual void				_socket(const int socketType);
 	virtual void				_connect(const char * const ip, const int port) const;
 	virtual void				_connect(const std::string &ip, const int port) const;
-	virtual WSocket			*_accept(void);
+	virtual WSocket				*_accept(void);
 	virtual void				_bind(const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
@@ -48,10 +55,15 @@ public:
 	virtual int					getfd(void) const;
 
 private:
-	int						_fd;
-	int						_fd_max;
-	fd_set					_readfds;
-	fd_set					_writefds;
+	WORD						wVersionRequested;
+	WSADATA						wsaData;
+	WSABUF						DataBuf;
+	WSAOVERLAPPED				SendOverlapped;
+	WSAOVERLAPPED				RecvOverlapped;
+	SOCKET						_fd;
+	SOCKET						_fd_max;
+	fd_set						_readfds;
+	fd_set						_writefds;
 };
 
 #endif					/* !__WSOCKET_HPP__ */

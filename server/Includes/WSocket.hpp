@@ -29,7 +29,7 @@
 
 class								WSocket : public ISocket {
 public:
-	WSocket(const int fd = -1);
+	WSocket(const SOCKET fd = INVALID_SOCKET);
 	virtual ~WSocket(void);
 
 	virtual void				_socket(const int socketType);

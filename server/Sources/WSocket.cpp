@@ -14,9 +14,9 @@
 ** Constructeurs & Destructeurs
 */
 
-WSocket::WSocket(const int fd) {
-	_fd = (SOCKET)fd;
-	_fd_max = (SOCKET)fd;
+WSocket::WSocket(const SOCKET fd) {
+	_fd = fd;
+	_fd_max = fd;
 	_FD_ZERO("rw");
 	this->wVersionRequested = MAKEWORD(2, 2);
 	if (WSAStartup(this->wVersionRequested, &(this->wsaData)) != 0)
@@ -109,7 +109,7 @@ void					WSocket::_bind(const int port) const {
 }
 
 void					WSocket::_listen(const int backlog) const {
-	if (listen(this->_fd, backlog) == -1)
+	if (listen(this->_fd, backlog) == SOCKET_ERROR)
 		throw std::runtime_error("listen function failed");
 
 	return;
@@ -120,7 +120,7 @@ void					WSocket::_select(const int sec, const int usec) {
 
   	tv.tv_sec = sec;
   	tv.tv_usec = usec;
-	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
+	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == SOCKET_ERROR) {
 		throw std::runtime_error("Select function failed");
 	}
 

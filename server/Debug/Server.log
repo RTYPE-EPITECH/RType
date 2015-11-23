@@ -1,0 +1,87 @@
+﻿La génération a démarré 23/11/2015 02:42:55.
+     1>Projet "C:\Users\dewael_a\Documents\RType\Server\Server.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\main.cpp Sources\Network.cpp Sources\Protocole.cpp Sources\USocket.cpp Sources\WSocket.cpp
+         WSocket.cpp
+         USocket.cpp
+     1>c:\users\dewael_a\documents\rtype\server\includes\usocket.hpp(14): fatal error C1083: Impossible d'ouvrir le fichier include : 'sys/socket.h' : No such file or directory
+         Protocole.cpp
+         Network.cpp
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(30): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(30): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(30): error C2227: la partie gauche de '->getfd' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(36): error C2660: 'ISocket::_socket' : la fonction ne prend pas 3 arguments
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(37): error C2660: 'ISocket::_bind' : la fonction ne prend pas 2 arguments
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(39): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(39): error C2228: la partie gauche de '.push_back' doit avoir un class/struct/union
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(39): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(39): error C2061: erreur de syntaxe : identificateur 'Client'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(44): error C2653: 'Server' : n'est pas un nom de classe ni d'espace de noms
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(45): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(45): error C2227: la partie gauche de '->_FD_ZERO' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(45): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(46): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(46): error C2227: la partie gauche de '->_FD_SET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(46): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(47): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(47): error C2228: la partie gauche de '.size' doit avoir un class/struct/union
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(47): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(48): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(48): error C2227: la partie gauche de '->_FD_SET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(48): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(48): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(48): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(49): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(49): error C2227: la partie gauche de '->getInput' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(49): error C2227: la partie gauche de '->_getListMsg' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(49): error C2228: la partie gauche de '.size' doit avoir un class/struct/union
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(50): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(50): error C2227: la partie gauche de '->_FD_SET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(50): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(50): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(50): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(54): error C2653: 'Server' : n'est pas un nom de classe ni d'espace de noms
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(57): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(57): error C2227: la partie gauche de '->_receive' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(58): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(58): error C2227: la partie gauche de '->_getMac' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(59): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(59): error C2227: la partie gauche de '->getInput' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(59): error C2227: la partie gauche de '->_writeLog' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(64): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(64): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(64): error C2227: la partie gauche de '->_readCmd' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(72): error C3861: 'deleteClient' : identificateur introuvable
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(77): error C2653: 'Server' : n'est pas un nom de classe ni d'espace de noms
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(78): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(78): error C2227: la partie gauche de '->_send' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(82): error C2653: 'Server' : n'est pas un nom de classe ni d'espace de noms
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(85): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(85): error C2227: la partie gauche de '->_select' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(85): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(88): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(88): error C2227: la partie gauche de '->_FD_ISSET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(88): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(89): error C3861: 'newClient' : identificateur introuvable
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(91): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(91): error C2228: la partie gauche de '.size' doit avoir un class/struct/union
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(91): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(92): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(92): error C2227: la partie gauche de '->_FD_ISSET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(92): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(92): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(92): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(94): error C2065: '_socket' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(94): error C2227: la partie gauche de '->_FD_ISSET' doit pointer vers un type class/struct/union/générique
+         c:\users\dewael_a\documents\rtype\server\sources\network.cpp(94): note: le type est 'unknown-type'
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(94): error C2065: '_listClient' : identificateur non déclaré
+     1>c:\users\dewael_a\documents\rtype\server\sources\network.cpp(94): error C2227: la partie gauche de '->getSocket' doit pointer vers un type class/struct/union/générique
+         main.cpp
+     1>c:\users\dewael_a\documents\rtype\server\sources\main.cpp(17): error C2660: 'Network::init' : la fonction ne prend pas 0 arguments
+     1>c:\users\dewael_a\documents\rtype\server\sources\main.cpp(16): error C2317: bloc 'try' commençant ligne '16' n'a pas de gestionnaires catch
+         Génération de code en cours...
+     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Server\Server.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:03.00

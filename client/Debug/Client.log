@@ -1,0 +1,14 @@
+﻿La génération a démarré 23/11/2015 02:46:37.
+     1>Projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\Protocole.cpp Sources\USocket.cpp Sources\WSocket.cpp
+         WSocket.cpp
+         USocket.cpp
+     1>c:\users\dewael_a\documents\rtype\client\includes\usocket.hpp(14): fatal error C1083: Impossible d'ouvrir le fichier include : 'sys/socket.h' : No such file or directory
+         Protocole.cpp
+         Génération de code en cours...
+     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:01.49

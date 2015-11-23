@@ -37,7 +37,7 @@ WSocket::~WSocket(void) {
 ** Getters
 */
 
-int						WSocket::getfd(void) const {
+SOCKET					WSocket::getfd(void) const {
 	return (int)_fd;
 }
 
@@ -81,7 +81,7 @@ void					WSocket::_connect(const std::string &ip, const int port) const {
 
 }
 
-WSocket				*WSocket::_accept(void) {
+ISocket				*WSocket::_accept(void) {
 	SOCKET			fd;
 	sockaddr_in		saClient;
 	int				iClientSize = sizeof(saClient);
@@ -159,12 +159,12 @@ void					WSocket::_FD_SET(const std::string &mode) {
 
 void					WSocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
 	if (mode == "r")
-		FD_SET(socket->getfd(), &_readfds);
+		FD_SET(((WSocket *)socket)->getfd(), &_readfds);
 	else if (mode == "w")
-		FD_SET(socket->getfd(), &_writefds);
+		FD_SET(((WSocket *)socket)->getfd(), &_writefds);
 	else if (mode == "rw") {
-		FD_SET(socket->getfd(), &_readfds);
-		FD_SET(socket->getfd(), &_writefds);
+		FD_SET(((WSocket *)socket)->getfd(), &_readfds);
+		FD_SET(((WSocket *)socket)->getfd(), &_writefds);
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_SET()");
@@ -174,12 +174,12 @@ void					WSocket::_FD_SET(const ISocket * const socket, const std::string &mode)
 
 bool					WSocket::_FD_ISSET(const char mode) const {
 	if (mode == 'r') {
-			if (FD_ISSET(_fd, &_readfds))
-				return true;
+		if (FD_ISSET(_fd, &_readfds))
+			return true;
 		}
-		else if (mode == 'w') {
-			if (FD_ISSET(_fd, &_writefds))
-				return true;
+	else if (mode == 'w') {
+		if (FD_ISSET(_fd, &_writefds))
+			return true;
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_ISSET()");
@@ -189,11 +189,11 @@ bool					WSocket::_FD_ISSET(const char mode) const {
 
 bool					WSocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
 	if (mode == 'r') {
-		if (FD_ISSET(socket->getfd(), &_readfds))
+		if (FD_ISSET(((WSocket *)socket)->getfd(), &_readfds))
 			return true;
 	}
 	else if (mode == 'w') {
-		if (FD_ISSET(socket->getfd(), &_writefds))
+		if (FD_ISSET(((WSocket *)socket)->getfd(), &_writefds))
 			return true;
 	}
 	else

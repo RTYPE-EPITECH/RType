@@ -144,10 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Includes\ISocket.hpp" />
+    <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\Protocole.hpp" />
     <ClInclude Include="Includes\WSocket.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Network.cpp" />
     <ClCompile Include="Sources\Protocole.cpp" />
     <ClCompile Include="Sources\WSocket.cpp" />
   </ItemGroup>

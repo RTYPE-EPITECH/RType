@@ -1,14 +1,16 @@
-﻿La génération a démarré 23/11/2015 02:46:37.
+﻿La génération a démarré 23/11/2015 16:06:28.
      1>Projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" sur le nœud 2 (Build cible(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\Protocole.cpp Sources\USocket.cpp Sources\WSocket.cpp
-         WSocket.cpp
-         USocket.cpp
-     1>c:\users\dewael_a\documents\rtype\client\includes\usocket.hpp(14): fatal error C1083: Impossible d'ouvrir le fichier include : 'sys/socket.h' : No such file or directory
-         Protocole.cpp
-         Génération de code en cours...
-     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\Network.cpp
+         Network.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Network.obj
+         Debug\Protocole.obj
+         Debug\WSocket.obj
+         Client.vcxproj -> C:\Users\dewael_a\Documents\RType\Client\Debug\Client.exe
+     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" terminée (Build cible(s)).
 
-ÉCHEC de la build.
+La génération a réussi.
 
-Temps écoulé 00:00:01.49
+Temps écoulé 00:00:01.26

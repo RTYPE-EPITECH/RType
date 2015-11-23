@@ -22,8 +22,8 @@ Network::~Network(void) {
 */
 
 void				Network::newClient(void) {
-	//_listClient.push_back(new Client(_socket->_accept()));
-	std::cout << CYAN << HIGHLIGHT << "A new client try to connect to the server..." << DEFAULT << std::endl;
+	std::cout <<  "A new client try to connect to the server..." << std::endl;
+	_socket->_accept();
 }
 
 void				Network::deleteClient(unsigned int i) {
@@ -74,7 +74,7 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		_socket->_select(60, 0);
-
+		std::cout << "bite" << std::endl;
 		/* Nouveau Client */
 		if (_socket->_FD_ISSET('r') == true)
 			newClient();

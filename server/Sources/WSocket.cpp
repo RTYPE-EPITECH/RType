@@ -231,10 +231,22 @@ char					*WSocket::_recv(const size_t size, const int flags) const {
 	return msg;
 }
 
+char					*WSocket::_recvFrom(const size_t size, const int flags) const {
+	char				*msg = new char[size + 1];
+	sockaddr			*structsend;
+	size_t				ret;
+
+	if ((ret = recvfrom(_fd, msg, size, flags, structsend, &(sizeof(structsend)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	return msg;
+}
+
 void					WSocket::_send(const char * const msg, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
+	if ((ret = send(_fd, msg, strlen(msg), flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -243,7 +255,7 @@ void					WSocket::_send(const char * const msg, const int flags) const {
 void					WSocket::_send(const char * const msg, const size_t size, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg, size, flags)) == -1)
+	if ((ret = send(_fd, msg, size, flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -252,7 +264,7 @@ void					WSocket::_send(const char * const msg, const size_t size, const int fla
 void					WSocket::_send(const std::string &msg, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
+	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -261,7 +273,47 @@ void					WSocket::_send(const std::string &msg, const int flags) const {
 void					WSocket::_send(const std::string &msg, const size_t size, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)
+	if ((ret = send(_fd, msg.c_str(), size, flags)) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const std::string &msg, const size_t size, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg.c_str(), size, flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const std::string &msg, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg.c_str(), strlen(msg.c_str()), flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const char *msg, const size_t size, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg, size, flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const char *msg, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg, strlen(msg), flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;

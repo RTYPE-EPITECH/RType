@@ -20,6 +20,7 @@ int    			main(int argc, char **argv) {
 	}
 	catch (const std::exception &msg) {
 		std::cout << msg.what() << std::endl;
+		getchar();
 	}
 	return 0;
 }

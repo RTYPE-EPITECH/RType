@@ -233,7 +233,7 @@ char					*WSocket::_recv(const size_t size, const int flags) const {
 
 char					*WSocket::_recvFrom(const size_t size, const int flags) const {
 	char				*msg = new char[size + 1];
-	sockaddr			*structsend;
+	sockaddr			*structsend = NULL;
 	int len = sizeof(structsend);
 	size_t				ret;
 
@@ -281,7 +281,7 @@ void					WSocket::_send(const std::string &msg, const size_t size, const int fla
 }
 
 void					WSocket::_sendto(const std::string &msg, const size_t size, const int flags) const {
-	sockaddr_in		*recvStruct;
+	sockaddr_in		*recvStruct = NULL;
 	int len = sizeof(recvStruct);
 	size_t			ret;
 
@@ -292,7 +292,7 @@ void					WSocket::_sendto(const std::string &msg, const size_t size, const int f
 }
 
 void					WSocket::_sendto(const std::string &msg, const int flags) const {
-	sockaddr_in		*recvStruct;
+	sockaddr_in		*recvStruct = NULL;
 	int len = sizeof(recvStruct);
 	size_t			ret;
 
@@ -303,7 +303,7 @@ void					WSocket::_sendto(const std::string &msg, const int flags) const {
 }
 
 void					WSocket::_sendto(const char *msg, const size_t size, const int flags) const {
-	sockaddr_in		*recvStruct;
+	sockaddr_in		*recvStruct = NULL;
 	int len = sizeof(recvStruct);
 	size_t			ret;
 
@@ -314,7 +314,7 @@ void					WSocket::_sendto(const char *msg, const size_t size, const int flags) c
 }
 
 void					WSocket::_sendto(const char *msg, const int flags) const {
-	sockaddr		*recvStruct;
+	sockaddr		*recvStruct = NULL;
 	int len = sizeof(recvStruct);
 	size_t			ret;
 

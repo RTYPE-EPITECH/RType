@@ -12,9 +12,10 @@
 # define						__WSOCKET_HPP__
 
 # define						_WINSOCK_DEPRECATED_NO_WARNINGS
-//# define						_CRT_SECURE_NO_WARNINGS
+# define						_CRT_SECURE_NO_WARNINGS
 # define						SEND_COUNT 10
 
+# include						<string.h>
 # include						<WinSock2.h>
 # include						<Windows.h>
 # include						<winsock.h>

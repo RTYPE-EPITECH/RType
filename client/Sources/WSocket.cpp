@@ -14,9 +14,9 @@
 ** Constructeurs & Destructeurs
 */
 
-WSocket::WSocket(const int fd) {
-	_fd = (SOCKET)fd;
-	_fd_max = (SOCKET)fd;
+WSocket::WSocket(const SOCKET fd) {
+	_fd = fd;
+	_fd_max = fd;
 	_FD_ZERO("rw");
 	this->wVersionRequested = MAKEWORD(2, 2);
 	if (WSAStartup(this->wVersionRequested, &(this->wsaData)) != 0)
@@ -37,7 +37,7 @@ WSocket::~WSocket(void) {
 ** Getters
 */
 
-int						WSocket::getfd(void) const {
+SOCKET					WSocket::getfd(void) const {
 	return (int)_fd;
 }
 
@@ -81,7 +81,7 @@ void					WSocket::_connect(const std::string &ip, const int port) const {
 
 }
 
-WSocket				*WSocket::_accept(void) {
+ISocket				*WSocket::_accept(void) {
 	SOCKET			fd;
 	sockaddr_in		saClient;
 	int				iClientSize = sizeof(saClient);
@@ -109,7 +109,7 @@ void					WSocket::_bind(const int port) const {
 }
 
 void					WSocket::_listen(const int backlog) const {
-	if (listen(this->_fd, backlog) == -1)
+	if (listen(this->_fd, backlog) == SOCKET_ERROR)
 		throw std::runtime_error("listen function failed");
 
 	return;
@@ -120,7 +120,7 @@ void					WSocket::_select(const int sec, const int usec) {
 
   	tv.tv_sec = sec;
   	tv.tv_usec = usec;
-	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
+	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == SOCKET_ERROR) {
 		throw std::runtime_error("Select function failed");
 	}
 
@@ -159,12 +159,12 @@ void					WSocket::_FD_SET(const std::string &mode) {
 
 void					WSocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
 	if (mode == "r")
-		FD_SET(socket->getfd(), &_readfds);
+		FD_SET(((WSocket *)socket)->getfd(), &_readfds);
 	else if (mode == "w")
-		FD_SET(socket->getfd(), &_writefds);
+		FD_SET(((WSocket *)socket)->getfd(), &_writefds);
 	else if (mode == "rw") {
-		FD_SET(socket->getfd(), &_readfds);
-		FD_SET(socket->getfd(), &_writefds);
+		FD_SET(((WSocket *)socket)->getfd(), &_readfds);
+		FD_SET(((WSocket *)socket)->getfd(), &_writefds);
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_SET()");
@@ -174,12 +174,12 @@ void					WSocket::_FD_SET(const ISocket * const socket, const std::string &mode)
 
 bool					WSocket::_FD_ISSET(const char mode) const {
 	if (mode == 'r') {
-			if (FD_ISSET(_fd, &_readfds))
-				return true;
+		if (FD_ISSET(_fd, &_readfds))
+			return true;
 		}
-		else if (mode == 'w') {
-			if (FD_ISSET(_fd, &_writefds))
-				return true;
+	else if (mode == 'w') {
+		if (FD_ISSET(_fd, &_writefds))
+			return true;
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_ISSET()");
@@ -189,11 +189,11 @@ bool					WSocket::_FD_ISSET(const char mode) const {
 
 bool					WSocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
 	if (mode == 'r') {
-		if (FD_ISSET(socket->getfd(), &_readfds))
+		if (FD_ISSET(((WSocket *)socket)->getfd(), &_readfds))
 			return true;
 	}
 	else if (mode == 'w') {
-		if (FD_ISSET(socket->getfd(), &_writefds))
+		if (FD_ISSET(((WSocket *)socket)->getfd(), &_writefds))
 			return true;
 	}
 	else
@@ -231,10 +231,22 @@ char					*WSocket::_recv(const size_t size, const int flags) const {
 	return msg;
 }
 
+char					*WSocket::_recvFrom(const size_t size, const int flags) const {
+	char				*msg = new char[size + 1];
+	sockaddr			*structsend;
+	size_t				ret;
+
+	if ((ret = recvfrom(_fd, msg, size, flags, structsend, &(sizeof(structsend)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	return msg;
+}
+
 void					WSocket::_send(const char * const msg, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
+	if ((ret = send(_fd, msg, strlen(msg), flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -243,7 +255,7 @@ void					WSocket::_send(const char * const msg, const int flags) const {
 void					WSocket::_send(const char * const msg, const size_t size, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg, size, flags)) == -1)
+	if ((ret = send(_fd, msg, size, flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -252,7 +264,7 @@ void					WSocket::_send(const char * const msg, const size_t size, const int fla
 void					WSocket::_send(const std::string &msg, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
+	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;
@@ -261,7 +273,47 @@ void					WSocket::_send(const std::string &msg, const int flags) const {
 void					WSocket::_send(const std::string &msg, const size_t size, const int flags) const {
 	size_t			ret;
 
-	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)
+	if ((ret = send(_fd, msg.c_str(), size, flags)) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const std::string &msg, const size_t size, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg.c_str(), size, flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const std::string &msg, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg.c_str(), strlen(msg.c_str()), flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const char *msg, const size_t size, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg, size, flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					WSocket::_sendto(const char *msg, const int flags) const {
+	sockaddr		*recvStruct;
+	size_t			ret;
+
+	if ((ret = sendto(_fd, msg, strlen(msg), flags, recvStruct, &(sizeof(recvStruct)))) == SOCKET_ERROR)
 		throw std::runtime_error(strerror(errno));
 
 	return;

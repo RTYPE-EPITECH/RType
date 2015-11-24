@@ -20,7 +20,7 @@ public:
 	virtual void				_socket(const int socketType) = 0;
 	virtual void				_connect(const char * const ip, const int port) const = 0;
 	virtual void				_connect(const std::string &ip, const int port) const = 0;
-	virtual ISocket			*_accept(void) = 0;
+	virtual ISocket				*_accept(void) = 0;
 	virtual void				_bind(const int port) const = 0;
 	virtual void				_listen(const int backlog) const = 0;
 	virtual void				_select(const int sec, const int usec) = 0;
@@ -32,12 +32,15 @@ public:
 	virtual void				_close(void) const = 0;
 	virtual char				*_recv(const int flags) const = 0;
 	virtual char				*_recv(const size_t size, const int flags) const = 0;
+	virtual char				*_recvFrom(const size_t size, const int) const = 0;
 	virtual void				_send(const char * const msg, const int flags) const = 0;
 	virtual void				_send(const char * const msg, const size_t size, const int flags) const = 0;
 	virtual void				_send(const std::string &msg, const int flags) const = 0;
 	virtual void				_send(const std::string &msg, const size_t size, const int flags) const = 0;
-
-	virtual int					getfd(void) const = 0;
+	virtual void				_sendto(const std::string &msg, const size_t size, const int flags) const = 0;
+	virtual void				_sendto(const std::string &msg, const int flags) const = 0;
+	virtual void				_sendto(const char *msg, const size_t size, const int flags) const = 0;
+	virtual void				_sendto(const char *msg, const int flags) const = 0;
 };
 
 #endif							/* !__ISOCKET_HPP__ */

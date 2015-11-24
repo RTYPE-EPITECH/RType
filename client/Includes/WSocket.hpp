@@ -12,7 +12,7 @@
 # define						__WSOCKET_HPP__
 
 # define						_WINSOCK_DEPRECATED_NO_WARNINGS
-# define						_CRT_SECURE_NO_WARNINGS
+//# define						_CRT_SECURE_NO_WARNINGS
 # define						SEND_COUNT 10
 
 # include						<WinSock2.h>
@@ -29,13 +29,13 @@
 
 class								WSocket : public ISocket {
 public:
-	WSocket(const int fd = -1);
+	WSocket(const SOCKET fd = INVALID_SOCKET);
 	virtual ~WSocket(void);
 
 	virtual void				_socket(const int socketType);
 	virtual void				_connect(const char * const ip, const int port) const;
 	virtual void				_connect(const std::string &ip, const int port) const;
-	virtual WSocket				*_accept(void);
+	virtual ISocket				*_accept(void);
 	virtual void				_bind(const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
@@ -47,12 +47,17 @@ public:
 	virtual void				_close(void) const;
 	virtual char				*_recv(const int flags) const;
 	virtual char				*_recv(const size_t size, const int flags) const;
+	virtual char				*_recvFrom(const size_t size, const int) const;
 	virtual void				_send(const char * const msg, const int flags) const;
 	virtual void				_send(const char * const msg, const size_t size, const int flags) const;
 	virtual void				_send(const std::string &msg, const int flags) const;
 	virtual void				_send(const std::string &msg, const size_t size, const int flags) const;
+	virtual void				_sendto(const std::string &msg, const size_t size, const int flags) const;
+	virtual void				_sendto(const std::string &msg, const int flags) const;
+	virtual void				_sendto(const char *msg, const size_t size, const int flags) const;
+	virtual void				_sendto(const char *msg, const int flags) const;
 
-	virtual int					getfd(void) const;
+	SOCKET						getfd(void) const;
 
 private:
 	WORD						wVersionRequested;

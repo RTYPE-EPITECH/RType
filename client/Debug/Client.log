@@ -1,16 +1,51 @@
-﻿La génération a démarré 24/11/2015 16:50:44.
+﻿La génération a démarré 24/11/2015 17:58:23.
      1>Projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" sur le nœud 2 (Build cible(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\Network.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I./Includes/ /I../Common/Includes/ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Common\Sources\Protocole.cpp ..\Common\Sources\WSocket.cpp Sources\main.cpp Sources\Network.cpp Sources\Sound.cpp Sources\SoundFactory.cpp
+         SoundFactory.cpp
+     1>c:\users\dewael_a\documents\rtype\client\includes\sound.hpp(15): fatal error C1083: Impossible d'ouvrir le fichier include : 'SFML/Audio.hpp' : No such file or directory
+         Sound.cpp
+     1>c:\users\dewael_a\documents\rtype\client\includes\sound.hpp(15): fatal error C1083: Impossible d'ouvrir le fichier include : 'SFML/Audio.hpp' : No such file or directory
          Network.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\dewael_a\Documents\RType\Client\Debug\Client.lib" /MACHINE:X86 Debug\main.obj
-         Debug\Network.obj
-         Debug\Protocole.obj
-         Debug\WSocket.obj
-         Client.vcxproj -> C:\Users\dewael_a\Documents\RType\Client\Debug\Client.exe
-     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" terminée (Build cible(s)).
+         main.cpp
+         WSocket.cpp
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(64): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(77): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(207): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(217): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(228): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(241): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(251): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(260): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(269): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(278): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(289): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(300): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(311): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(322): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: voir la déclaration de 'strerror'
+         Protocole.cpp
+         Génération de code en cours...
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(240): warning C4700: variable locale 'structsend' non initialisée utilisée
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(288): warning C4700: variable locale 'recvStruct' non initialisée utilisée
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(299): warning C4700: variable locale 'recvStruct' non initialisée utilisée
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(310): warning C4700: variable locale 'recvStruct' non initialisée utilisée
+     1>c:\users\dewael_a\documents\rtype\common\sources\wsocket.cpp(321): warning C4700: variable locale 'recvStruct' non initialisée utilisée
+     1>Génération du projet "C:\Users\dewael_a\Documents\RType\Client\Client.vcxproj" terminée (Build cible(s)) -- ÉCHEC.
 
-La génération a réussi.
+ÉCHEC de la build.
 
-Temps écoulé 00:00:05.43
+Temps écoulé 00:00:04.05

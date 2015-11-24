@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Includes\ISocket.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Includes\Network.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\Protocole.hpp">
+    <ClInclude Include="..\Common\Includes\ISocket.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Includes\WSocket.hpp">
+    <ClInclude Include="..\Common\Includes\Protocole.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Includes\WSocket.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClCompile Include="Sources\Network.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Protocole.cpp">
+    <ClCompile Include="..\Common\Sources\Protocole.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\WSocket.cpp">
+    <ClCompile Include="..\Common\Sources\WSocket.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

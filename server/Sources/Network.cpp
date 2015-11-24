@@ -23,7 +23,6 @@ Network::~Network(void) {
 
 void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
-	_socket->_accept();
 }
 
 void				Network::deleteClient(unsigned int i) {
@@ -35,10 +34,8 @@ void				Network::deleteClient(unsigned int i) {
 void				Network::init(char *port) {
 	_socket->_socket(SOCK_DGRAM);
 	std::cout << "socket ok" << std::endl;
-	getchar();
 	_socket->_bind(atoi(port));
 	std::cout << "bind ok" << std::endl;
-	getchar();
 
 	//_listClient.push_back(new Client(new USocket(STDIN_FILENO)));
 	_socket->_FD_ZERO("rw");

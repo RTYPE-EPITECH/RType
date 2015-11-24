@@ -146,17 +146,12 @@
     <ClInclude Include="..\Common\Includes\ISocket.hpp" />
     <ClInclude Include="..\Common\Includes\WSocket.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
-    <ClInclude Include="Includes\Sound.hpp" />
-    <ClInclude Include="Includes\SoundFactory.hpp" />
-    <ClInclude Include="Includes\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
     <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Network.cpp" />
-    <ClCompile Include="Sources\Sound.cpp" />
-    <ClCompile Include="Sources\SoundFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,7 +5,7 @@
 // Login   <beauraF@epitech.net>
 // 
 // Started on  Tue Nov 17 18:34:01 2015 Florent BEAURAIN
-// Last update Tue Nov 17 18:34:22 2015 Florent BEAURAIN
+// Last update Thu Nov 26 13:12:08 2015 Pierre Noel
 //
 
 #include		<iostream>
@@ -20,7 +20,10 @@ int    			main(int argc, char **argv) {
 	}
 	catch (const std::exception &msg) {
 		std::cout << msg.what() << std::endl;
+		#ifndef WIN32
+		#else
 		getchar();
+		#endif
 	}
 	return 0;
 }

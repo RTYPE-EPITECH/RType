@@ -31,10 +31,10 @@ void				Network::deleteClient(unsigned int i) {
 	//_listClient.erase(_listClient.begin() + i);
 }
 
-void				Network::init(char *port) {
+void				Network::init(const std::string & port) {
 	_socket->_socket(SOCK_DGRAM);
 	std::cout << "socket ok" << std::endl;
-	_socket->_bind(atoi(port));
+	_socket->_bind(atoi(port.str()));
 	std::cout << "bind ok" << std::endl;
 
 	//_listClient.push_back(new Client(new USocket(STDIN_FILENO)));

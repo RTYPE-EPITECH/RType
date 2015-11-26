@@ -31,7 +31,7 @@ public:
 	~Network(void);
 
 	void					run(void);
-	void					init(char *);
+  void					init(const std::string &);
 
 private:
 	ISocket					*_socket;

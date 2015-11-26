@@ -5,7 +5,7 @@
 // Login   <beauraF@epitech.net>
 //
 // Started on  Mon Oct 26 15:44:59 2015 Florent BEAURAIN
-// Last update Mon Nov  2 13:04:11 2015 Florent BEAURAIN
+// Last update Thu Nov 26 13:26:40 2015 Pierre Noel
 //
 
 #include		"USocket.hpp"
@@ -97,7 +97,7 @@ void					USocket::_connect(const std::string &ip, const int port) const {
 }
 
 USocket				*USocket::_accept(void) {
-	int						fd;
+	int			fd;
 	struct sockaddr_in	s_in;
 	socklen_t            sin_len = sizeof(s_in);
 
@@ -173,12 +173,12 @@ void					USocket::_FD_SET(const std::string &mode) {
 
 void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
 	if (mode == "r")
-		FD_SET(socket->getfd(), &_readfds);
+	  FD_SET(static_cast<const USocket *const >(socket)->getfd(), &_readfds);
 	else if (mode == "w")
-		FD_SET(socket->getfd(), &_writefds);
+	  FD_SET(static_cast<const USocket *const >(socket)->getfd(), &_writefds);
 	else if (mode == "rw") {
-		FD_SET(socket->getfd(), &_readfds);
-		FD_SET(socket->getfd(), &_writefds);
+	  FD_SET(static_cast<const USocket *const >(socket)->getfd(), &_readfds);
+	  FD_SET(static_cast<const USocket *const >(socket)->getfd(), &_writefds);
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_SET()");
@@ -203,11 +203,11 @@ bool					USocket::_FD_ISSET(const char mode) const {
 
 bool					USocket::_FD_ISSET(const ISocket * const socket, const char mode) const {
 	if (mode == 'r') {
-		if (FD_ISSET(socket->getfd(), &_readfds))
+	  if (FD_ISSET(static_cast<const USocket *const >(socket)->getfd(), &_readfds))
 			return true;
 	}
 	else if (mode == 'w') {
-		if (FD_ISSET(socket->getfd(), &_writefds))
+	  if (FD_ISSET(static_cast<const USocket *const >(socket)->getfd(), &_writefds))
 			return true;
 	}
 	else

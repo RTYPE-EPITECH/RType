@@ -45,8 +45,8 @@ SOCKET					WSocket::getfd(void) const {
 ** Méthodes
 */
 
-void					WSocket::_socket(const int socketType) {
-	if ((this->_fd = WSASocketW(AF_INET, socketType, IPPROTO_UDP, NULL, 0, 0)) == INVALID_SOCKET)
+void					WSocket::_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol) {
+	if ((this->_fd = WSASocketW(family, type, protocol, NULL, 0, 0)) == INVALID_SOCKET)
 		throw std::runtime_error("WSASocket function failed");
 	_fd_max = _fd;
 	_FD_ZERO("rw");
@@ -54,10 +54,10 @@ void					WSocket::_socket(const int socketType) {
 	return;
 }
 
-void					WSocket::_connect(const char * const ip, const int port) const {
+void					WSocket::_connect(const eSocketFamily family, const char * const ip, const int port) const {
 	sockaddr_in			service;
 
-	service.sin_family = AF_INET;
+	service.sin_family = family;
 	service.sin_addr.s_addr = inet_addr(ip);
 	service.sin_port = htons(port);
 	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
@@ -67,10 +67,10 @@ void					WSocket::_connect(const char * const ip, const int port) const {
 	return;
 }
 
-void					WSocket::_connect(const std::string &ip, const int port) const {
+void					WSocket::_connect(const eSocketFamily family, const std::string &ip, const int port) const {
 	sockaddr_in			service;
 
-	service.sin_family = AF_INET;
+	service.sin_family = family;
 	service.sin_addr.s_addr = inet_addr(ip.c_str());
 	service.sin_port = htons(port);
 	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
@@ -89,14 +89,13 @@ ISocket				*WSocket::_accept(void) {
 		throw std::runtime_error("WSAAccept function failed");
 	if (_fd_max < fd)
 		_fd_max = fd;
-
 	WSocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }
 
-void					WSocket::_bind(const int port) const {
+void					WSocket::_bind(const eSocketFamily family, const int port) const {
 	sockaddr_in			service;
-	service.sin_family = AF_INET;
+	service.sin_family = family;
 	service.sin_addr.s_addr = htons(INADDR_ANY);
 	service.sin_port = htons(port);
 	if (bind(this->_fd, (SOCKADDR *)&(service), sizeof(service)) == SOCKET_ERROR) {

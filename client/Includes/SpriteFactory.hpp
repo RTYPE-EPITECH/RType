@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Nov 24 16:51:40 2015 Probola
-// Last update Tue Nov 24 16:56:26 2015 Probola
+// Last update Thu Nov 26 19:15:21 2015 Probola
 //
 
 #ifndef					_SPRITEFACTORY_HPP_
@@ -22,6 +22,8 @@ private:
   Sprite				*_load(const std::string &);
 
 public:
+  SpriteFactory();
+  ~SpriteFactory();
   bool					initialize(std::string &, std::string &);
   bool					display(std::string &);
 };

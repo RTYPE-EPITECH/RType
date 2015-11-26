@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 //
 // Started on  Tue Nov 24 16:32:34 2015 Probola
-// Last update Tue Nov 24 16:51:17 2015 Probola
+// Last update Thu Nov 26 19:15:42 2015 Probola
 //
 
 #ifndef				_SPRITE_HPP_
@@ -19,6 +19,8 @@ private:
   sf::Sprite			sprite;
 
 public:
+  Sprite();
+  ~Sprite();
   bool				initializeSprite(std::string &, std::string &);
   void				displaySprite();
 };

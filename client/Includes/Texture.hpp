@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:50:02 2015 Probola
-// Last update Tue Nov 24 16:32:20 2015 Probola
+// Last update Thu Nov 26 19:15:54 2015 Probola
 //
 
 #ifndef				_TEXTURE_HPP_
@@ -20,6 +20,8 @@ private:
   Texture			*_load(std::string &);
 
 public:
+  Texture();
+  ~Texture();
   bool				initializeTexture(std::string &);
 };
 

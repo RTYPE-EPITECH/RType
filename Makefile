@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Wed Nov 18 15:32:58 2015 Florent BEAURAIN
+## Last update Thu Nov 26 16:06:45 2015 Florent BEAURAIN
 ##
 
 include			source.mk
@@ -19,7 +19,7 @@ CXX			?=	g++
 
 DEBUG			?=	no
 
-CXXFLAGS		+=	-Iserver/inc -Icommon/inc
+CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes
 
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded

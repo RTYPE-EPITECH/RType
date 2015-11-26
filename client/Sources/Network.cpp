@@ -27,6 +27,7 @@ void				Network::init(char *ip, int port) {
 	_socket->_connect(ip, port);
 	std::cout << "connect ok" << std::endl;
 	_socket->_FD_ZERO("rw");
+	_socket->_send("TEST", 0);
 }
 
 void				Network::setClient(void) {

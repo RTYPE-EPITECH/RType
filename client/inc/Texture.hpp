@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:50:02 2015 Probola
-// Last update Fri Nov 20 15:09:09 2015 Probola
+// Last update Tue Nov 24 16:32:20 2015 Probola
 //
 
 #ifndef				_TEXTURE_HPP_

@@ -15,13 +15,28 @@
 
 class								ISocket {
 public:
+	enum							eSocketFamily {
+		IPv4 = 2,
+		IPv6 = 6
+	};
+
+	enum							eSocketType {
+		STREAM = 1,
+		DGRAM = 2
+	};
+
+	enum							eProtocol {
+		TCP = 6,
+		UDP = 17
+	};
+
 	virtual ~ISocket(void) {}
 
-	virtual void				_socket(const int socketType) = 0;
-	virtual void				_connect(const char * const ip, const int port) const = 0;
-	virtual void				_connect(const std::string &ip, const int port) const = 0;
-	virtual ISocket				*_accept(void) = 0;
-	virtual void				_bind(const int port) const = 0;
+	virtual void				_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol) = 0;
+	virtual void				_connect(const eSocketFamily family, const char * const ip, const int port) const = 0;
+	virtual void				_connect(const eSocketFamily family, const std::string &ip, const int port) const = 0;
+	virtual ISocket			*_accept(void) = 0;
+	virtual void				_bind(const eSocketFamily family, const int port) const = 0;
 	virtual void				_listen(const int backlog) const = 0;
 	virtual void				_select(const int sec, const int usec) = 0;
 	virtual void				_FD_ZERO(const std::string &mode) = 0;

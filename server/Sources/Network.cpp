@@ -33,9 +33,13 @@ void				Network::deleteClient(unsigned int i) {
 }
 
 void				Network::init(const std::string & port) {
-	_socket->_socket(SOCK_DGRAM);
+	_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::TCP);
 	std::cout << "socket ok" << std::endl;
+<<<<<<< HEAD
 	_socket->_bind(atoi(port.c_str()));
+=======
+	_socket->_bind(ISocket::IPv4, atoi(port.c_str()));
+>>>>>>> 036cb1edff88d3de8ccd0a38d3a3fd81b250a650
 	std::cout << "bind ok" << std::endl;
 
 	//_listClient.push_back(new Client(new USocket(STDIN_FILENO)));

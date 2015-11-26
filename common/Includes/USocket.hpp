@@ -30,11 +30,11 @@ public:
 	USocket(const int fd = -1);
 	virtual ~USocket(void);
 
-	virtual void				_socket(const int socketType);
-	virtual void				_connect(const char * const ip, const int port) const;
-	virtual void				_connect(const std::string &ip, const int port) const;
+	virtual void				_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol);
+	virtual void				_connect(const eSocketFamily family, const char * const ip, const int port) const;
+	virtual void				_connect(const eSocketFamily family, const std::string &ip, const int port) const;
 	virtual USocket			*_accept(void);
-	virtual void				_bind(const int port) const;
+	virtual void				_bind(const eSocketFamily family, const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
 	virtual void				_FD_ZERO(const std::string &mode);

@@ -1,4 +1,5 @@
 #include			"Network.hpp"
+#include			<iostream>
 
 /*
 ** Constructeurs & Destructeurs
@@ -34,12 +35,12 @@ void				Network::deleteClient(unsigned int i) {
 void				Network::init(const std::string & port) {
 	_socket->_socket(SOCK_DGRAM);
 	std::cout << "socket ok" << std::endl;
-	_socket->_bind(atoi(port.str()));
+	_socket->_bind(atoi(port.c_str()));
 	std::cout << "bind ok" << std::endl;
 
 	//_listClient.push_back(new Client(new USocket(STDIN_FILENO)));
 	_socket->_FD_ZERO("rw");
-	std::cout << "Welcome on the RType Server (port : " << port << ")" << std::endl;
+	std::cout << "Welcome on the RType Server (port : " << port.c_str() << ")" << std::endl;
 }
 
 void				Network::setClient(void) {

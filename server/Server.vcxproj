@@ -150,15 +150,31 @@
     <ClInclude Include="..\Common\Includes\WMutex.hpp" />
     <ClInclude Include="..\Common\Includes\WSocket.hpp" />
     <ClInclude Include="..\Common\Includes\WThread.hpp" />
+    <ClInclude Include="Includes\AObject.hpp" />
+    <ClInclude Include="Includes\Client.hpp" />
+    <ClInclude Include="Includes\EObject.hpp" />
+    <ClInclude Include="Includes\Game.hpp" />
+    <ClInclude Include="Includes\HandleThread.hpp" />
+    <ClInclude Include="Includes\IConditionVariable.hpp" />
+    <ClInclude Include="Includes\Monster.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
+    <ClInclude Include="Includes\Obstacle.hpp" />
+    <ClInclude Include="Includes\Player.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
     <ClCompile Include="..\Common\Sources\WMutex.cpp" />
     <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="..\Common\Sources\WThread.cpp" />
+    <ClCompile Include="Sources\AObject.cpp" />
+    <ClCompile Include="Sources\Client.cpp" />
+    <ClCompile Include="Sources\HandleThread.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Monster.cpp" />
     <ClCompile Include="Sources\Network.cpp" />
+    <ClCompile Include="Sources\Game.cpp" />
+    <ClCompile Include="Sources\Obstacle.cpp" />
+    <ClCompile Include="Sources\Player.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

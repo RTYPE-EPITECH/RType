@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Nov 26 16:06:45 2015 Florent BEAURAIN
+## Last update Thu Nov 26 17:43:42 2015 Florent BEAURAIN
 ##
 
 include			source.mk
@@ -33,7 +33,7 @@ endif
 
 all:			$(NAME)
 
-$(NAME):		$(OBJS_SERVER) $(OBJS_COMMON)
+$(NAME):		$(OBJS_COMMON) $(OBJS_SERVER)
 			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON)
 clean:
 			@rm -vf $(OBJS_SERVER) $(OBJS_COMMON)

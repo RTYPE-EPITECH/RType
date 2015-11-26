@@ -243,6 +243,36 @@ char					*USocket::_recv(const size_t size, const int flags) const {
 	return msg;
 }
 
+char					*USocket::_recvFrom(const int flags, std::string &ip, int &port) const {
+	char						*msg = new char[30721];
+	ssize_t					ret;
+	struct sockaddr_in	srcAddr;
+
+	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&srcAddr), sizeof(srcAddr))) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	ip = inet_ntoa(src_addr.sin_addr);
+	port = htons(src_addr.sin_port);
+
+	return msg;
+}
+
+char					*USocket::_recvFrom(const size_t size, const int flags, std::string & const ip, int &port) const {
+	char						*msg = new char[size + 1]
+	ssize_t					ret;
+	struct sockaddr_in	srcAddr;
+
+	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&srcAddr), sizeof(srcAddr))) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	ip = inet_ntoa(srcAddr.sin_addr);
+	port = htons(srcAddr.sin_port);
+
+	return msg;
+}
+
 void					USocket::_send(const char * const msg, const int flags) const {
 	ssize_t			ret;
 
@@ -278,3 +308,15 @@ void					USocket::_send(const std::string &msg, const size_t size, const int fla
 
 	return;
 }
+/*
+void					USocket::_sendto(const char * const msg, const int flags, const std::string &ip, const int port) const {
+	ssize_t					ret;
+	struct sockaddr_in	destAddr;
+
+	destAddr.sin_addr =
+
+	if ((sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&destAddr), sizeof(destAddr))) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}*/

@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Thu Nov 26 16:07:25 2015 Florent BEAURAIN
+## Last update Thu Nov 26 16:43:37 2015 Florent BEAURAIN
 ##
 
 ## Server sources
@@ -13,6 +13,7 @@
 DIR_SERVER		=	server/Sources/
 
 SERVER			+=	$(DIR_SERVER)main.cpp
+SERVER			+=	$(DIR_SERVER)Network.cpp
 
 ## Common sources
 

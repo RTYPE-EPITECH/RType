@@ -47,15 +47,12 @@ public:
 	virtual void				_close(void) const = 0;
 	virtual char				*_recv(const int flags) const = 0;
 	virtual char				*_recv(const size_t size, const int flags) const = 0;
-	virtual char				*_recvFrom(const size_t size, const int) const = 0;
+	virtual char				*_recvFrom(const int flags, std::string &ip, int &port) const = 0;
+	virtual char				*_recvFrom(const size_t size, const int flags, std::string &ip, int &port) const = 0;
 	virtual void				_send(const char * const msg, const int flags) const = 0;
 	virtual void				_send(const char * const msg, const size_t size, const int flags) const = 0;
 	virtual void				_send(const std::string &msg, const int flags) const = 0;
 	virtual void				_send(const std::string &msg, const size_t size, const int flags) const = 0;
-	virtual void				_sendto(const std::string &msg, const size_t size, const int flags) const = 0;
-	virtual void				_sendto(const std::string &msg, const int flags) const = 0;
-	virtual void				_sendto(const char *msg, const size_t size, const int flags) const = 0;
-	virtual void				_sendto(const char *msg, const int flags) const = 0;
 };
 
 #endif							/* !__ISOCKET_HPP__ */

@@ -88,7 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>./Includes/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./Includes/;../Common/Includes/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,16 +143,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Includes\ISocket.hpp" />
+    <ClInclude Include="..\Common\Includes\ISocket.hpp" />
+    <ClInclude Include="..\Common\Includes\WSocket.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
-    <ClInclude Include="Includes\Protocole.hpp" />
-    <ClInclude Include="Includes\WSocket.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\Sources\Protocole.cpp" />
+    <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Network.cpp" />
-    <ClCompile Include="Sources\Protocole.cpp" />
-    <ClCompile Include="Sources\WSocket.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

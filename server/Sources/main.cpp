@@ -10,6 +10,7 @@
 
 #include		<iostream>
 #include		"Network.hpp"
+#include		"Tools.hpp"
 
 int    			main(int argc, char **argv) {
 	Network		network;

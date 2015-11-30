@@ -2,8 +2,9 @@
 #include "Player.hpp"
 #include "Monster.hpp"
 #include "Obstacle.hpp"
+#include "Client.hpp"
 
-Game::Game()
+Game::Game(IConditionVariable & c) : _condVar(c)
 {
 }
 
@@ -18,5 +19,16 @@ bool Game::init()
 
 bool Game::loop()
 {
+
 	return true;
+}
+
+unsigned int Game::getIdThread() const
+{
+	return _idThread;
+}
+
+void Game::setIdThread(unsigned int i)
+{
+	_idThread = i;
 }

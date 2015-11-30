@@ -3,7 +3,7 @@
 #include "Game.hpp"
 #include "IMutex.hpp"
 
-Client::Client(IConditionVariable & con) : _condVar(con)
+Client::Client(Game * g) : _game(g)
 {
 }
 
@@ -16,12 +16,12 @@ bool	Client::init()
 	return true;
 }
 
-unsigned int Client::getIdThread() const
+Player * Client::getPlayer() const
 {
-	return _idThread;
+	return player;
 }
 
-void Client::setIdThread(unsigned int i)
+void	Client::setPlayer(Player *p)
 {
-	_idThread = i;
+	player = p;
 }

@@ -1,3 +1,7 @@
+#pragma once
+#ifndef PROTOCOLE_HPP_
+# define PROCOTOLE_HPP_
+
 #include			<cstring>
 #include			<cstdint>
 #include			<vector>
@@ -118,3 +122,5 @@ public:
 	uint8_t					_getActionOpcode(void) const;
 
 };
+
+#endif // !PROTOCOLE_HPP_

@@ -3,7 +3,7 @@
 #include "Game.hpp"
 #include "IMutex.hpp"
 
-#ifndef WIN_32
+#ifndef WIN32
 # include "USocket.hpp"
 # include "UMutex.hpp"
 #else
@@ -13,7 +13,7 @@
 
 Client::Client(Game * g, const std::string & _ip, short _port) : _game(g)
 {
-#ifndef WIN_32
+#ifndef WIN32
 	_socket = new USocket(0);
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();

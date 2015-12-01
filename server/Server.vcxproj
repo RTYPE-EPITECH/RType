@@ -143,12 +143,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\Includes\IConditionVariable.hpp" />
     <ClInclude Include="..\Common\Includes\IMutex.hpp" />
     <ClInclude Include="..\Common\Includes\ISocket.hpp" />
     <ClInclude Include="..\Common\Includes\IThread.hpp" />
     <ClInclude Include="..\common\Includes\ITimer.hpp" />
     <ClInclude Include="..\Common\Includes\Protocole.hpp" />
     <ClInclude Include="..\common\Includes\StateConnexion.hpp" />
+    <ClInclude Include="..\common\Includes\WConditionVariable.hpp" />
     <ClInclude Include="..\common\Includes\WTimer.hpp" />
     <ClInclude Include="..\common\Includes\Tools.hpp" />
     <ClInclude Include="..\Common\Includes\WMutex.hpp" />
@@ -159,7 +161,6 @@
     <ClInclude Include="Includes\EObject.hpp" />
     <ClInclude Include="Includes\Game.hpp" />
     <ClInclude Include="Includes\HandleThread.hpp" />
-    <ClInclude Include="Includes\IConditionVariable.hpp" />
     <ClInclude Include="Includes\Monster.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\Obstacle.hpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
     <ClCompile Include="..\common\Sources\Tools.cpp" />
+    <ClCompile Include="..\common\Sources\WConditionVariable.cpp" />
     <ClCompile Include="..\Common\Sources\WMutex.cpp" />
     <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="..\Common\Sources\WThread.cpp" />

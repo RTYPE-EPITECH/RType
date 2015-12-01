@@ -33,11 +33,11 @@ public:
 	WSocket(const SOCKET fd = INVALID_SOCKET);
 	virtual ~WSocket(void);
 
-	virtual void				_socket(const eSocketType type);
-	virtual void				_connect(const char * const ip, const int port) const;
-	virtual void				_connect(const std::string &ip, const int port) const;
+	virtual void				_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol);
+	virtual void				_connect(const eSocketFamily family, const char * const ip, const int port) const;
+	virtual void				_connect(const eSocketFamily family, const std::string &ip, const int port) const;
 	virtual ISocket			*_accept(void);
-	virtual void				_bind(const int port) const;
+	virtual void				_bind(const eSocketFamily family, const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
 	virtual void				_FD_ZERO(const std::string &mode);

@@ -4,23 +4,23 @@
 #include "IMutex.hpp"
 
 #ifndef WIN_32
-# include "WSocket.hpp"
-# include "WMutex.hpp"
-#else
 # include "USocket.hpp"
 # include "UMutex.hpp"
+#else
+# include "WSocket.hpp"
+# include "WMutex.hpp"
 #endif
 
 Client::Client(Game * g, const std::string & _ip, short _port) : _game(g)
 {
 #ifndef WIN_32
+	_socket = new USocket(0);
+	_mutexOutput = new UMutex();
+	_mutexInput = new UMutex();
+#else
 	_socket = new WSocket(0);
 	_mutexOutput = new WMutex();
 	_mutexInput = new WMutex();
-#else
-	_socket = new UtSocket(0);
-	_mutexOutput = new UMutex();
-	_mutexInput = new UMutex();
 #endif
 	ip = _ip;
 	port = _port;

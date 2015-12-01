@@ -1,6 +1,7 @@
 #include		"UMutex.hpp"
 
-UMutex::UMutex() { }
+UMutex::UMutex() {
+}
 
 UMutex::~UMutex() {
  if (pthread_mutex_destroy(&_mutex) != 0)

@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Nov 26 19:07:18 2015 Probola
+## Last update Tue Dec  1 14:56:42 2015 Pierre Noel
 ##
 
 include			source.mk
@@ -19,12 +19,12 @@ CXX			?=	g++
 
 DEBUG			?=	no
 
-CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes 
+CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes
 
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded
 else
-CXXFLAGS		+=	-W -Wall -Wextra
+CXXFLAGS		+=	-pthread -lpthread  -W -Wall -Wextra -std=c++11
 endif
 
 ifeq ($(DEBUG), yes)
@@ -34,7 +34,7 @@ endif
 all:			$(NAME)
 
 $(NAME):		$(OBJS_SERVER) $(OBJS_COMMON)
-			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON)
+			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON) $(CXXFLAGS)
 clean:
 			@rm -vf $(OBJS_SERVER) $(OBJS_COMMON)
 

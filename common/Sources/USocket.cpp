@@ -278,3 +278,31 @@ void					USocket::_send(const std::string &msg, const size_t size, const int fla
 
 	return;
 }
+
+	 void				USocket::_sendto(const std::string &msg, const size_t size, const int flags) const
+	 {
+	 	(void)msg;
+	 	(void)size;
+	 	(void)flags;
+	 }
+	 void				USocket::_sendto(const std::string &msg, const int flags) const
+	 {
+	 	(void)msg;
+	 	(void)flags;
+	 }
+	 void				USocket::_sendto(const char *msg, const size_t size, const int flags) const
+	 {
+	 	(void)msg;
+	 	(void)size;
+	 	(void)flags;
+	 }
+	 void				USocket::_sendto(const char *msg, const int flags) const
+	 {
+	 	(void)msg;
+	 	(void)flags;
+	 }
+
+	char				*USocket::_recvFrom(const size_t size, const int) const
+	{
+		(void) size;
+	}

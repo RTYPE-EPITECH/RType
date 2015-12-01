@@ -2,14 +2,14 @@
 #define	HANDLETHREAD_HPP_
 
 class IThread;
-class Client;
+class Game;
 
 class HandleThread {
 private:
 	IThread * _t;
 public:
-	bool init(Client * cl);
-	bool destroy(Client * cl);
+	bool init(Game * cl);
+	bool destroy(Game * cl);
 	bool destroyAll();
 	static void *functionClient(void * arg);
 };

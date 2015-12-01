@@ -5,7 +5,7 @@
 // Login   <beauraF@epitech.net>
 //
 // Started on  Mon Oct 26 15:36:20 2015 Florent BEAURAIN
-// Last update Mon Oct 26 15:36:22 2015 Florent BEAURAIN
+// Last update Tue Dec  1 15:25:29 2015 Florent BEAURAIN
 //
 
 #ifndef							__USOCKET_HPP__

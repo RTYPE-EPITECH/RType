@@ -5,7 +5,7 @@
 // Login   <beauraF@epitech.net>
 //
 // Started on  Mon Oct 26 15:44:59 2015 Florent BEAURAIN
-// Last update Thu Nov 26 13:26:40 2015 Pierre Noel
+// Last update Tue Dec  1 15:23:49 2015 Florent BEAURAIN
 //
 
 #include		"USocket.hpp"

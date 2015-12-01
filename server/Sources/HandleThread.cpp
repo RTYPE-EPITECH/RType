@@ -1,9 +1,9 @@
 #include <iostream>
 #include "HandleThread.hpp"
 #include "IThread.hpp"
-#include "Client.hpp"
+#include "Game.hpp"
 
-bool HandleThread::init(Client * cl)
+bool HandleThread::init(Game * cl)
 {
 	try {
 		cl->setIdThread(_t->initialize(functionClient, static_cast<void*>(cl)));
@@ -16,7 +16,7 @@ bool HandleThread::init(Client * cl)
 	return true;
 }
 
-bool HandleThread::destroy(Client * cl)
+bool HandleThread::destroy(Game * cl)
 {
 	return _t->destroy(cl->getIdThread());
 }
@@ -28,10 +28,10 @@ bool HandleThread::destroyAll()
 
 void * HandleThread::functionClient(void * arg)
 {
-	Client * cl = reinterpret_cast<Client *>(arg);
-
+	Game * cl = reinterpret_cast<Game *>(arg);
+	(void)cl;
 	// Boucle du jeu
-	// cl->game->init();
-	// cl->game->loop();
+	// cl->init();
+	// cl->loop();
 	return arg;
 }

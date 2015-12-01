@@ -3,35 +3,46 @@
 
 #include <vector>
 #include <string>
-#include "IConditionVariable.hpp"
 #include "Protocole.hpp"
+#include "StateConnexion.hpp"
 
 class ISocket;
 class Game;
 class IMutex;
+class Player;
 
 class Client
 {
 public:
-	Client(IConditionVariable &);
+	Client(Game * g, const std::string &, short);
 	~Client();
 	bool init();
 
 	// get/set
-	unsigned int getIdThread() const;
-	void setIdThread(unsigned int);
+	Player * getPlayer() const;
+	void	setPlayer(Player *);
+
+	bool	getOldestInput();
+	char *	getOutput();
+	void	addInput(char *);
+
+	Protocole _proto;
 
 private:
 	ISocket * _socket;
+
 	std::string ip;
-	int port;
-	unsigned int _idThread;
+	short port;
+
+	STATE_CONNECT _state;
 	Game  * _game;
-	IMutex * _mutex;
-	IConditionVariable & _condVar;
+	Player * player;
+
+	IMutex * _mutexOutput;
+	IMutex * _mutexInput;
 	std::vector<char *> _input;
 	std::vector<char *> _output;
-	Protocole _proto;
+
 };
 
 #endif /* CLIENT_HPP */

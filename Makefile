@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Nov 26 17:43:42 2015 Florent BEAURAIN
+## Last update Tue Dec  1 15:26:00 2015 Florent BEAURAIN
 ##
 
 include			source.mk
@@ -24,7 +24,7 @@ CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded
 else
-CXXFLAGS		+=	-W -Wall -Wextra
+CXXFLAGS		+=	-pthread -lpthread  -W -Wall -Wextra -std=c++11
 endif
 
 ifeq ($(DEBUG), yes)

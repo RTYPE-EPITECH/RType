@@ -6,20 +6,16 @@
 */
 
 Network::Network(void) {
-#ifdef WIN32
-	_socket = new WSocket();
-#else
-	_socket = new USocket();
-#endif
-	//_listClient.clear();
+	_socket = NULL;
 }
 
 Network::~Network(void) {
-	delete _socket;
+	if (_socket != NULL)
+		delete _socket;
 }
 
 /*
-** Méthodes
+** MÃ©thodes
 */
 
 void				Network::newClient(void) {
@@ -27,12 +23,19 @@ void				Network::newClient(void) {
 }
 
 void				Network::deleteClient(unsigned int i) {
+(void)i;
 	//std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _listClient[i]->getSocket()->getfd() << ")" << std::endl;
 	//delete _listClient[i];
 	//_listClient.erase(_listClient.begin() + i);
 }
 
 void				Network::init(const std::string & port) {
+#ifdef WIN32
+	_socket = new WSocket();
+#else
+	_socket = new USocket();
+#endif
+	//_listClient.clear();
 	_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::TCP);
 	std::cout << "socket ok" << std::endl;
 	_socket->_bind(ISocket::IPv4, atoi(port.c_str()));
@@ -54,6 +57,7 @@ void				Network::setClient(void) {
 }
 
 bool				Network::readClient(unsigned int i) {
+(void)i;
 	try {
 		//_listClient[i]->_receive();
 	}
@@ -64,6 +68,7 @@ bool				Network::readClient(unsigned int i) {
 }
 
 void				Network::writeClient(unsigned int i) {
+(void)i;
 	//_listClient[i]->_send();
 	return;
 }
@@ -77,6 +82,8 @@ void				Network::run(void) {
 		if (_socket->_FD_ISSET('r') == true)
 			newClient();
 		else
+		{
+		}
 			/*for (unsigned int i = 0; i < _listClient.size(); i++) {
 				if (_socket->_FD_ISSET(_listClient[i]->getSocket(), 'w') == true)
 					writeClient(i);
@@ -84,6 +91,5 @@ void				Network::run(void) {
 					if (readClient(i) == false)
 						return;
 			}*/
-			;
 	}
 }

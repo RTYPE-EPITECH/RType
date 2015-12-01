@@ -5,25 +5,34 @@
 // Login   <beauraF@epitech.net>
 // 
 // Started on  Tue Nov 17 18:34:01 2015 Florent BEAURAIN
-// Last update Thu Nov 26 13:12:08 2015 Pierre Noel
+// Last update Tue Dec  1 15:01:35 2015 Pierre Noel
 //
 
 #include		<iostream>
 #include		"Network.hpp"
+#include		"Tools.hpp"
 
 int    			main(int argc, char **argv) {
-	Network		network;
-
-	try {
-		network.init("4242");
-		network.run();
-	}
-	catch (const std::exception &msg) {
-		std::cout << msg.what() << std::endl;
-		#ifndef WIN32
-		#else
-		getchar();
-		#endif
-	}
-	return 0;
+  Network		network;
+  bool			error = 0;
+  try {
+    if (argc == 2){
+      network.init(argv[1]);
+      network.run();
+    }
+    else
+      {
+	std::cerr << "Usage " << argv[0] << " [port] " << std::endl;
+	error = 1;
+      }
+  }
+  catch (const std::exception &msg) {
+    std::cout << msg.what() << std::endl;
+    error = 1;
+#ifndef WIN_32
+#else
+    getchar();
+#endif
+  }
+  return error;
 }

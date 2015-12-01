@@ -148,6 +148,7 @@
     <ClInclude Include="..\Common\Includes\IThread.hpp" />
     <ClInclude Include="..\common\Includes\ITimer.hpp" />
     <ClInclude Include="..\Common\Includes\Protocole.hpp" />
+    <ClInclude Include="..\common\Includes\StateConnexion.hpp" />
     <ClInclude Include="..\common\Includes\WTimer.hpp" />
     <ClInclude Include="..\common\Includes\Tools.hpp" />
     <ClInclude Include="..\Common\Includes\WMutex.hpp" />

@@ -19,6 +19,7 @@ bool Game::init()
 
 bool Game::loop()
 {
+	// For each client, get the oldest Input
 
 	return true;
 }

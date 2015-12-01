@@ -5,7 +5,7 @@
 // Login   <beauraF@epitech.net>
 //
 // Started on  Mon Oct 26 15:44:59 2015 Florent BEAURAIN
-// Last update Thu Nov 26 13:26:40 2015 Pierre Noel
+// Last update Tue Dec  1 15:23:49 2015 Florent BEAURAIN
 //
 
 #include		"USocket.hpp"
@@ -37,7 +37,7 @@ int					USocket::getfd(void) const {
 */
 
 void					USocket::_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol) {
-	struct protoent		*pe;
+	struct protoent		*pe = NULL;
 
 	if (protocol == TCP) {
 		if ((pe = getprotobyname("TCP")) == NULL)
@@ -58,7 +58,7 @@ void					USocket::_socket(const eSocketFamily family, const eSocketType type, co
 	return;
 }
 
-void					USocket::_connect(const eSocketFamily family, const char * const ip, const int port) const {
+void					USocket::_connect(const eSocketFamily family, const char * const ip, const unsigned short port) const {
 	struct sockaddr_in	s_in;
 	struct in_addr			addr;
 	struct hostent			*h;
@@ -76,7 +76,7 @@ void					USocket::_connect(const eSocketFamily family, const char * const ip, co
 	return;
 }
 
-void					USocket::_connect(const eSocketFamily family, const std::string &ip, const int port) const {
+void					USocket::_connect(const eSocketFamily family, const std::string &ip, const unsigned short port) const {
 	struct sockaddr_in	s_in;
 	struct in_addr			addr;
 	struct hostent			*h;
@@ -95,11 +95,10 @@ void					USocket::_connect(const eSocketFamily family, const std::string &ip, co
 }
 
 USocket				*USocket::_accept(void) {
-	int			fd;
+	int						fd;
 	struct sockaddr_in	s_in;
-	socklen_t            sin_len = sizeof(s_in);
 
-	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sin_len)) == -1)
+	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), reinterpret_cast<socklen_t *>(sizeof(s_in)))) == -1)
 		throw std::runtime_error(strerror(errno));
 	if (_fd_max < fd)
 		_fd_max = fd;
@@ -108,7 +107,7 @@ USocket				*USocket::_accept(void) {
 	return newConnection;
 }
 
-void					USocket::_bind(const eSocketFamily family, const int port) const {
+void					USocket::_bind(const eSocketFamily family, const unsigned short port) const {
 	struct sockaddr_in	s_in;
 
 	s_in.sin_family = family;
@@ -243,66 +242,140 @@ char					*USocket::_recv(const size_t size, const int flags) const {
 	return msg;
 }
 
-void					USocket::_send(const char * const msg, const int flags) const {
-	ssize_t			ret;
+char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
+	char						*msg = new char[30721];
+	ssize_t					ret;
+	struct sockaddr_in	src_addr;
 
-	if ((ret = send(_fd, msg, strlen(msg), flags)) == -1)
+	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	if (src_addr.sin_family == AF_INET)
+		adress->family = IPv4;
+	else if (src_addr.sin_family == AF_INET6)
+		adress->family = IPv6;
+	adress->ip = inet_ntoa(src_addr.sin_addr);
+	adress->port = ntohs(src_addr.sin_port);
+
+	return msg;
+}
+
+char					*USocket::_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const {
+	char						*msg = new char[size + 1];
+	ssize_t					ret;
+	struct sockaddr_in	src_addr;
+
+	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
+		throw std::runtime_error(strerror(errno));
+	msg[ret] = '\0';
+
+	if (src_addr.sin_family == AF_INET)
+		adress->family = IPv4;
+	else if (src_addr.sin_family == AF_INET6)
+		adress->family = IPv6;
+	adress->ip = inet_ntoa(src_addr.sin_addr);
+	adress->port = ntohs(src_addr.sin_port);
+
+	return msg;
+}
+
+void					USocket::_send(const char * const msg, const int flags) const {
+	if (send(_fd, msg, strlen(msg), flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
 void					USocket::_send(const char * const msg, const size_t size, const int flags) const {
-	ssize_t			ret;
-
-	if ((ret = send(_fd, msg, size, flags)) == -1)
+	if (send(_fd, msg, size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
 void					USocket::_send(const std::string &msg, const int flags) const {
-	ssize_t			ret;
-
-	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == -1)
+	if (send(_fd, msg.c_str(), msg.size(), flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
 void					USocket::_send(const std::string &msg, const size_t size, const int flags) const {
-	ssize_t			ret;
-
-	if ((ret = send(_fd, msg.c_str(), size, flags)) == -1)
+	if (send(_fd, msg.c_str(), size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
 	return;
 }
 
-	 void				USocket::_sendto(const std::string &msg, const size_t size, const int flags) const
-	 {
-	 	(void)msg;
-	 	(void)size;
-	 	(void)flags;
-	 }
-	 void				USocket::_sendto(const std::string &msg, const int flags) const
-	 {
-	 	(void)msg;
-	 	(void)flags;
-	 }
-	 void				USocket::_sendto(const char *msg, const size_t size, const int flags) const
-	 {
-	 	(void)msg;
-	 	(void)size;
-	 	(void)flags;
-	 }
-	 void				USocket::_sendto(const char *msg, const int flags) const
-	 {
-	 	(void)msg;
-	 	(void)flags;
-	 }
+void					USocket::_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
 
-	char				*USocket::_recvFrom(const size_t size, const int) const
-	{
-		(void) size;
-	}
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					USocket::_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					USocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg.c_str(), msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}
+
+void					USocket::_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg.c_str(), size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+		throw std::runtime_error(strerror(errno));
+
+	return;
+}

@@ -9,11 +9,11 @@
 //
 
 #ifndef							__WSOCKET_HPP__
-# define						__WSOCKET_HPP__
+# define							__WSOCKET_HPP__
 
-# define						_WINSOCK_DEPRECATED_NO_WARNINGS
-# define						_CRT_SECURE_NO_WARNINGS
-# define						SEND_COUNT 10
+# define							_WINSOCK_DEPRECATED_NO_WARNINGS
+# define							_CRT_SECURE_NO_WARNINGS
+# define							SEND_COUNT 10
 
 # include						<string.h>
 # include						<WinSock2.h>
@@ -36,7 +36,7 @@ public:
 	virtual void				_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol);
 	virtual void				_connect(const eSocketFamily family, const char * const ip, const int port) const;
 	virtual void				_connect(const eSocketFamily family, const std::string &ip, const int port) const;
-	virtual ISocket				*_accept(void);
+	virtual ISocket			*_accept(void);
 	virtual void				_bind(const eSocketFamily family, const int port) const;
 	virtual void				_listen(const int backlog) const;
 	virtual void				_select(const int sec, const int usec);
@@ -48,15 +48,16 @@ public:
 	virtual void				_close(void) const;
 	virtual char				*_recv(const int flags) const;
 	virtual char				*_recv(const size_t size, const int flags) const;
-	virtual char				*_recvFrom(const size_t size, const int) const;
+	virtual char				*_recvfrom(const int flags, tSocketAdress *adress) const;
+	virtual char				*_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const;
 	virtual void				_send(const char * const msg, const int flags) const;
 	virtual void				_send(const char * const msg, const size_t size, const int flags) const;
 	virtual void				_send(const std::string &msg, const int flags) const;
 	virtual void				_send(const std::string &msg, const size_t size, const int flags) const;
-	virtual void				_sendto(const std::string &msg, const size_t size, const int flags) const;
-	virtual void				_sendto(const std::string &msg, const int flags) const;
-	virtual void				_sendto(const char *msg, const size_t size, const int flags) const;
-	virtual void				_sendto(const char *msg, const int flags) const;
+	virtual void				_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const;
 
 	SOCKET						getfd(void) const;
 

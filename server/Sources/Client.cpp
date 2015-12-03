@@ -3,7 +3,7 @@
 #include "Game.hpp"
 #include "IMutex.hpp"
 
-#ifndef WIN_32
+#ifndef WIN32
 # include "USocket.hpp"
 # include "UMutex.hpp"
 #else
@@ -13,7 +13,7 @@
 
 Client::Client(Game * g, const std::string & _ip, short _port) : _game(g)
 {
-#ifndef WIN_32
+#ifndef WIN32
 	_socket = new USocket(0);
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();
@@ -42,7 +42,14 @@ bool	Client::init()
 bool	Client::getOldestInput()
 {
 	_mutexInput->lock();
-	// Charge Input in Protocole
+	/*char * header = new char[];
+	memset(header, 0,);
+	
+	char * body = ;
+	memset(body, 0, _proto._getHeaderSize());
+
+	_proto._setNewPacketHeader(header);
+	_proto._setNewPacketBody(body);*/
 	_mutexInput->unlock();
 	return true;
 }

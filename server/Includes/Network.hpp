@@ -10,7 +10,7 @@
 #else
 # include					"USocket.hpp"
 #endif // WIN32
-
+# include					"IConditionVariable.hpp"
 
 # define		RED			"\x1B[31m"
 # define		GREEN		"\033[32m"
@@ -35,7 +35,7 @@ public:
 
 private:
 	ISocket					*_socket;
-	
+	IConditionVariable		*_i;
 	void					newClient(void);
 	void					deleteClient(unsigned int);
 	void					setClient(void);

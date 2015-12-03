@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Tue Dec  1 16:40:15 2015 Probola
+// Last update Thu Dec  3 16:22:06 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -16,13 +16,15 @@
 
 class				SFML
 {
-  sf::window			window;
+  sf::window			_window;
+  SpriteFactory			*_spritefactory;
+  SoundFactory			*_soundfactory;
 
 public:
   SFML();
   ~SFML();
   bool				 initialize(int size_x, int size_y, std::string &name);
-  void				update(Sprite *);
+  void				update(const std::string &, int, int);
 };
 
 #endif

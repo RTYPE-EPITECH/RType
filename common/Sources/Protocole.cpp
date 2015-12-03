@@ -75,7 +75,7 @@ void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, co
 	this->_arrayPositionPacket.data[this->_posInArray].size_x = (uint16_t)sizeX;
 	this->_arrayPositionPacket.data[this->_posInArray].size_y = (uint16_t)sizeY;
 	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), sprite, strlen(sprite));
-	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)sprite;
+	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)(strlen(sprite));
 	this->_posInArray = this->_posInArray + 1;
 }
 

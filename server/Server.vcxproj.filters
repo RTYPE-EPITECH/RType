@@ -81,6 +81,12 @@
     <ClInclude Include="..\common\Includes\IConditionVariable.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\Includes\IDynamicLibrary.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\Includes\WDynamicLibrary.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\main.cpp">
@@ -129,6 +135,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\common\Sources\WConditionVariable.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\Sources\WDynamicLibrary.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

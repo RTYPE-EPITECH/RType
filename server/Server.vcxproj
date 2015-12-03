@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\common\Includes\IConditionVariable.hpp" />
+    <ClInclude Include="..\common\Includes\IDynamicLibrary.hpp" />
     <ClInclude Include="..\Common\Includes\IMutex.hpp" />
     <ClInclude Include="..\Common\Includes\ISocket.hpp" />
     <ClInclude Include="..\Common\Includes\IThread.hpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="..\Common\Includes\Protocole.hpp" />
     <ClInclude Include="..\common\Includes\StateConnexion.hpp" />
     <ClInclude Include="..\common\Includes\WConditionVariable.hpp" />
+    <ClInclude Include="..\common\Includes\WDynamicLibrary.hpp" />
     <ClInclude Include="..\common\Includes\WTimer.hpp" />
     <ClInclude Include="..\common\Includes\Tools.hpp" />
     <ClInclude Include="..\Common\Includes\WMutex.hpp" />
@@ -170,6 +172,7 @@
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
     <ClCompile Include="..\common\Sources\Tools.cpp" />
     <ClCompile Include="..\common\Sources\WConditionVariable.cpp" />
+    <ClCompile Include="..\common\Sources\WDynamicLibrary.cpp" />
     <ClCompile Include="..\Common\Sources\WMutex.cpp" />
     <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="..\Common\Sources\WThread.cpp" />

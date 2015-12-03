@@ -68,14 +68,14 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const std::string &sprite) {
+void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
 	this->_arrayPositionPacket.data[this->_posInArray].size_x = (uint16_t)sizeX;
 	this->_arrayPositionPacket.data[this->_posInArray].size_y = (uint16_t)sizeY;
-	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), sprite.data(), sprite.length());
-	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)sprite.length();
+	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), sprite, strlen(sprite));
+	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)sprite;
 	this->_posInArray = this->_posInArray + 1;
 }
 
@@ -125,28 +125,40 @@ void		Protocole::_createDisconnectCommand(void) {
 ** Functions to handle new Packets
 */
 
-void		Protocole::_setNewPacketHeader(const std::string &packet) {
-	memcpy(&(this->_header), packet.data(), sizeof(headerPacket));
+const char		*Protocole::_linkPacketHeaderBody(const char *header, const char *body) const {
+	headerPacket tmp;
+	memset(&tmp, 0, sizeof(headerPacket));
+	memcpy(&tmp, header, sizeof(headerPacket));
+	char *result = new char[sizeof(headerPacket) + tmp.size];
+	memset(result, 0, sizeof(headerPacket) + tmp.size);
+	memcpy(result, header, sizeof(headerPacket));
+	memcpy(result + sizeof(headerPacket), body, tmp.size);
+	return result;
 }
 
-void		Protocole::_setNewPacketBody(const std::string &packet) {
+void		Protocole::_setNewPacketHeader(const char *packet) {
+	memcpy(&(this->_header), packet, sizeof(headerPacket));
+}
+
+void		Protocole::_setNewPacket(const char *packet) {
+	_setNewPacketHeader(packet);
 	if (this->_header.size != 0)
 		(this->*_generateData[this->_header.opcode])(packet);
 }
-void		Protocole::_setResponseStruct(const std::string &packet) {
-	memcpy(&(this->_response), packet.data(), sizeof(responsePacket));
+void		Protocole::_setResponseStruct(const char *packet) {
+	memcpy(&(this->_response), packet, sizeof(responsePacket));
 }
 
-void		Protocole::_setParametersStruct(const std::string &packet) {
-	memcpy(&(this->_params), packet.data(), sizeof(parametersPacket));
+void		Protocole::_setParametersStruct(const char *packet) {
+	memcpy(&(this->_params), packet, sizeof(parametersPacket));
 }
 
-void		Protocole::_setActionStruct(const std::string &packet) {
-	memcpy(&(this->_action), packet.data(), sizeof(actionPacket));
+void		Protocole::_setActionStruct(const char *packet) {
+	memcpy(&(this->_action), packet, sizeof(actionPacket));
 }
 
-void		Protocole::_setPositionStruct(const std::string &packet) {
-	memcpy(&(this->_arrayPositionPacket), packet.data(), sizeof(arrayPositionPacket));
+void		Protocole::_setPositionStruct(const char *packet) {
+	memcpy(&(this->_arrayPositionPacket), packet, sizeof(arrayPositionPacket));
 }
 
 /*
@@ -211,4 +223,8 @@ uint8_t			Protocole::_getParametersNbGame(void) const {
 
 uint8_t			Protocole::_getActionOpcode(void) const {
 	return this->_action.action;
+}
+
+unsigned int	Protocole::_getSizePacketHeader(void) const {
+	return sizeof(headerPacket);
 }

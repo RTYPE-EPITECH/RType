@@ -1,5 +1,10 @@
 #include			"Network.hpp"
 #include			<iostream>
+#ifdef WIN32
+# include "WConditionVariable.hpp"
+#else
+# include "UConditionVariable.hpp"
+#endif
 
 /*
 ** Constructeurs & Destructeurs
@@ -32,8 +37,10 @@ void				Network::deleteClient(unsigned int i) {
 void				Network::init(const std::string & port) {
 #ifdef WIN32
 	_socket = new WSocket();
+	_i = new WConditionVariable();
 #else
 	_socket = new USocket();
+	_i = new UConditionVariable();
 #endif
 	//_listClient.clear();
 	_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::TCP);

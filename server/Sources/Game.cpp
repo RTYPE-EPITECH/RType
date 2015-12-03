@@ -27,6 +27,7 @@ bool Game::loop()
 			break;
 		// set input into protocole to have the get/set
 
+
 		// Move player or shoot 
 		// Check Scene
 

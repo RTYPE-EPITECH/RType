@@ -143,6 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\Includes\EMissile.hpp" />
+    <ClInclude Include="..\common\Includes\EObject.hpp" />
     <ClInclude Include="..\common\Includes\IConditionVariable.hpp" />
     <ClInclude Include="..\Common\Includes\IMutex.hpp" />
     <ClInclude Include="..\Common\Includes\ISocket.hpp" />
@@ -158,9 +160,9 @@
     <ClInclude Include="..\Common\Includes\WThread.hpp" />
     <ClInclude Include="Includes\AObject.hpp" />
     <ClInclude Include="Includes\Client.hpp" />
-    <ClInclude Include="Includes\EObject.hpp" />
     <ClInclude Include="Includes\Game.hpp" />
     <ClInclude Include="Includes\HandleThread.hpp" />
+    <ClInclude Include="Includes\Missile.hpp" />
     <ClInclude Include="Includes\Monster.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\Obstacle.hpp" />
@@ -178,6 +180,7 @@
     <ClCompile Include="Sources\Client.cpp" />
     <ClCompile Include="Sources\HandleThread.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Missile.cpp" />
     <ClCompile Include="Sources\Monster.cpp" />
     <ClCompile Include="Sources\Network.cpp" />
     <ClCompile Include="Sources\Game.cpp" />

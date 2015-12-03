@@ -12,7 +12,7 @@ public:
 
 	// FAIRE LES GET/SET
 
-private:
+protected:
 	size_t x;
 	size_t y;
 	size_t width;

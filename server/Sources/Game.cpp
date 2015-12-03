@@ -20,7 +20,17 @@ bool Game::init()
 bool Game::loop()
 {
 	// For each client, get the oldest Input
+	for (unsigned int i = 0; i < _clients.size(); i++)
+	{
+		char * input = NULL;
+		if (!(input = _clients[i]->getInput()))
+			break;
+		// set input into protocole to have the get/set
 
+		// Move player or shoot 
+		// Check Scene
+
+	}
 	return true;
 }
 

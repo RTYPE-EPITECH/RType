@@ -1,6 +1,5 @@
-#pragma once
 #ifndef PROTOCOLE_HPP_
-# define PROCOTOLE_HPP_
+# define PROTOCOLE_HPP_
 
 #include			<cstring>
 #include			<cstdint>
@@ -58,7 +57,7 @@ typedef				enum {
 
 class				Protocole {
 private:
-	std::map<char, void(Protocole::*)(const std::string &)>	_generateData;
+	std::map<char, void(Protocole::*)(const char *)>	_generateData;
 	headerPacket			_header;
 	responsePacket			_response;
 	actionPacket			_action;
@@ -71,10 +70,10 @@ private:
 	** Functions Private to set Packets
 	*/
 
-	void					_setResponseStruct(const std::string &);
-	void					_setParametersStruct(const std::string &);
-	void					_setActionStruct(const std::string &);
-	void					_setPositionStruct(const std::string &);
+	void					_setResponseStruct(const char *);
+	void					_setParametersStruct(const char *);
+	void					_setActionStruct(const char *);
+	void					_setPositionStruct(const char *);
 
 public:
 	Protocole(void);
@@ -88,7 +87,7 @@ public:
 	void					_createConnectPacket(void);
 	void					_createActionPacket(ACTION act);
 	void					_createParametersPacket(int, int);
-	void					_addPositionPacket(int, int, int, int, const std::string &);
+	void					_addPositionPacket(int, int, int, int, const char *);
 	void					_putPositionPacketOnList(void);
 	void					_createPingCommand(void);
 	void					_createPongCommand(void);
@@ -98,8 +97,9 @@ public:
 	** Functions to handle new Packets
 	*/
 
-	void					_setNewPacketHeader(const std::string &);
-	void					_setNewPacketBody(const std::string &);
+	const char 				*_linkPacketHeaderBody(const char *, const char *) const;
+	void					_setNewPacketHeader(const char *);
+	void					_setNewPacket(const char *);
 
 	/*
 	** Getters
@@ -120,7 +120,7 @@ public:
 	uint8_t					_getParametersDifficulty(void) const;
 	uint8_t					_getParametersNbGame(void) const;
 	uint8_t					_getActionOpcode(void) const;
-
+	unsigned int			_getSizePacketHeader(void) const;
 };
 
 #endif // !PROTOCOLE_HPP_

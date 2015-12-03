@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "IConditionVariable.hpp"
+#include "Protocole.hpp"
 
 class Client;
 class Player;
@@ -24,6 +25,7 @@ public:
 private:
 	unsigned int _idThread;
 	IConditionVariable & _condVar;
+	Protocole			_proto;
 	std::vector<Client *> _clients;
 	std::vector<Monster*> _monsters;
 	std::vector<Obstacle *> _obstacles;

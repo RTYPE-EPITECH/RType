@@ -18,15 +18,17 @@ public:
 	~Client();
 	bool init();
 
-	// get/set
+	// get/set player object
 	Player * getPlayer() const;
 	void	setPlayer(Player *);
 
-	bool	getOldestInput();
+	// Mutexed function to get input/output from vector
+	char *	getInput();
 	char *	getOutput();
-	void	addInput(char *);
 
-	Protocole _proto;
+	// Mutexed function to add input/output to vector
+	void	addInput(char *);
+	void	addOutput(char *);
 
 private:
 	ISocket * _socket;

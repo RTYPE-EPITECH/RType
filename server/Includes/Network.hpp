@@ -11,7 +11,7 @@
 # include					"USocket.hpp"
 #endif // WIN32
 # include					"IConditionVariable.hpp"
-
+# include					"Protocole.hpp"
 # define		RED			"\x1B[31m"
 # define		GREEN		"\033[32m"
 # define		YELLOW		"\033[33m"
@@ -31,11 +31,12 @@ public:
 	~Network(void);
 
 	void					run(void);
-  void					init(const std::string &);
+	void					init(const std::string &);
 
 private:
 	ISocket					*_socket;
 	IConditionVariable		*_i;
+	Protocole				_proto;
 	void					newClient(void);
 	void					deleteClient(unsigned int);
 	void					setClient(void);

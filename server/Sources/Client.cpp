@@ -39,19 +39,17 @@ bool	Client::init()
 	return true;
 }
 
-bool	Client::getOldestInput()
+char *	Client::getInput()
 {
+	char * result = NULL;
 	_mutexInput->lock();
-	/*char * header = new char[];
-	memset(header, 0,);
-	
-	char * body = ;
-	memset(body, 0, _proto._getHeaderSize());
-
-	_proto._setNewPacketHeader(header);
-	_proto._setNewPacketBody(body);*/
+	if (_input.size() > 0)
+	{
+		result = _input[0];
+		_input.erase(_input.begin());
+	}
 	_mutexInput->unlock();
-	return true;
+	return result;
 }
 
 char *	Client::getOutput()
@@ -71,6 +69,13 @@ void	Client::addInput(char * e)
 {
 	_mutexInput->lock();
 	_input.push_back(e);
+	_mutexInput->unlock();
+}
+
+void	Client::addOutput(char * e)
+{
+	_mutexInput->lock();
+	_output.push_back(e);
 	_mutexInput->unlock();
 }
 

@@ -1,6 +1,5 @@
-#pragma once
 #ifndef PROTOCOLE_HPP_
-# define PROCOTOLE_HPP_
+# define PROTOCOLE_HPP_
 
 #include			<cstring>
 #include			<cstdint>

@@ -5,12 +5,13 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Thu Nov 26 19:10:23 2015 Probola
+// Last update Tue Dec  1 16:40:15 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
 # define			_SFML_HPP_
 
+#include			"Sprite.hpp"
 #include			<SFML/Window.hpp>
 
 class				SFML
@@ -21,7 +22,7 @@ public:
   SFML();
   ~SFML();
   bool				 initialize(int size_x, int size_y, std::string &name);
-  //update();
+  void				update(Sprite *);
 };
 
 #endif

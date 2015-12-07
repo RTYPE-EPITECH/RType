@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Tue Dec  1 15:24:28 2015 Florent BEAURAIN
+## Last update Thu Dec  3 16:43:33 2015 Probola
 ##
 
 ## Server sources
@@ -33,3 +33,16 @@ COMMON			+=	$(DIR_COMMON)UMutex.cpp
 COMMON			+=	$(DIR_COMMON)Tools.cpp
 COMMON			+=	$(DIR_COMMON)UConditionVariable.cpp
 COMMON			+=	$(DIR_COMMON)Protocole.cpp
+
+## Client sources
+
+DIR_CLIENT		=	client/Sources/
+
+CLIENT			+=	Game.cpp
+CLIENT                  +=	main.cpp
+CLIENT 	                +=	Network.cpp
+CLIENT                  +=	SFML.cpp
+CLIENT                  +=	Sound.cpp
+CLIENT                  +=	SoundFactory.cpp
+CLIENT                  +=	Sprite.cpp
+CLIENT                  +=	TextureFactory.cpp

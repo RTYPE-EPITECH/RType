@@ -19,20 +19,40 @@ bool Game::init()
 
 bool Game::loop()
 {
-	// For each client, get the oldest Input
-	for (unsigned int i = 0; i < _clients.size(); i++)
+	while (1)
 	{
-		char * input = NULL;
-		if (!(input = _clients[i]->getInput()))
-			break;
-		// set input into protocole to have the get/set
+		// For each client, get the oldest Input
+		for (unsigned int i = 0; i < _clients.size(); i++)
+		{
+			char * input = NULL;
+			if (!(input = _clients[i]->getInput()))
+				break;
+			// set input into protocole to have the get/set
+			_proto._setNewPacket(input);
+			handleInputClient(_clients[i]);
+			// Move player or shoot 
 
-
-		// Move player or shoot 
-		// Check Scene
-
+			// Check Scene
+		}
 	}
 	return true;
+}
+
+bool	Game::handleInputClient(Client * c)
+{
+	if (_proto._getHeaderOpcode() != 3)
+	{
+		ACTION a = (ACTION)_proto._getActionOpcode();
+		Missile * m = NULL;
+		if (a == SHOOT)
+			m = c->getPlayer()->shoot();
+		else
+			c->getPlayer()->move(a, 1);
+	}
+	else
+	{
+		// send Packet error
+	}
 }
 
 unsigned int Game::getIdThread() const

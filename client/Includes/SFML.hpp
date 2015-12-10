@@ -5,25 +5,25 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Thu Dec  3 16:22:06 2015 Probola
+// Last update Mon Dec  7 00:33:04 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
 # define			_SFML_HPP_
 
 #include			"Sprite.hpp"
-#include			<SFML/Window.hpp>
+#include			"SFML/RenderWindow.hpp"
 
 class				SFML
 {
-  sf::window			_window;
+  sf::RenderWindow		win(sf::videoMode(800, 800, 32), "RType");
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
 
 public:
   SFML();
   ~SFML();
-  bool				 initialize(int size_x, int size_y, std::string &name);
+  void				loop();
   void				update(const std::string &, int, int);
 };
 

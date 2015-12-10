@@ -7,12 +7,11 @@
 class Missile;
 
 class Player : public AObject {
+public:
 	Player(Protocole &);
 	~Player();
 
 	Missile * shoot();
-	bool move(ACTION, size_t);
-
 
 	// get / set
 	size_t getLife() const;

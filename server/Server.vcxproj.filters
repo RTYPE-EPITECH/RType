@@ -51,6 +51,9 @@
     <ClInclude Include="Includes\AObject.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Includes\EObject.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
     <ClInclude Include="Includes\Player.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -78,13 +81,10 @@
     <ClInclude Include="..\common\Includes\IConditionVariable.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\Includes\EObject.hpp">
+    <ClInclude Include="..\common\Includes\IDynamicLibrary.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\Includes\EMissile.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Includes\Missile.hpp">
+    <ClInclude Include="..\common\Includes\WDynamicLibrary.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -137,7 +137,7 @@
     <ClCompile Include="..\common\Sources\WConditionVariable.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Missile.cpp">
+    <ClCompile Include="..\common\Sources\WDynamicLibrary.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

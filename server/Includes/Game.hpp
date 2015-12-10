@@ -29,6 +29,8 @@ private:
 	std::vector<Client *> _clients;
 	std::vector<Monster*> _monsters;
 	std::vector<Obstacle *> _obstacles;
+
+	bool handleInputClient(Client *);
 };
 
 #endif /* GAME_HPP */

@@ -89,11 +89,12 @@ bool	AObject::move(ACTION a, size_t t)
 	static size_t fx = x;
 	static size_t fy = y;
 	if (check == true) {
-		tomove[UP] = &moveTop;
-		tomove[DOWN] = &moveBot;
-		tomove[LEFT] = &moveLeft;
-		tomove[RIGHT] = &moveRight;
+		tomove[UP] = &AObject::moveTop;
+		tomove[DOWN] = &AObject::moveBot;
+		tomove[LEFT] = &AObject::moveLeft;
+		tomove[RIGHT] = &AObject::moveRight;
 	}
 	(this->*tomove[a])(fx, fy, t);
 // a finir;
+	return true;
 }

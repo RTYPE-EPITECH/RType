@@ -53,6 +53,7 @@ bool	Game::handleInputClient(Client * c)
 	{
 		// send Packet error
 	}
+	return true;
 }
 
 unsigned int Game::getIdThread() const

@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef WCONDITIONVARIABLE_HPP_
 # define WCONDITIONVARIABLE_HPP_
 

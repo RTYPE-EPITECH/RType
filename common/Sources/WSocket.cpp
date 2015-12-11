@@ -54,7 +54,7 @@ void					WSocket::_socket(const eSocketFamily family, const eSocketType type, co
 	return;
 }
 
-void					WSocket::_connect(const eSocketFamily family, const char * const ip, const int port) const {
+void					WSocket::_connect(const eSocketFamily family, const char * const ip, const unsigned short port) const {
 	sockaddr_in			service;
 
 	service.sin_family = family;
@@ -67,7 +67,7 @@ void					WSocket::_connect(const eSocketFamily family, const char * const ip, co
 	return;
 }
 
-void					WSocket::_connect(const eSocketFamily family, const std::string &ip, const int port) const {
+void					WSocket::_connect(const eSocketFamily family, const std::string &ip, const unsigned short port) const {
 	sockaddr_in			service;
 
 	service.sin_family = family;
@@ -89,11 +89,11 @@ ISocket				*WSocket::_accept(void) {
 		throw std::runtime_error("WSAAccept function failed");
 	if (_fd_max < fd)
 		_fd_max = fd;
-	WSocket	*newConnection = new WSocket(fd);
+	ISocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }
 
-void					WSocket::_bind(const eSocketFamily family, const int port) const {
+void					WSocket::_bind(const eSocketFamily family, const unsigned short port) const {
 	sockaddr_in			service;
 	service.sin_family = family;
 	service.sin_addr.s_addr = htons(INADDR_ANY);
@@ -232,7 +232,7 @@ char					*WSocket::_recv(const size_t size, const int flags) const {
 
 char					*WSocket::_recvfrom(const int flags, tSocketAdress *adresse) const {
 	(void)flags;
-	(void)adress;
+	(void)adresse;
 
 	return "Work in progress ...";
 }
@@ -242,7 +242,7 @@ char					*WSocket::_recvfrom(const size_t size, const int flags, tSocketAdress *
 	(void)flags;
 	(void)adress;
 
-	return "Work in progress ..."
+	return "Work in progress ...";
 }
 
 void					WSocket::_send(const char * const msg, const int flags) const {

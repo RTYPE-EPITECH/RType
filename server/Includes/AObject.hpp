@@ -46,6 +46,4 @@ private:
 	static std::vector<size_t> _ids;
 };
 
-std::vector<size_t> AObject::_ids;
-
 #endif /* AOBJECT_HPP */

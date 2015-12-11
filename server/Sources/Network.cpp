@@ -1,5 +1,7 @@
 #include			"Network.hpp"
 #include			<iostream>
+#include			"Tools.hpp"
+
 #ifdef WIN32
 # include "WConditionVariable.hpp"
 #else
@@ -42,13 +44,12 @@ void				Network::init(const std::string & port) {
 	_socket = new USocket();
 	_i = new UConditionVariable();
 #endif
-	//_listClient.clear();
+
 	_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::TCP);
 	std::cout << "socket ok" << std::endl;
-	_socket->_bind(ISocket::IPv4, atoi(port.c_str()));
+	_socket->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(port));
 	std::cout << "bind ok" << std::endl;
 
-	//_listClient.push_back(new Client(new USocket(STDIN_FILENO)));
 	_socket->_FD_ZERO("rw");
 	std::cout << "Welcome on the RType Server (port : " << port.c_str() << ")" << std::endl;
 }

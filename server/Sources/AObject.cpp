@@ -3,6 +3,8 @@
 #include <map>
 #include <iostream>
 
+std::vector<size_t> AObject::_ids;
+
 AObject::AObject(Protocole & _p) : _proto(_p)
 {
 	x = 0;

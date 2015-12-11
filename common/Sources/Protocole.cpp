@@ -19,7 +19,7 @@ Protocole::~Protocole(void) {}
 ** Functions to create Packets
 */
 
-void		Protocole::_createResponsePacket(ERROR err) {
+void		Protocole::_createResponsePacket(ERROR_PROTO err) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(responsePacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(responsePacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));

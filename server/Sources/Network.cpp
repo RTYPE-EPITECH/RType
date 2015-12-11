@@ -1,11 +1,13 @@
 #include			"Network.hpp"
 #include			<iostream>
 #include			"Tools.hpp"
+#include			"Client.hpp"
+#include			"Game.hpp"
 
 #ifdef WIN32
-# include "WConditionVariable.hpp"
+# include			"WConditionVariable.hpp"
 #else
-# include "UConditionVariable.hpp"
+# include			"UConditionVariable.hpp"
 #endif
 
 /*
@@ -27,6 +29,10 @@ Network::~Network(void) {
 
 void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
+	//accept
+	// recup IP + PORT
+	ISocket * New = _socket->_accept();
+
 }
 
 void				Network::deleteClient(unsigned int i) {

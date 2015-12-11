@@ -89,6 +89,8 @@ ISocket				*WSocket::_accept(void) {
 		throw std::runtime_error("WSAAccept function failed");
 	if (_fd_max < fd)
 		_fd_max = fd;
+	/*std::string ip(inet_ntoa(saClient.sin_addr));
+	unsigned short port = ntohs(saClient.sin_port);*/
 	ISocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }
@@ -103,7 +105,6 @@ void					WSocket::_bind(const eSocketFamily family, const unsigned short port) c
 		_close();
 		WSACleanup();
 	}
-
 	return;
 }
 

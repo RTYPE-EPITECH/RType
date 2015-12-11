@@ -25,6 +25,8 @@ public:
 	STATE_CONNECT getState() const;
 	void setState(STATE_CONNECT);
 
+	ISocket *	getSocket() const;
+
 	// Mutexed function to get input/output from vector
 	char *	getInput();
 	char *	getOutput();

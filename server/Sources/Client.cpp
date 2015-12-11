@@ -15,14 +15,14 @@
 Client::Client(const std::string & _ip, short _port)
 {
 #ifndef WIN32
-	_socket = new USocket(0);
+
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();
 #else
-	_socket = new WSocket(0);
 	_mutexOutput = new WMutex();
 	_mutexInput = new WMutex();
 #endif
+	_socket = NULL;
 	ip = _ip;
 	port = _port;
 	player = NULL;
@@ -101,4 +101,9 @@ STATE_CONNECT Client::getState() const
 void Client::setState(STATE_CONNECT e)
 {
 	_state = e;
+}
+
+ISocket * Client::getSocket() const
+{
+	return _socket;
 }

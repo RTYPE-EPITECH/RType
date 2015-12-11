@@ -14,13 +14,16 @@ class Player;
 class Client
 {
 public:
-	Client(Game * g, const std::string &, short);
+	Client(const std::string &, short);
 	~Client();
-	bool init();
+	bool init(Game *);
 
 	// get/set player object
 	Player * getPlayer() const;
 	void	setPlayer(Player *);
+
+	STATE_CONNECT getState() const;
+	void setState(STATE_CONNECT);
 
 	// Mutexed function to get input/output from vector
 	char *	getInput();
@@ -39,6 +42,8 @@ private:
 	STATE_CONNECT _state;
 	Game  * _game;
 	Player * player;
+
+	Protocole protocole;
 
 	IMutex * _mutexOutput;
 	IMutex * _mutexInput;

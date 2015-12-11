@@ -1,8 +1,11 @@
+#pragma once
 #ifndef AOBJECT_HPP
 #define AOBJECT_HPP
 
 #include "Protocole.hpp"
 #include "EObject.hpp"
+
+class Game;
 
 class AObject
 {
@@ -10,8 +13,7 @@ public:
 	AObject(Protocole &);
 	~AObject();
 
-	// FAIRE LES GET/SET
-
+	size_t	getId() const;
 	size_t	getX() const;
 	size_t	getY() const;
 	size_t	getWidth() const;
@@ -24,9 +26,10 @@ public:
 	void	setHeight(size_t);
 	void	setType(EObject);
 
-	bool	move(ACTION, size_t);
+	bool	move(Game *, ACTION, size_t);
 
 protected:
+	size_t id;
 	size_t x;
 	size_t y;
 	size_t width;
@@ -39,8 +42,10 @@ private:
 	void	moveLeft(size_t &x, size_t &y, size_t s = 1) const;
 	void	moveTop(size_t &x, size_t &y, size_t s = 1) const;
 	void	moveBot(size_t &x, size_t &y, size_t s = 1) const;
+	
+	static std::vector<size_t> _ids;
 };
 
-
+std::vector<size_t> AObject::_ids;
 
 #endif /* AOBJECT_HPP */

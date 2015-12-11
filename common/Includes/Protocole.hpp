@@ -6,6 +6,8 @@
 #include			<vector>
 #include			<map>
 
+class AObject;
+
 typedef struct {
 	uint8_t			lenght;
 	uint8_t			data[255];
@@ -87,6 +89,7 @@ public:
 	void					_createConnectPacket(void);
 	void					_createActionPacket(ACTION act);
 	void					_createParametersPacket(int, int);
+	void					_addPositionPacket(AObject *);
 	void					_addPositionPacket(int, int, int, int, const char *);
 	void					_putPositionPacketOnList(void);
 	void					_createPingCommand(void);

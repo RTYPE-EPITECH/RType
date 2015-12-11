@@ -1,5 +1,7 @@
 #include "AObject.hpp"
+#include "Game.hpp"
 #include <map>
+#include <iostream>
 
 AObject::AObject(Protocole & _p) : _proto(_p)
 {
@@ -8,10 +10,17 @@ AObject::AObject(Protocole & _p) : _proto(_p)
 	width = 0;
 	height = 0;
 	type = UNKNOWN_OBJECT;
+	id = _ids.size();
+	_ids.push_back(id);
 }
 
 AObject::~AObject()
 {
+}
+
+size_t	AObject::getId() const
+{
+	return id;
 }
 
 size_t	AObject::getX() const
@@ -79,7 +88,7 @@ void	AObject::moveBot(size_t &x, size_t &y, size_t s) const
 	y += s;
 }
 
-bool	AObject::move(ACTION a, size_t t)
+bool	AObject::move(Game * g, ACTION a, size_t t)
 {
 	static std::map<ACTION,
 					void(AObject::*)(size_t &, 
@@ -93,8 +102,24 @@ bool	AObject::move(ACTION a, size_t t)
 		tomove[DOWN] = &AObject::moveBot;
 		tomove[LEFT] = &AObject::moveLeft;
 		tomove[RIGHT] = &AObject::moveRight;
+		check = false;
 	}
 	(this->*tomove[a])(fx, fy, t);
-// a finir;
+
+	// CHECK IF IT GET OUT OF SCREEN /!\ 
+
+	// Check collision with Player/ScreenEdge. If true, then do nothing
+	if (g->checkCollisionObject("Player", this)
+		|| g->checkCollisionObject("Screen", this))
+		return true;
+
+	// check collision with enemies/obstacle/missile . If true, then player dies
+	if (g->checkCollisionObject("Monster", this)
+		|| g->checkCollisionObject("Obstacle", this)
+		|| g->checkCollisionObject("Missile", this))
+		return false;
+	// no collision, apply position
+	x = fx;
+	y = fy;
 	return true;
 }

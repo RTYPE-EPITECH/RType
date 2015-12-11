@@ -1,4 +1,5 @@
 #include "Protocole.hpp"
+#include "AObject.hpp"
 
 Protocole::Protocole(void) {
 	this->_posInArray = 0;
@@ -66,6 +67,16 @@ void		Protocole::_createActionPacket(ACTION act) {
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	memcpy(result + sizeof(headerPacket), &(this->_action), sizeof(actionPacket));
 	this->_listPacket.push_back(result);
+}
+
+void		Protocole::_addPositionPacket(AObject * obj)
+{
+	_addPositionPacket(obj->getX(),
+		obj->getY(),
+		obj->getWidth(),
+		obj->getHeight(),
+		"Type");
+	//obj->getType()
 }
 
 void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite) {

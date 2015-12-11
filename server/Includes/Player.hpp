@@ -29,6 +29,7 @@ private:
 	size_t life;
 	size_t maxLife;
 	size_t maxMissile;
+	size_t currentMissile;
 	EMissile typeMissile;
 };
 

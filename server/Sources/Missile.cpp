@@ -30,9 +30,11 @@ EMissile Missile::getType()
 	return _type;
 }
 
-Missile * Missile::newInstance(Protocole & e, EMissile t, size_t x, size_t y)
+Missile * Missile::newInstance(Protocole & e, EMissile t, size_t _x, size_t _y)
 {
 	Missile * m = new Missile(e);
 	m->setType(t);
+	m->setX(_x);
+	m->setY(_y);
 	return m;
 }

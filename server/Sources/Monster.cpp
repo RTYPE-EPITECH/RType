@@ -1,4 +1,5 @@
 #include "Monster.hpp"
+#include "Missile.hpp"
 
 Monster::Monster(Protocole & _p) : AObject(_p)
 {
@@ -48,4 +49,16 @@ size_t Monster::getMaxMissile() const
 EMissile Monster::getTypeMissile() const
 {
 	return typeMissile;
+}
+
+Missile * Monster::shoot(Game *)
+{
+	if (currentMissile < maxMissile)
+	{
+		currentMissile++;
+		missiles.push_back(Missile::newInstance(_proto, typeMissile, x + width + 1, y + width / 2));
+		// CREATE PACKET NEW SPRITE
+		return missiles.back();
+	}
+	return NULL;
 }

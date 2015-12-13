@@ -29,9 +29,8 @@ Network::~Network(void) {
 
 void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
-	//accept
-	// recup IP + PORT
-	ISocket * New = _socket->_accept();
+
+	//ISocket * New = _socket->_accept();
 
 }
 

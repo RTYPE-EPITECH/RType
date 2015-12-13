@@ -11,12 +11,15 @@
 #define ZONE			100
 #define SPAWN			500
 #define MAX_PLAYER_GAME	4
+#define FPS				30
 
 class AObject;
 class Client;
 class Player;
 class Monster;
 class Obstacle;
+class ITimer;
+class IMutex;
 
 class Game
 {
@@ -33,12 +36,16 @@ public:
 
 	int	getSizeAvailable() const;
 
-	bool checkCollisionObject(const std::string &, AObject *) const;
+	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
 
 private:
 	unsigned int _idThread;
 	IConditionVariable & _condVar;
 	Protocole			_proto;
+	IMutex				* mutex;
+	ITimer				* timer;
+	size_t				_currwave;
+	size_t				_stateScroll;
 
 	// Sprites present on the scene
 	std::vector<Client *> _clients;
@@ -50,16 +57,21 @@ private:
 
 	// All the waves to launch
 	std::map<size_t, std::vector<Monster *> * > _waves;
-	size_t					_currwave;
-	size_t					_stateScroll;
 
+	// checkInputAvailable
+	bool haveInput(unsigned long long);
+
+	// factorisation 
 	bool handleInputClient(Client *);
+	bool handleObjestScene();
 	bool conditionCollision(AObject *, AObject *) const;
 
-	bool listPlayer(AObject *) const;
-	bool listMonster(AObject *) const;
-	bool listObstacles(AObject *) const;
-	bool listMissiles(AObject *) const;
+	AObject* listPlayer(AObject *) const;
+	AObject* listMonster(AObject *) const;
+	AObject* listObstacles(AObject *) const;
+	AObject* listMissiles(AObject *) const;
+
+	void AllMove();
 };
 
 #endif /* GAME_HPP */

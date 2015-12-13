@@ -11,7 +11,7 @@ public:
 	Player(Protocole &);
 	~Player();
 
-	Missile * shoot();
+	Missile * shoot(Game *);
 
 	// get / set
 	size_t getLife() const;

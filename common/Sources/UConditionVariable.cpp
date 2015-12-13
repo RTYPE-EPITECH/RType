@@ -1,6 +1,7 @@
 #include "UConditionVariable.hpp"
 #include <stdexcept>
 #include <iostream>
+#include <sys/time.h>
 
 UConditionVariable::UConditionVariable()
 {
@@ -33,6 +34,24 @@ void UConditionVariable::wait()
 	while (condition == false)
 		 if (pthread_cond_wait(&_cond, &_mut) != 0)
 		 	throw std::runtime_error("Failed to wait cond var");
+	if (pthread_mutex_unlock(&_mut) != 0)
+		throw std::runtime_error("Failed to wait cond var");
+}
+
+void UConditionVariable::wait(unsigned long long t)
+{
+	struct timespec timeToWait;
+	struct timeval now;
+
+	gettimeofday(&now, NULL);
+	timeToWait.tv_sec = now.tv_sec + t / 1000.0;
+	timeToWait.tv_nsec = now.tv_usec * 1000;
+
+	if (pthread_mutex_lock(&_mut) != 0)
+		throw std::runtime_error("Failed to lock Mutex");
+	while (condition == false)
+		if (pthread_cond_timedwait(&_cond, &_mut, &timeToWait) != 0)
+			throw std::runtime_error("Failed to wait cond var");
 	if (pthread_mutex_unlock(&_mut) != 0)
 		throw std::runtime_error("Failed to wait cond var");
 }

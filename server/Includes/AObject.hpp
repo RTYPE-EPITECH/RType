@@ -11,7 +11,10 @@ class AObject
 {
 public:
 	AObject(Protocole &);
+	AObject(const AObject &);
 	~AObject();
+
+	AObject & operator=(const AObject &);
 
 	size_t	getId() const;
 	size_t	getX() const;
@@ -19,7 +22,8 @@ public:
 	size_t	getWidth() const;
 	size_t	getHeight() const;
 	EObject	getType() const;
-	
+	bool	isDead() const;
+
 	void	setX(size_t);
 	void	setY(size_t);
 	void	setWidth(size_t);
@@ -27,6 +31,7 @@ public:
 	void	setType(EObject);
 
 	bool	move(Game *, ACTION, size_t);
+	void	die(Game *);
 
 protected:
 	size_t id;
@@ -36,6 +41,7 @@ protected:
 	size_t height;
 	EObject type;
 	Protocole & _proto;
+	bool	_dead;
 
 private:
 	void	moveRight(size_t &x, size_t &y, size_t s = 1) const;

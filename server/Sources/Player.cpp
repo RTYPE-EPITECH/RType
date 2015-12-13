@@ -12,12 +12,14 @@ Player::Player(Protocole & _p) : AObject(_p)
 
 Player::~Player() {}
 
-Missile * Player::shoot()
+Missile * Player::shoot(Game *)
 {
 	if (currentMissile < maxMissile)
 	{
 		currentMissile++;
-		return Missile::newInstance(_proto, typeMissile, x + width + 1, y + width / 2);
+		missiles.push_back(Missile::newInstance(_proto, typeMissile, x + width + 1, y + width / 2));
+		// CREATE PACKET NEW SPRITE
+		return missiles.back();
 	}
 	return NULL;
 }

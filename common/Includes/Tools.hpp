@@ -19,7 +19,7 @@ public:
     return (result);
   }
 
-  template<typename T>
+ /* template<typename T>
   static std::string		NumberToString(T nb)
   {
     std::ostringstream	oss;
@@ -29,7 +29,7 @@ public:
 
     result = oss.str();
     return (result);
-  }
+  }*/
 };
 /*template<unsigned int> unsigned int Tools::charToNumber(const std::string &);
 template<unsigned short> unsigned short Tools::charToNumber(const std::string &);

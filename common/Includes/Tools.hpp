@@ -24,7 +24,7 @@ public:
     std::ostringstream	oss;
     std::string		result;
 
-    oss << T;
+    oss << nb;
 
     result = oss.str();
     return (result);

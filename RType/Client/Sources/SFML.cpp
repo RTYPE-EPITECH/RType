@@ -5,14 +5,14 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Mon Dec  7 01:13:00 2015 Probola
+// Last update Mon Dec 14 11:09:45 2015 Probola
 //
 
 #include			"SFML.hpp"
 
 SFML::SFML()
 {
-
+  this->win = sf::VideoMode(800, 800, "RType");
 }
 
 SFML::~SFML()

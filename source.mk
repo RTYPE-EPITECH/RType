@@ -39,11 +39,14 @@ COMMON			+=	$(DIR_COMMON)Protocole.cpp
 
 DIR_CLIENT		=	client/Sources/
 
-CLIENT			+=	Game.cpp
-CLIENT                  +=	main.cpp
-CLIENT 	                +=	Network.cpp
-CLIENT                  +=	SFML.cpp
-CLIENT                  +=	Sound.cpp
-CLIENT                  +=	SoundFactory.cpp
-CLIENT                  +=	Sprite.cpp
-CLIENT                  +=	TextureFactory.cpp
+#CLIENT			+=	$(DIR_CLIENT)Game.cpp
+CLIENT                  +=	$(DIR_CLIENT)main.cpp
+#CLIENT 	                +=	$(DIR_CLIENT)Network.cpp
+CLIENT                  +=	$(DIR_CLIENT)SFML.cpp
+CLIENT                  +=	$(DIR_CLIENT)Sound.cpp
+CLIENT                  +=	$(DIR_CLIENT)SoundFactory.cpp
+CLIENT                  +=	$(DIR_CLIENT)RSprite.cpp
+CLIENT                  +=	$(DIR_CLIENT)TextureFactory.cpp
+CLIENT			+=	$(DIR_CLIENT)RTexture.cpp
+CLIENT			+=	$(DIR_CLIENT)SpriteFactory.cpp
+CLIENT			+=	$(DIR_CLIENT)TextureFactory.cpp

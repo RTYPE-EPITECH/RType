@@ -14,12 +14,13 @@ NAME			=	binServer
 
 OBJS_SERVER		=	$(SERVER:.cpp=.o)
 OBJS_COMMON		=	$(COMMON:.cpp=.o)
+OBJS_CLIENT		=	$(CLIENT:.cpp=.o)
 
 CXX			?=	g++
 
 DEBUG			?=	no
 
-CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes -Iclient/Includes
+CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes -Iclient/Includes -Icommon/Library/SFML-Unix/include -lcommon/Library/SFML-Unix
 
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded
@@ -33,10 +34,10 @@ endif
 
 all:			$(NAME)
 
-$(NAME):		$(OBJS_COMMON) $(OBJS_SERVER)
-			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON)
+$(NAME):		$(OBJS_COMMON) $(OBJS_SERVER) $(OBJS_CLIENT)
+			$(CXX) -o $(NAME) $(OBJS_SERVER) $(OBJS_COMMON) $(OBJS_CLIENT)
 clean:
-			@rm -vf $(OBJS_SERVER) $(OBJS_COMMON)
+			@rm -vf $(OBJS_SERVER) $(OBJS_COMMON) $(OBJS_CLIENT)
 
 fclean:			clean
 			@rm -vf $(NAME)

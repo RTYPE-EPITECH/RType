@@ -5,18 +5,25 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Mon Dec  7 00:33:04 2015 Probola
+// Last update Mon Dec 14 11:07:57 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
 # define			_SFML_HPP_
 
-#include			"Sprite.hpp"
-#include			"SFML/RenderWindow.hpp"
+#include			"SpriteFactory.hpp"
+#include			"SoundFactory.hpp"
+#include	                "SFML.hpp"
+#include		        "SFML/Audio.hpp"
+#include			"SFML/Config.hpp"
+#include		        "SFML/Graphics.hpp"
+#include			"SFML/Network.hpp"
+#include			"SFML/System.hpp"
+#include			"SFML/Window.hpp"
 
 class				SFML
 {
-  sf::RenderWindow		win(sf::videoMode(800, 800, 32), "RType");
+  sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
 

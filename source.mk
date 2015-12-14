@@ -5,48 +5,55 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Mon Dec 14 13:41:38 2015 Probola
+## Last update Mon Dec 14 15:31:45 2015 Pierre Noel
 ##
 
 ## Server sources
 
-DIR_SERVER		=	RType/Server/Sources/
+DIR_SERVER		=	RType/Server/
+DIR_SERVER_S		=	RType/Server/Sources/
+DIR_SERVER_I		=	RType/Server/Includes/
 
-SERVER			+=	$(DIR_SERVER)main.cpp
-SERVER			+=	$(DIR_SERVER)Client.cpp
-SERVER			+=	$(DIR_SERVER)Network.cpp
-SERVER			+=	$(DIR_SERVER)Game.cpp
-SERVER			+=	$(DIR_SERVER)HandleThread.cpp
-SERVER			+=	$(DIR_SERVER)Monster.cpp
-SERVER			+=	$(DIR_SERVER)Player.cpp
-SERVER			+=	$(DIR_SERVER)Obstacle.cpp
-SERVER			+=	$(DIR_SERVER)AObject.cpp
-SERVER			+=	$(DIR_SERVER)Missile.cpp
+SERVER			+=	$(DIR_SERVER_S)main.cpp
+SERVER			+=	$(DIR_SERVER_S)Client.cpp
+SERVER			+=	$(DIR_SERVER_S)Network.cpp
+SERVER			+=	$(DIR_SERVER_S)Game.cpp
+SERVER			+=	$(DIR_SERVER_S)HandleThread.cpp
+SERVER			+=	$(DIR_SERVER_S)Monster.cpp
+SERVER			+=	$(DIR_SERVER_S)Player.cpp
+SERVER			+=	$(DIR_SERVER_S)Obstacle.cpp
+SERVER			+=	$(DIR_SERVER_S)AObject.cpp
+SERVER			+=	$(DIR_SERVER_S)Missile.cpp
 
 ## Common sources
 
-DIR_COMMON		=	RType/Common/Sources/
+DIR_COMMON		=	RType/Common/
+DIR_COMMON_S		=	RType/Common/Sources/
+DIR_COMMON_I		=	RType/Common/Includes/
 
-COMMON			+=	$(DIR_COMMON)USocket.cpp
-COMMON			+=	$(DIR_COMMON)UTimer.cpp
-COMMON			+=	$(DIR_COMMON)UThread.cpp
-COMMON			+=	$(DIR_COMMON)UMutex.cpp
-COMMON			+=	$(DIR_COMMON)Tools.cpp
-COMMON			+=	$(DIR_COMMON)UConditionVariable.cpp
-COMMON			+=	$(DIR_COMMON)Protocole.cpp
+COMMON			+=	$(DIR_COMMON_S)USocket.cpp
+COMMON			+=	$(DIR_COMMON_S)UTimer.cpp
+COMMON			+=	$(DIR_COMMON_S)UThread.cpp
+COMMON			+=	$(DIR_COMMON_S)UMutex.cpp
+COMMON			+=	$(DIR_COMMON_S)Tools.cpp
+COMMON			+=	$(DIR_COMMON_S)UConditionVariable.cpp
+COMMON			+=	$(DIR_COMMON_S)Protocole.cpp
 
 ## Client sources
 
-DIR_CLIENT		=	RType/Client/Sources/
+DIR_CLIENT		=	RType/Client/
+DIR_CLIENT_S		=	RType/Client/Sources/
+DIR_CLIENT_I		=	RType/Client/Includes/
 
-#CLIENT			+=	$(DIR_CLIENT)Game.cpp
-CLIENT                  +=	$(DIR_CLIENT)main.cpp
-#CLIENT 	                +=	$(DIR_CLIENT)Network.cpp
-CLIENT                  +=	$(DIR_CLIENT)SFML.cpp
-CLIENT                  +=	$(DIR_CLIENT)Sound.cpp
-CLIENT                  +=	$(DIR_CLIENT)SoundFactory.cpp
-CLIENT                  +=	$(DIR_CLIENT)RSprite.cpp
-CLIENT                  +=	$(DIR_CLIENT)TextureFactory.cpp
-CLIENT			+=	$(DIR_CLIENT)RTexture.cpp
-CLIENT			+=	$(DIR_CLIENT)SpriteFactory.cpp
-CLIENT			+=	$(DIR_CLIENT)TextureFactory.cpp
+#CLIENT			+=	$(DIR_CLIENT_S)Game.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)main.cpp
+#CLIENT 	                +=	$(DIR_CLIENT_S)Network.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)SFML.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)Sound.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)SoundFactory.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)RSprite.cpp
+CLIENT                  +=	$(DIR_CLIENT_S)TextureFactory.cpp
+CLIENT			+=	$(DIR_CLIENT_S)RTexture.cpp
+CLIENT			+=	$(DIR_CLIENT_S)SpriteFactory.cpp
+
+DIR_LIB			=	RType/Common/Library/

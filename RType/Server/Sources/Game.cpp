@@ -99,34 +99,36 @@ bool Game::haveInput(unsigned long long t)
 
 bool Game::loop()
 {
-	while (1)
+  while (1)
+    {
+      if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
 	{
-		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
-		{
-			mutex->lock();
-			// For each client, get the oldest Input
-			for (size_t i = 0; i < _clients.size(); i++)
-			{
-				char * input = NULL;
-				if (!(input = _clients[i]->getInput()))
-					continue;
-				// set input into protocole to have the get/set
-				_proto._setNewPacket(input);
-				handleInputClient(_clients[i]);
-			}
-			mutex->unlock();
-		}
-		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
-		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
-		{
-			mutex->lock();
-			AllMove();
-			mutex->unlock();
-			timer->start();
-		}
-		//packet scroll
+	  mutex->lock();
+	  // For each client, get the oldest Input
+	  for (size_t i = 0; i < _clients.size(); i++)
+	    {
+	      char * input = NULL;
+	      if (!(input = _clients[i]->getInput()))
+		continue;
+	      // set input into protocole to have the get/set
+	      _proto._setNewPacket(input);
+	      handleInputClient(_clients[i]);
+	    }
+	  //_proto._putPositionPacketOnList();
+	  //_proto._getLastPacket();
+	  mutex->unlock();
 	}
-	return true;
+      // Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
+      if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
+	{
+	  mutex->lock();
+	  AllMove();
+	  mutex->unlock();
+	  timer->start();
+	}
+      //packet scroll
+    }
+  return true;
 }
 
 bool	Game::handleObjestScene()
@@ -138,25 +140,25 @@ bool	Game::handleObjestScene()
 
 bool	Game::handleInputClient(Client * c)
 {
-	if (_proto._getHeaderOpcode() != 3)
+  if (_proto._getHeaderOpcode() != 3)
+    {
+      ACTION a = (ACTION)_proto._getActionOpcode();
+      Missile * m = NULL;
+      if (a == SHOOT)
 	{
-		ACTION a = (ACTION)_proto._getActionOpcode();
-		Missile * m = NULL;
-		if (a == SHOOT)
-		{
-			if ((m = c->getPlayer()->shoot(this)) == NULL)
-				std::cout << "Player " << c->getPlayer()->getId() << " cannot shoot" << std::endl;
-		}
-		else
-			if (c->getPlayer()->move(this, a, 1) == false)
-				std::cout << "Player " << c->getPlayer()->getId() << " die" << std::endl;
+	  if ((m = c->getPlayer()->shoot(this)) == NULL)
+	    std::cout << "Player " << c->getPlayer()->getId() << " cannot shoot" << std::endl;
 	}
-	else
-	{
-		// send Packet error
-		std::cerr << "NEED SEND PACKET ERROR - CHECK THE CODE" << std::endl;
-	}
-	return true;
+      else
+	if (c->getPlayer()->move(this, a, 1) == false)
+	  std::cout << "Player " << c->getPlayer()->getId() << " die" << std::endl;
+    }
+  else
+    {
+      // send Packet error
+      std::cerr << "NEED SEND PACKET ERROR - CHECK THE CODE" << std::endl;
+    }
+  return true;
 }
 
 unsigned int Game::getIdThread() const

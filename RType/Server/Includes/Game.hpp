@@ -37,11 +37,10 @@ public:
 	int	getSizeAvailable() const;
 
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
-
+  Protocole			_proto;
 private:
 	unsigned int _idThread;
 	IConditionVariable & _condVar;
-	Protocole			_proto;
 	IMutex				* mutex;
 	ITimer				* timer;
 	size_t				_currwave;

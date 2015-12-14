@@ -33,6 +33,10 @@ typedef struct {
 }					actionPacket;
 
 typedef struct {
+	uint8_t			scroll;
+}					scrollingPacket;
+
+typedef struct {
 	uint16_t		pos_x;
 	uint16_t		pos_y;
 	uint16_t		size_x;
@@ -66,6 +70,7 @@ private:
 	actionPacket			_action;
 	arrayPositionPacket		_arrayPositionPacket;
 	parametersPacket		_params;
+	scrollingPacket			_scroll;
 	int						_posInArray;
 	std::vector<char *>		_listPacket;
 
@@ -77,6 +82,7 @@ private:
 	void					_setParametersStruct(const char *);
 	void					_setActionStruct(const char *);
 	void					_setPositionStruct(const char *);
+	void					_setScrollingPacket(const char *);
 
 public:
 	Protocole(void);
@@ -96,6 +102,7 @@ public:
 	void					_createPingCommand(void);
 	void					_createPongCommand(void);
 	void					_createDisconnectCommand(void);
+	void					_createScrollingPacket(int);
 
 	/*
 	** Functions to handle new Packets
@@ -124,6 +131,7 @@ public:
 	uint8_t					_getParametersDifficulty(void) const;
 	uint8_t					_getParametersNbGame(void) const;
 	uint8_t					_getActionOpcode(void) const;
+	uint8_t					_getScrolling(void) const;
 	unsigned int			_getSizePacketHeader(void) const;
 };
 

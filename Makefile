@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Dec  3 16:41:16 2015 Probola
+## Last update Mon Dec 14 10:35:12 2015 Probola
 ##
 
 include			source.mk
@@ -13,7 +13,6 @@ include			source.mk
 NAME			=	binServer
 
 OBJS_SERVER		=	$(SERVER:.cpp=.o)
-OBJS_COMMON		=	$(COMMON:.cpp=.o)
 
 CXX			?=	g++
 

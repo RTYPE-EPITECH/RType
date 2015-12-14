@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:27:06 2015 Probola
-// Last update Fri Nov 20 13:29:56 2015 Probola
+// Last update Mon Dec 14 09:50:35 2015 Probola
 //
 
 #ifndef					_SOUND_HPP_
@@ -19,7 +19,7 @@ class					Sound
 private:
   sf::Music				*_music;
   sf::SoundBuffer			*_buffer;
-  sd::Sound				*_sound;
+  sf::Sound				*_sound;
 
 public:
   Sound();

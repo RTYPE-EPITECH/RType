@@ -7,12 +7,11 @@
 class Missile;
 
 class Player : public AObject {
+public:
 	Player(Protocole &);
 	~Player();
 
-	Missile * shoot();
-	bool move(ACTION, size_t);
-
+	Missile * shoot(Game *);
 
 	// get / set
 	size_t getLife() const;
@@ -30,6 +29,7 @@ private:
 	size_t life;
 	size_t maxLife;
 	size_t maxMissile;
+	size_t currentMissile;
 	EMissile typeMissile;
 };
 

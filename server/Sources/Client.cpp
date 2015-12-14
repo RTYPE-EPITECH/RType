@@ -2,6 +2,7 @@
 #include "ISocket.hpp"
 #include "Game.hpp"
 #include "IMutex.hpp"
+#include "Player.hpp"
 
 #ifndef WIN32
 # include "USocket.hpp"
@@ -11,20 +12,21 @@
 # include "WMutex.hpp"
 #endif
 
-Client::Client(Game * g, const std::string & _ip, short _port) : _game(g)
+Client::Client(const std::string & _ip, short _port)
 {
 #ifndef WIN32
-	_socket = new USocket(0);
+
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();
 #else
-	_socket = new WSocket(0);
 	_mutexOutput = new WMutex();
 	_mutexInput = new WMutex();
 #endif
+	_socket = NULL;
 	ip = _ip;
 	port = _port;
 	player = NULL;
+	_game = NULL;
 	_state = DISCONNECT;
 }
 
@@ -32,10 +34,12 @@ Client::~Client()
 {
 }
 
-bool	Client::init()
+bool	Client::init(Game * g)
 {
 	if (!_mutexInput->initialize() || !_mutexOutput->initialize())
 		return false;
+	player = new Player(protocole);
+	_game = g;
 	return true;
 }
 
@@ -87,4 +91,19 @@ Player * Client::getPlayer() const
 void	Client::setPlayer(Player *p)
 {
 	player = p;
+}
+
+STATE_CONNECT Client::getState() const
+{
+	return _state;
+}
+
+void Client::setState(STATE_CONNECT e)
+{
+	_state = e;
+}
+
+ISocket * Client::getSocket() const
+{
+	return _socket;
 }

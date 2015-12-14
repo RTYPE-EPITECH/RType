@@ -1,3 +1,4 @@
+#pragma once
 #ifndef PROTOCOLE_HPP_
 # define PROTOCOLE_HPP_
 
@@ -5,6 +6,8 @@
 #include			<cstdint>
 #include			<vector>
 #include			<map>
+
+class AObject;
 
 typedef struct {
 	uint8_t			lenght;
@@ -45,7 +48,7 @@ typedef struct {
 typedef				enum {
 					NONE = 0,
 					UNKNOW = 1
-}					ERROR;
+}					ERROR_PROTO;
 
 typedef				enum {
 					LEFT = 0,
@@ -83,10 +86,11 @@ public:
 	** Functions to create Packets 
 	*/
 
-	void					_createResponsePacket(ERROR err);
+	void					_createResponsePacket(ERROR_PROTO err);
 	void					_createConnectPacket(void);
 	void					_createActionPacket(ACTION act);
 	void					_createParametersPacket(int, int);
+	void					_addPositionPacket(AObject *);
 	void					_addPositionPacket(int, int, int, int, const char *);
 	void					_putPositionPacketOnList(void);
 	void					_createPingCommand(void);

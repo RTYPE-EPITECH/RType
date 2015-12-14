@@ -10,7 +10,7 @@ void			WDynamicLibrary::loadLibrary(const std::string &lib) {
 }
 
 void			WDynamicLibrary::useFunction(const std::string &func) const {
-	MYPROC		ProcAdd = (MYPROC)GetProcAddress(this->hinstLib, (LPCWSTR)func.data());
+	MYPROC		ProcAdd = (MYPROC)GetProcAddress(this->hinstLib, (LPCSTR)func.data());
 	if (ProcAdd == NULL)
 		throw std::runtime_error("[DynamcLibrary] GetProcAdress failed");
 	ProcAdd(L"");

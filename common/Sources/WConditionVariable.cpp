@@ -25,6 +25,14 @@ void WConditionVariable::wait()
 	LeaveCriticalSection(&CritSection);
 }
 
+void WConditionVariable::wait(unsigned long long t)
+{
+	EnterCriticalSection(&CritSection);
+	while (condition == false)
+		SleepConditionVariableCS(&ConditionVar, &CritSection, t / 1000.0);
+	LeaveCriticalSection(&CritSection);
+}
+
 void WConditionVariable::sendSignal(bool c)
 {
 	EnterCriticalSection(&CritSection);

@@ -1,4 +1,5 @@
 #include		"UMutex.hpp"
+#include		<stdexcept>
 
 UMutex::UMutex() {
 }

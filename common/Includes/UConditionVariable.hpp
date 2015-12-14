@@ -1,9 +1,10 @@
 #ifndef UCONDITIONVARIABLE_HPP_
 # define UCONDITIONVARIABLE_HPP_
 
+#include "IConditionVariable.hpp"
 #include <pthread.h>
 
-class UConditionVariable
+class UConditionVariable : public IConditionVariable
 {
 private:
 	pthread_cond_t _cond;
@@ -14,6 +15,7 @@ public:
 	virtual ~UConditionVariable();
 	virtual bool init();
 	virtual void wait();
+	virtual void wait(unsigned long long);
 	virtual void sendSignal(bool c = true);
 };
 

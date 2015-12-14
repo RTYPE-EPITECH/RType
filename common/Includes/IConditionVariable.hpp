@@ -7,6 +7,7 @@ public:
 	virtual ~IConditionVariable() {}
 	virtual bool init() = 0;
 	virtual void wait() = 0;
+	virtual void wait(unsigned long long) = 0;
 	virtual void sendSignal(bool) = 0;
 };
 

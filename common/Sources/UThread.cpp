@@ -1,4 +1,5 @@
 #include "UThread.hpp"
+#include <stdexcept>
 
 UThread::UThread()
 {

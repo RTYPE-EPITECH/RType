@@ -6,14 +6,22 @@ Player::Player(Protocole & _p) : AObject(_p)
 	life = 10;
 	maxLife = 10;
 	maxMissile = 3;
+	currentMissile = 0;
 	typeMissile = NORMAL;
 }
 
 Player::~Player() {}
 
-Missile * Player::shoot()
+Missile * Player::shoot(Game *)
 {
-	return Missile::newInstance(_proto, typeMissile, x + width + 1, y + width / 2);
+	if (currentMissile < maxMissile)
+	{
+		currentMissile++;
+		missiles.push_back(Missile::newInstance(_proto, typeMissile, x + width + 1, y + width / 2));
+		// CREATE PACKET NEW SPRITE
+		return missiles.back();
+	}
+	return NULL;
 }
 
 size_t Player::getLife() const

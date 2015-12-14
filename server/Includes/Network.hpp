@@ -24,6 +24,8 @@
 # define		BLINK		"\033[5m"
 # define		UNDERLINE	"\033[4m"
 
+class Client;
+class Game;
 
 class						Network {
 public:
@@ -37,6 +39,10 @@ private:
 	ISocket					*_socket;
 	IConditionVariable		*_i;
 	Protocole				_proto;
+
+	std::vector<Game *>		_games;
+	std::vector<Client *>	_clients;
+
 	void					newClient(void);
 	void					deleteClient(unsigned int);
 	void					setClient(void);

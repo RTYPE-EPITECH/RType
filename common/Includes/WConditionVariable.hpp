@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef WCONDITIONVARIABLE_HPP_
 # define WCONDITIONVARIABLE_HPP_
 
@@ -17,6 +16,7 @@ public:
 	virtual ~WConditionVariable();
 	virtual bool init();
 	virtual void wait();
+	virtual void wait(unsigned long long);
 	virtual void sendSignal(bool c = true);
 };
 

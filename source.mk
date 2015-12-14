@@ -21,6 +21,7 @@ SERVER			+=	$(DIR_SERVER)Monster.cpp
 SERVER			+=	$(DIR_SERVER)Player.cpp
 SERVER			+=	$(DIR_SERVER)Obstacle.cpp
 SERVER			+=	$(DIR_SERVER)AObject.cpp
+SERVER			+=	$(DIR_SERVER)Missile.cpp
 
 ## Common sources
 

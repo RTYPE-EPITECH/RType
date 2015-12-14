@@ -42,6 +42,7 @@ typedef struct {
 	uint16_t		size_x;
 	uint16_t		size_y;
 	string			sprite;
+	string			path;
 }					positionPacket;
 
 typedef struct {
@@ -97,7 +98,7 @@ public:
 	void					_createActionPacket(ACTION act);
 	void					_createParametersPacket(int, int);
 	void					_addPositionPacket(AObject *);
-	void					_addPositionPacket(int, int, int, int, const char *);
+	void					_addPositionPacket(int, int, int, int, const char *, const char *);
 	void					_putPositionPacketOnList(void);
 	void					_createPingCommand(void);
 	void					_createPongCommand(void);
@@ -127,6 +128,8 @@ public:
 	uint16_t				_getPositionSizeY(size_t) const;
 	uint8_t					_getPositionSpriteLenght(size_t) const;
 	uint8_t					*_getPositionSpriteData(size_t) const;
+	uint8_t					_getPositionPathLength(size_t) const;
+	uint8_t					*_getPositionPathData(size_t) const;
 	uint8_t					_getResponseOpcode(void) const;
 	uint8_t					_getParametersDifficulty(void) const;
 	uint8_t					_getParametersNbGame(void) const;

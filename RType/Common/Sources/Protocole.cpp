@@ -93,7 +93,7 @@ void		Protocole::_addPositionPacket(AObject * obj)
 	//obj->getType()
 }
 
-void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite) {
+void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite, const char *path) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
@@ -236,6 +236,14 @@ uint8_t			Protocole::_getPositionSpriteLenght(size_t pos) const {
 
 uint8_t			*Protocole::_getPositionSpriteData(size_t pos) const {
 	return (uint8_t *)this->_arrayPositionPacket.data[pos].sprite.data;
+}
+
+uint8_t			Protocole::_getPositionPathLength(size_t pos) const {
+	return this->_arrayPositionPacket.data[pos].path.lenght;
+}
+
+uint8_t			*Protocole::_getPositionPathData(size_t pos) const {
+	return (uint8_t *)this->_arrayPositionPacket.data[pos].path.data;
 }
 
 uint8_t			Protocole::_getResponseOpcode(void) const {

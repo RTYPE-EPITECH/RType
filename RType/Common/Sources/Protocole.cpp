@@ -11,6 +11,7 @@ Protocole::Protocole(void) {
 	_generateData[5] = NULL;
 	_generateData[6] = NULL;
 	_generateData[7] = NULL;
+	_generateData[8] = &Protocole::_setScrollingPacket;
 }
 
 Protocole::~Protocole(void) {}
@@ -69,6 +70,19 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
+void		Protocole::_createScrollingPacket(int scroll) {
+	char	*result = new char[sizeof(headerPacket) + sizeof(scrollingPacket)];
+	memset(result, 0, sizeof(headerPacket) + sizeof(scrollingPacket));
+	memset(&(this->_header), 0, sizeof(headerPacket));
+	memset(&(this->_scroll), 0, sizeof(scrollingPacket));
+	this->_header.opcode = 8;
+	this->_header.size = sizeof(scrollingPacket);
+	this->_action.action = (uint8_t)scroll;
+	memcpy(result, &(this->_header), sizeof(headerPacket));
+	memcpy(result + sizeof(headerPacket), &(this->_scroll), sizeof(scrollingPacket));
+	this->_listPacket.push_back(result);
+}
+
 void		Protocole::_addPositionPacket(AObject * obj)
 {
 	_addPositionPacket(obj->getX(),
@@ -79,7 +93,7 @@ void		Protocole::_addPositionPacket(AObject * obj)
 	//obj->getType()
 }
 
-void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite) {
+void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite, const char *path) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
@@ -172,6 +186,10 @@ void		Protocole::_setPositionStruct(const char *packet) {
 	memcpy(&(this->_arrayPositionPacket), packet, sizeof(arrayPositionPacket));
 }
 
+void		Protocole::_setScrollingPacket(const char *packet) {
+	memcpy(&(this->_scroll), packet, sizeof(scrollingPacket));
+}
+
 /*
 ** Getters
 */
@@ -220,6 +238,14 @@ uint8_t			*Protocole::_getPositionSpriteData(size_t pos) const {
 	return (uint8_t *)this->_arrayPositionPacket.data[pos].sprite.data;
 }
 
+uint8_t			Protocole::_getPositionPathLength(size_t pos) const {
+	return this->_arrayPositionPacket.data[pos].path.lenght;
+}
+
+uint8_t			*Protocole::_getPositionPathData(size_t pos) const {
+	return (uint8_t *)this->_arrayPositionPacket.data[pos].path.data;
+}
+
 uint8_t			Protocole::_getResponseOpcode(void) const {
 	return this->_response.opcode;
 }
@@ -234,6 +260,10 @@ uint8_t			Protocole::_getParametersNbGame(void) const {
 
 uint8_t			Protocole::_getActionOpcode(void) const {
 	return this->_action.action;
+}
+
+uint8_t			Protocole::_getScrolling(void) const {
+	return this->_scroll.scroll;
 }
 
 unsigned int	Protocole::_getSizePacketHeader(void) const {

@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Mon Dec 14 13:59:13 2015 Probola
+// Last update Mon Dec 14 17:43:21 2015 Pierre Noel
 //
 
 #ifndef				_SFML_HPP_

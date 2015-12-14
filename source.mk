@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Mon Dec 14 15:31:45 2015 Pierre Noel
+## Last update Mon Dec 14 17:07:27 2015 Pierre Noel
 ##
 
 ## Server sources
@@ -47,7 +47,7 @@ DIR_CLIENT_I		=	RType/Client/Includes/
 
 #CLIENT			+=	$(DIR_CLIENT_S)Game.cpp
 CLIENT                  +=	$(DIR_CLIENT_S)main.cpp
-#CLIENT 	                +=	$(DIR_CLIENT_S)Network.cpp
+#CLIENT 	        +=	$(DIR_CLIENT_S)Network.cpp
 CLIENT                  +=	$(DIR_CLIENT_S)SFML.cpp
 CLIENT                  +=	$(DIR_CLIENT_S)Sound.cpp
 CLIENT                  +=	$(DIR_CLIENT_S)SoundFactory.cpp

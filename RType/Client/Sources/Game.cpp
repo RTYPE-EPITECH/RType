@@ -5,10 +5,16 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-** Last update Tue Dec  1 11:38:22 2015 Jérémy MATHON
+// Last update Mon Dec 14 17:58:39 2015 Pierre Noel
 */
 
 #include	"Game.hpp"
+
+#ifdef	WIN32
+# include	"WMutex.hpp"
+#else
+# include	"UMutex.hpp"
+#endif
 
 Game::Game()
 {
@@ -20,6 +26,14 @@ Game::~Game()
 
 bool		Game::init()
 {
+ #ifdef	WIN32
+  _mutexInput = new WMutex();
+  _mutexOutput = new WMutex();
+#else
+  _mutexInput = new UMutex();
+  _mutexOutput = new UMutex();
+#endif
+
   if(!(this->_mutexInput->initialize()))
     return false;
   if(!(this->_mutexOutput->initialize()))
@@ -32,10 +46,32 @@ bool		Game::init()
     std::cerr << error.what() << std::endl;
     return false;
   }
+  return true;
 }
 
-static	void	*Game::loop(void *)
+static void	*Game::loop(void * arg)
 {
+  Game *_this = reinterpret_cast<Game *>(arg);
+  SFML display;
+
+  // check si la partie est commencée
+  while ()
+    {
+      // Reçoit idGame idPlayer
+      // Appel update (init des sprites)
+      // Si reçoit Packet : OK Server a tout envoyé
+      //     Client crée packet : CLIENT OK Partie commencée
+      //     Changer la condition pour dire que le client démarre
+    }
+  while (display.isOpen())
+    {
+      ACTION  a = display.getInput();
+      //addOutput
+      // Récupérer les Input
+      // les mettre dans protocole et update
+      display.endLoop();
+    }
+  return arg;
 }
 
 void		Game::getInput(ACTION input)

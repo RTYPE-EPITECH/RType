@@ -60,7 +60,8 @@ typedef				enum {
 					RIGHT = 1,
 					UP = 2,
 					DOWN = 3,
-					SHOOT = 4
+					SHOOT = 4,
+					UNKNOW = 5
 }					ACTION;
 
 class				Protocole {

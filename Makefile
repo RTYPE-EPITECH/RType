@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Dec  3 16:41:16 2015 Probola
+## Last update Mon Dec 14 13:42:26 2015 Probola
 ##
 
 include			source.mk
@@ -20,7 +20,7 @@ CXX			?=	g++
 
 DEBUG			?=	no
 
-CXXFLAGS		+=	-Iserver/Includes -Icommon/Includes -Iclient/Includes -Icommon/Library/SFML-Unix/include -lcommon/Library/SFML-Unix
+CXXFLAGS		+=	-IRType/Server/Includes -IRType/Common/Includes -IRType/Client/Includes -IRType/Common/Library/SFML-Unix/include -lRType/Common/Library/SFML-Unix
 
 ifeq ($(CXX), clang++)
 CXXFLAGS		+=	-Weverything -Wno-padded

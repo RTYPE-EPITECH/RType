@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Mon Dec 14 11:07:57 2015 Probola
+// Last update Mon Dec 14 13:59:13 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -31,7 +31,7 @@ public:
   SFML();
   ~SFML();
   void				loop();
-  void				update(const std::string &, int, int);
+  void				update(const std::string &, const std::string &, float, float);
 };
 
 #endif

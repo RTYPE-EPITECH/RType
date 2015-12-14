@@ -5,12 +5,12 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Thu Dec  3 16:43:33 2015 Probola
+## Last update Mon Dec 14 13:41:38 2015 Probola
 ##
 
 ## Server sources
 
-DIR_SERVER		=	server/Sources/
+DIR_SERVER		=	RType/Server/Sources/
 
 SERVER			+=	$(DIR_SERVER)main.cpp
 SERVER			+=	$(DIR_SERVER)Client.cpp
@@ -25,7 +25,7 @@ SERVER			+=	$(DIR_SERVER)Missile.cpp
 
 ## Common sources
 
-DIR_COMMON		=	common/Sources/
+DIR_COMMON		=	RType/Common/Sources/
 
 COMMON			+=	$(DIR_COMMON)USocket.cpp
 COMMON			+=	$(DIR_COMMON)UTimer.cpp
@@ -37,7 +37,7 @@ COMMON			+=	$(DIR_COMMON)Protocole.cpp
 
 ## Client sources
 
-DIR_CLIENT		=	client/Sources/
+DIR_CLIENT		=	RType/Client/Sources/
 
 #CLIENT			+=	$(DIR_CLIENT)Game.cpp
 CLIENT                  +=	$(DIR_CLIENT)main.cpp

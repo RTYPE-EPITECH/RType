@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 //
 // Started on  Tue Nov 24 16:32:34 2015 Probola
-// Last update Mon Dec 14 10:15:44 2015 Probola
+// Last update Mon Dec 14 14:25:04 2015 Probola
 //
 
 #ifndef				_RSPRITE_HPP_
@@ -23,10 +23,11 @@
 
 class				RSprite
 {
-  sf::Sprite			_sprite;
-  TextureFactory		*_textureFactory;
+   TextureFactory		*_textureFactory;
 
 public:
+  sf::Sprite			_sprite;
+
   RSprite(const std::string &, const std::string &, float, float);
   ~RSprite();
   void				setPosition(float x, float y);

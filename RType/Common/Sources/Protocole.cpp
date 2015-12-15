@@ -83,16 +83,6 @@ void		Protocole::_createScrollingPacket(int scroll) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_addPositionPacket(AObject * obj)
-{
-	_addPositionPacket(obj->getX(),
-		obj->getY(),
-		obj->getWidth(),
-		obj->getHeight(),
-		"Type");
-	//obj->getType()
-}
-
 void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite, const char *path) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;

@@ -5,6 +5,7 @@
 #include "Missile.hpp"
 #include "Player.hpp"
 #include "Monster.hpp"
+#include "Tools.hpp"
 
 std::vector<size_t> AObject::_ids;
 
@@ -177,13 +178,13 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   // no collision, apply position
   x = fx;
   y = fy;
-  g->_proto._addPositionPacket(fx, fy, 1, 1, "afaire", "unknown");
-  // Create PACKET to move
+  g->_proto._addPositionPacket(fx, fy, width, height, (Tools::getName(type, id)).c_str() , "unknown");
   return true;
 }
 
 void	AObject::die(Game *)
 {
 	// create Packet die
+
 	_dead = true;
 }

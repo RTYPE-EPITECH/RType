@@ -28,13 +28,14 @@ public:
 	~Game();
 	bool init(const std::vector<std::string> &);
 	bool addClient(Client *);
+	void removeClient(Client *);
 	bool loop();
 
 	// get/set
 	unsigned int getIdThread() const;
 	void setIdThread(unsigned int);
 
-	int	getSizeAvailable() const;
+	size_t getSizeAvailable() const;
 
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
   Protocole			_proto;

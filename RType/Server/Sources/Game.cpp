@@ -6,7 +6,7 @@
 #include "Missile.hpp"
 #include <iostream>
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
 #else
@@ -44,10 +44,17 @@ bool Game::addClient(Client * cl)
 	return true;
 }
 
-int Game::getSizeAvailable() const
+void Game::removeClient(Client * c)
 {
 	mutex->lock();
-	int size = MAX_PLAYER_GAME - _clients.size();
+
+	mutex->unlock();
+}
+
+size_t Game::getSizeAvailable() const
+{
+	mutex->lock();
+	size_t size = MAX_PLAYER_GAME - _clients.size();
 	mutex->unlock();
 	return size;
 }
@@ -60,7 +67,7 @@ bool Game::init(const std::vector<std::string> &)
 	// store the command in special command to send
 
 
-#ifdef WIN32
+#ifdef _WIN32
 	timer = new WTimer();
 	mutex = new WMutex();
 #else
@@ -101,6 +108,8 @@ bool Game::loop()
 {
   while (1)
     {
+		if (_clients.size() == 0)
+			_condVar.wait();
       if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
 	{
 	  mutex->lock();
@@ -109,13 +118,15 @@ bool Game::loop()
 	    {
 	      char * input = NULL;
 	      if (!(input = _clients[i]->getInput()))
-		continue;
+			continue;
 	      // set input into protocole to have the get/set
 	      _proto._setNewPacket(input);
 	      handleInputClient(_clients[i]);
 	    }
-	  //_proto._putPositionPacketOnList();
-	  //_proto._getLastPacket();
+	  _proto._putPositionPacketOnList();
+	  char * packet = _proto._getLastPacket();
+	  for (size_t i = 0; i < _clients.size(); i++)
+		  _clients[i]->addOutput(packet);
 	  mutex->unlock();
 	}
       // Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
@@ -123,10 +134,13 @@ bool Game::loop()
 	{
 	  mutex->lock();
 	  AllMove();
+	  _proto._putPositionPacketOnList();
+	  char * packet = _proto._getLastPacket();
+	  for (size_t i = 0; i < _clients.size(); i++)
+		  _clients[i]->addOutput(packet);
 	  mutex->unlock();
 	  timer->start();
 	}
-      //packet scroll
     }
   return true;
 }

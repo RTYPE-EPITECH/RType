@@ -1,26 +1,29 @@
 #include				"Tools.hpp"
+#include				<map>
 
-/*template<T>
-T					Tools::charToNumber(char *nb)
+std::string Tools::getName(EObject type, size_t id)
 {
-  std::istringstream	iss(nb);
-  T			result;
+	std::stringstream oss;
 
-  iss >> result;
-  return (result);
-}*/
+	oss << EObjectToString(type);
+	oss << "-" << id;
+	return std::string(oss.str());
+}
 
-/*template<T>
-char					*Tools::NumberToChar(T nb)
+std::string Tools::EObjectToString(EObject t)
 {
-  // créer un flux de sortie
-  std::ostringstream oss;
+	static std::map<EObject, std::string> gen;
+	static bool check = true;
 
-  // écrire un nombre dans le flux
-  oss << nb;
-
-  // récupérer une chaîne de caractères
-  std::string result = oss.str();
-  result = oss.str();
-  return (result);
-  }*/
+	if (check) {
+		gen[PLAYER] = "player";
+		gen[MISSILE] = "missile";
+		gen[OBSTACLE] = "obstacle";
+		gen[MONSTER] = "monster";
+		gen[UNKNOWN_OBJECT] = "unknown";
+		check = false;
+	}
+	if (gen.count(t) > 0)
+		return gen.at(t);
+	return gen[UNKNOWN_OBJECT];
+}

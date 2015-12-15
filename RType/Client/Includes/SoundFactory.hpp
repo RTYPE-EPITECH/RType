@@ -5,12 +5,14 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:22:47 2015 Probola
-// Last update Fri Nov 20 13:26:38 2015 Probola
+// Last update Tue Dec 15 15:00:31 2015 Probola
 //
 
 #ifndef					__SOUND_FACTORY_HPP__
 # define				__SOUND_FACTORY_HPP__
 
+#include				<iostream>
+#include				<map>
 #include				"Sound.hpp"
 
 class					SoundFactory

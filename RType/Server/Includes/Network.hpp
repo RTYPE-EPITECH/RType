@@ -5,13 +5,14 @@
 # include					<iostream>
 # include					<vector>
 # include					<algorithm>
-#ifdef WIN32
+#ifdef _WIN32
 # include					"WSocket.hpp"
 #else
 # include					"USocket.hpp"
 #endif // WIN32
 # include					"IConditionVariable.hpp"
 # include					"Protocole.hpp"
+# include					"HandleThread.hpp"
 # define		RED			"\x1B[31m"
 # define		GREEN		"\033[32m"
 # define		YELLOW		"\033[33m"
@@ -39,15 +40,19 @@ private:
 	ISocket					*_socket;
 	IConditionVariable		*_i;
 	Protocole				_proto;
-
+	HandleThread			_handle;
 	std::vector<Game *>		_games;
 	std::vector<Client *>	_clients;
+
+	std::vector<std::string> _init;
 
 	void					newClient(void);
 	void					deleteClient(unsigned int);
 	void					setClient(void);
 	bool					readClient(unsigned int);
 	void					writeClient(unsigned int);
+
+	void					createGame(Client *);
 };
 
 #endif                 /* !__NETWORK_HPP__ */

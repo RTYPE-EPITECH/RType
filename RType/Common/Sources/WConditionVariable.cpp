@@ -29,7 +29,7 @@ void WConditionVariable::wait(unsigned long long t)
 {
 	EnterCriticalSection(&CritSection);
 	while (condition == false)
-		SleepConditionVariableCS(&ConditionVar, &CritSection, t / 1000.0);
+		SleepConditionVariableCS(&ConditionVar, &CritSection, t / (unsigned long long)1000.0);
 	LeaveCriticalSection(&CritSection);
 }
 

@@ -1,0 +1,14 @@
+Protocole de communication pour la connexion :
+
+- Client envoie connect (ConnectPacket)
+- Le serveur envoie une réponse (ResponsePacket)
+
+OK : 
+- Le client peut alors envoie ses paramétres locaux (ParametersPacket)
+   -> Auquel le serveur renvoie l'id de la game + l'id du joueurs (IdentifiantPacket)
+ 
+- Le client envoie alors une reponse au serveur quand tout est initialisé : thread, sfml etc... (responsePacket)
+   -> Le serveur envoie la liste des sprites initialisé (PositionPAcket)
+
+- Le client envoie alors uen réponse quand la game est prete (responsePacket)
+  -> le serveur répond que la connexion est finie d'etre établie et que la game peut commencer (responsePacket)

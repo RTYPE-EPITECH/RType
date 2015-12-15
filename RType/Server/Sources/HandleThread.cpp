@@ -31,7 +31,6 @@ void * HandleThread::functionClient(void * arg)
 	Game * cl = reinterpret_cast<Game *>(arg);
 	(void)cl;
 	// Boucle du jeu
-	// cl->init();
 	// cl->loop();
 	return arg;
 }

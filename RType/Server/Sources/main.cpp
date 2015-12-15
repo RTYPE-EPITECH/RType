@@ -29,10 +29,9 @@ int    			main(int argc, char **argv) {
   catch (const std::exception &msg) {
     std::cout << msg.what() << std::endl;
     error = 1;
-#ifndef WIN_32
-#else
-    getchar();
-#endif
   }
+#ifdef _WIN32
+  getchar();
+#endif
   return error;
 }

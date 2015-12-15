@@ -5,13 +5,17 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Nov 24 16:51:40 2015 Probola
-// Last update Mon Dec 14 17:15:18 2015 Pierre Noel
+// Last update Tue Dec 15 16:05:09 2015 Probola
 //
 
 #ifndef					_SPRITEFACTORY_HPP_
 # define				_SPRITEFACTORY_HPP_
 
+#include				<iostream>
+#include				<map>
 #include				"RSprite.hpp"
+
+class					RSprite;
 
 class					SpriteFactory
 {

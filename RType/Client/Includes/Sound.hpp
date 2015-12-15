@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:27:06 2015 Probola
-// Last update Mon Dec 14 09:50:35 2015 Probola
+// Last update Tue Dec 15 17:57:49 2015 Probola
 //
 
 #ifndef					_SOUND_HPP_
@@ -24,8 +24,8 @@ private:
 public:
   Sound();
   ~Sound();
-  bool					initializeSound(const std::string &, bool, int, int);
-  bool					initializeMusic(const std::string &, bool, int, int);
+  bool					initializeSound(const std::string &, bool, float, float);
+  bool					initializeMusic(const std::string &, bool);
   void					playSound();
   void					playMusic();
 };

@@ -14,7 +14,7 @@ class Player;
 class Client
 {
 public:
-	Client(const std::string &, short);
+	Client();
 	~Client();
 	bool init(Game *);
 
@@ -25,6 +25,7 @@ public:
 	STATE_CONNECT getState() const;
 	void setState(STATE_CONNECT);
 
+	void	setSocket(ISocket *);
 	ISocket *	getSocket() const;
 
 	// Mutexed function to get input/output from vector

@@ -5,15 +5,19 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-// Last update Mon Dec 14 17:58:39 2015 Pierre Noel
+** Last update Tue Dec 15 17:29:23 2015 Jérémy MATHON
 */
 
 #include	"Game.hpp"
 
 #ifdef	WIN32
 # include	"WMutex.hpp"
+# include	"WTimer.hpp"
+# include	"WThread.hpp"
 #else
 # include	"UMutex.hpp"
+# include	"UTimer.hpp"
+# include	"UThread.hpp"
 #endif
 
 Game::Game()
@@ -27,71 +31,106 @@ Game::~Game()
 bool		Game::init()
 {
  #ifdef	WIN32
-  _mutexInput = new WMutex();
-  _mutexOutput = new WMutex();
+  _mutexGame = new WMutex();
+  thread_t = new WThread();
+  time = new WTimer();
 #else
-  _mutexInput = new UMutex();
-  _mutexOutput = new UMutex();
+  _mutexGame = new UMutex();
+  thread_t = new UThread();
+  time = new UTimer();
 #endif
 
-  if(!(this->_mutexInput->initialize()))
+  this->setStart(false);
+  if(!(this->_mutexGame->initialize()))
     return false;
-  if(!(this->_mutexOutput->initialize()))
-    return false;
-  this->time.start();
+  this->time->start();
   try {
-    thread_t.initialize(&loop, this);
+    thread_t->initialize(&loop, this);
   }
-  catch(const std::runtime_error &error) {
+  catch (const std::runtime_error &error) {
     std::cerr << error.what() << std::endl;
     return false;
   }
   return true;
 }
 
-static void	*Game::loop(void * arg)
+void	*Game::loop(void * arg)
 {
   Game *_this = reinterpret_cast<Game *>(arg);
   SFML display;
+  std::vector<char *>	_lastInput;
+  std::vector<char *>	_lastOutput;
 
   // check si la partie est commencée
-  while ()
+  while (_this->getStart() == false)
     {
+      _lastInput = _this->getInput();
       // Reçoit idGame idPlayer
       // Appel update (init des sprites)
       // Si reçoit Packet : OK Server a tout envoyé
       //     Client crée packet : CLIENT OK Partie commencée
-      //     Changer la condition pour dire que le client démarre
+      _this->setStart(true);
     }
   while (display.isOpen())
     {
+      _lastInput = _this->getInput();
       ACTION  a = display.getInput();
-      //addOutput
-      // Récupérer les Input
-      // les mettre dans protocole et update
+      _this->_protocole._createActionPacket(a, _this->_idPlayer);
+      _this->addOutput(_this->_protocole._getLastPacket());
       display.endLoop();
     }
   return arg;
 }
 
-void		Game::getInput(ACTION input)
+bool		Game::getStart()
 {
-  this->_mutexInput->lock();
+  bool		ret;
+
+  this->_mutexGame->lock();
+  ret = this->_start;
+  this->_mutexGame->unlock();
+  return (ret);
+}
+
+void		Game::setStart(bool ret)
+{
+  this->_mutexGame->lock();
+  this->_start = ret;
+  this->_mutexGame->unlock();
+}
+
+std::vector<char *>	Game::getInput()
+{
+  std::vector<char *>	tmp;
+
+  this->_mutexGame->lock();
+  tmp = this->input;
+  this->input.clear();
+  this->_mutexGame->unlock();
+  return (tmp);
+}
+
+std::vector<char*>	Game::getOutput()
+{
+  std::vector<char *>	tmp;
+
+  this->_mutexGame->lock();
+  tmp = this->output;
+  this->output.clear();
+  this->_mutexGame->unlock();
+  return (tmp);
+}
+
+void		Game::addInput(char *input)
+{
+  this->_mutexGame->lock();
   this->input.push_back(input);
-  this->_mutexInput->unlock();
+  this->_mutexGame->unlock();
 }
 
-void		Game::getOutput(ACTION output)
+void		Game::addOutput(char *output)
 {
-  this->_mutexOutput->lock();
+  this->_mutexGame->lock();
   this->output.push_back(output);
-  this->_mutexOutput->unlock();
-}
-
-void		Game::addInput(ACTION input)
-{
-}
-
-void		Game::addOutput(ACTION output)
-{
+  this->_mutexGame->unlock();
 }

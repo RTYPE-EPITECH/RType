@@ -5,26 +5,26 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:34:58 2015 Probola
-// Last update Sat Dec 12 18:05:31 2015 Probola
+// Last update Tue Dec 15 17:57:09 2015 Probola
 //
 
 #include			"TextureFactory.hpp"
 
-TextureFactory::Texture()
+TextureFactory::TextureFactory()
 {
 
 }
 
-TextureFactory::~Texture()
+TextureFactory::~TextureFactory()
 {
 
 }
 
 bool			TextureFactory::initialize(const std::string &name, const std::string &file)
 {
-  if (!exist(name))
+  if (!_exist(name))
     {
-      Texture		*text(name, file);
+      RTexture		*text = new RTexture(file);
       if (text != 0)
 	this->_stack[name] = text;
       else
@@ -35,19 +35,13 @@ bool			TextureFactory::initialize(const std::string &name, const std::string &fi
 
 bool			TextureFactory::_exist(const std::string &name)
 {
-  if (this->_stack.count(file) == 0)
+  if (this->_stack.count(name) == 0)
     return false;
   return true;
 }
 
 bool			TextureFactory::setAssets()
 {
-  int			i = 0;
-  std::string		FileToLoad = "client/Assets/r-typesheet";
-
-  while (i < 45)
-    {
-      initialize(FileToLoad + NumberToString(i) + ".gif";
-      i++;
-    }
+  
+  return false;
 }

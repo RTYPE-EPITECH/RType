@@ -29,16 +29,29 @@ Network::~Network(void) {
 
 void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
+	Client * newClient = new Client();
+	ISocket * newSocket = NULL;
+	newClient->setSocket(_socket->_accept());
 
-	//ISocket * New = _socket->_accept();
-
+	// Trouver une game pour lui
+	bool check = true;
+	for (size_t i = 0; i < _games.size() && check; i++)
+		if (_games[i]->getSizeAvailable() != 0)
+		{
+			newClient->init(_games[i]);
+			_games[i]->addClient(newClient);
+			check = false;
+		}
+	// Si aucune game OK : CReate a game
+	if (check)
+		createGame(newClient);
 }
 
 void				Network::deleteClient(unsigned int i) {
 (void)i;
-	//std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _listClient[i]->getSocket()->getfd() << ")" << std::endl;
-	//delete _listClient[i];
-	//_listClient.erase(_listClient.begin() + i);
+	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _listClient[i]->getSocket()->getfd() << ")" << std::endl;
+	delete _clients[i];
+	_clients.erase(_listClient.begin() + i);
 }
 
 void				Network::init(const std::string & port) {
@@ -49,12 +62,11 @@ void				Network::init(const std::string & port) {
 	_socket = new USocket();
 	_i = new UConditionVariable();
 #endif
-
-	_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::TCP);
+	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	//_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
 	std::cout << "socket ok" << std::endl;
 	_socket->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(port));
 	std::cout << "bind ok" << std::endl;
-
 	_socket->_FD_ZERO("rw");
 	std::cout << "Welcome on the RType Server (port : " << port.c_str() << ")" << std::endl;
 }
@@ -86,23 +98,32 @@ void				Network::writeClient(unsigned int i) {
 	return;
 }
 
+void				Network::createGame(Client * e)
+{
+	Game * g = new Game(*_i);
+	g->init(_init);
+	e->init(g);
+	_handle.init(g);
+	g->addClient(e);
+	_games.push_back(g);
+}
+
 void				Network::run(void) {
 	while (true) {
 		setClient();
 		_socket->_select(60, 0);
-		std::cout << "bite" << std::endl;
+		std::cout << "Selected passed" << std::endl;
 		/* Nouveau Client */
 		if (_socket->_FD_ISSET('r') == true)
 			newClient();
 		else
 		{
-		}
-			/*for (unsigned int i = 0; i < _listClient.size(); i++) {
-				if (_socket->_FD_ISSET(_listClient[i]->getSocket(), 'w') == true)
+			for (unsigned int i = 0; i < _clients.size(); i++) {
+				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
 					writeClient(i);
-				if (_socket->_FD_ISSET(_listClient[i]->getSocket(), 'r') == true)
+				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
 					if (readClient(i) == false)
 						return;
-			}*/
-	}
+			}
+		}
 }

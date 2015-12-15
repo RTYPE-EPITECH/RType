@@ -4,7 +4,7 @@
 #include "IMutex.hpp"
 #include "Player.hpp"
 
-#ifndef WIN32
+#ifndef _WIN32
 # include "USocket.hpp"
 # include "UMutex.hpp"
 #else
@@ -12,7 +12,7 @@
 # include "WMutex.hpp"
 #endif
 
-Client::Client(const std::string & _ip, short _port)
+Client::Client()
 {
 #ifndef WIN32
 
@@ -23,8 +23,8 @@ Client::Client(const std::string & _ip, short _port)
 	_mutexInput = new WMutex();
 #endif
 	_socket = NULL;
-	ip = _ip;
-	port = _port;
+	/*ip = _ip;
+	port = _port;*/
 	player = NULL;
 	_game = NULL;
 	_state = DISCONNECT;
@@ -101,6 +101,11 @@ STATE_CONNECT Client::getState() const
 void Client::setState(STATE_CONNECT e)
 {
 	_state = e;
+}
+
+void			Client::setSocket(ISocket *s)
+{
+	_socket = s;
 }
 
 ISocket * Client::getSocket() const

@@ -5,7 +5,7 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-** Last update Tue Dec 15 11:41:55 2015 Jérémy MATHON
+** Last update Tue Dec 15 12:23:40 2015 Jérémy MATHON
 */
 
 #include	"Game.hpp"
@@ -54,21 +54,21 @@ static void	*Game::loop(void * arg)
   std::vector<char *>	_lastOutput;
 
   // check si la partie est commencée
-  while (this.getStart() == false)
+  while (_this->getStart() == false)
     {
-      _lastInput = this.getInput();
+      _lastInput = _this->getInput();
       // Reçoit idGame idPlayer
       // Appel update (init des sprites)
       // Si reçoit Packet : OK Server a tout envoyé
       //     Client crée packet : CLIENT OK Partie commencée
-      this.setStart(true);
+      _this->setStart(true);
     }
   while (display.isOpen())
     {
-      _lastInput = this.getInput();
+      _lastInput = _this->getInput();
       ACTION  a = display.getInput();
-      this->_protocole._createActionPacket(a);
-      output.addOutput(this->_protocole._getLastPacket());
+      _this->_protocole._createActionPacket(a);
+      output.addOutput(_this->_protocole._getLastPacket());
       display.endLoop();
     }
   return arg;

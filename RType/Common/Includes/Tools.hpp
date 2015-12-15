@@ -3,6 +3,7 @@
 
 #include				<sstream>
 #include				<string>
+#include				"EObject.hpp"
 
 class					Tools {
 public:
@@ -30,10 +31,10 @@ public:
     result = oss.str();
     return (result);
   }*/
+
+  static std::string getName(EObject type, size_t id);
+  static std::string EObjectToString(EObject);
+
 };
-/*template<unsigned int> unsigned int Tools::charToNumber(const std::string &);
-template<unsigned short> unsigned short Tools::charToNumber(const std::string &);
-template<int> int Tools::charToNumber(const std::string &);
-template<short> short Tools::charToNumber(const std::string &);*/
 
 #endif					/* _TOOL_HPP_ */

@@ -6,7 +6,7 @@
 #include "Missile.hpp"
 #include <iostream>
 
-#ifdef WIN32
+#ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
 #else

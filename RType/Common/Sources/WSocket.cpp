@@ -16,16 +16,12 @@
 
 WSocket::WSocket(const SOCKET fd) {
 	_fd = fd;
-	_fd_max = fd;
 	_FD_ZERO("rw");
-	this->wVersionRequested = MAKEWORD(2, 2);
-	if (WSAStartup(this->wVersionRequested, &(this->wsaData)) != 0)
-		throw std::runtime_error("WSAStartup failed");
-	if (LOBYTE(this->wsaData.wVersion) != 2 || HIBYTE(this->wsaData.wVersion) != 2) {
-		throw std::runtime_error("Could not find a usable version of Winsock.dll");
-		WSACleanup();
-	}
-	std::cout << "The Winsock 2.2 dll was found okay" << std::endl;
+	_wVersionRequested = MAKEWORD(2, 2);
+	if (WSAStartup(_wVersionRequested, &(_wsaData)) != 0)
+		throw std::runtime_error(_strerror());
+	if (LOBYTE(_wsaData.wVersion) != 2 || HIBYTE(_wsaData.wVersion) != 2)
+		throw std::runtime_error(_strerror());
 }
 
 WSocket::~WSocket(void) {
@@ -38,93 +34,86 @@ WSocket::~WSocket(void) {
 */
 
 SOCKET					WSocket::getfd(void) const {
-	return (int)_fd;
+	return _fd;
 }
 
 /*
 ** Méthodes
 */
 
-void					WSocket::_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol) {
-	if ((this->_fd = WSASocketW(family, type, protocol, NULL, 0, 0)) == INVALID_SOCKET)
-		throw std::runtime_error("WSASocket function failed");
-	_fd_max = _fd;
-	_FD_ZERO("rw");
+char					*WSocket::_strerror(void) const {
+	char	*error = NULL;
 
-	return;
+	if (FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPTSTR>(&error), 0, NULL) == 0)
+		throw std::runtime_error("[Error]: FormatMessage() failed");
+
+	return error;
+}
+
+void					WSocket::_socket(const eSocketFamily family, const eSocketType type, const eProtocol protocol) {
+	if ((_fd = WSASocketW(family, type, protocol, NULL, 0, 0)) == INVALID_SOCKET)
+		throw std::runtime_error(_strerror());
+	_FD_ZERO("rw");
 }
 
 void					WSocket::_connect(const eSocketFamily family, const char * const ip, const unsigned short port) const {
-	sockaddr_in			service;
+	struct sockaddr_in			s_in;
 
-	service.sin_family = family;
-	service.sin_addr.s_addr = inet_addr(ip);
-	service.sin_port = htons(port);
-	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
-		throw std::runtime_error(strerror(errno));
-		WSACleanup();
-	}
-	return;
+	s_in.sin_family = family;
+	s_in.sin_port = htons(port);
+	s_in.sin_addr.s_addr = inet_addr(ip);
+
+	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_connect(const eSocketFamily family, const std::string &ip, const unsigned short port) const {
-	sockaddr_in			service;
+	struct sockaddr_in			s_in;
 
-	service.sin_family = family;
-	service.sin_addr.s_addr = inet_addr(ip.c_str());
-	service.sin_port = htons(port);
-	if (WSAConnect(_fd, (SOCKADDR *)&(service), sizeof(service), 0, 0, 0, 0) == SOCKET_ERROR) {
-		throw std::runtime_error(strerror(errno));
-		WSACleanup();
-	}
-	return;
+	s_in.sin_family = family;
+	s_in.sin_port = htons(port);
+	s_in.sin_addr.s_addr = inet_addr(ip.c_str());
 
+	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 ISocket				*WSocket::_accept(void) {
-	SOCKET			fd;
-	sockaddr_in		saClient;
-	int				iClientSize = sizeof(saClient);
-	if ((fd = WSAAccept(this->_fd, (SOCKADDR *)&saClient, &iClientSize, NULL, NULL)) == SOCKET_ERROR)
-		throw std::runtime_error("WSAAccept function failed");
-	if (_fd_max < fd)
-		_fd_max = fd;
-	/*std::string ip(inet_ntoa(saClient.sin_addr));
-	unsigned short port = ntohs(saClient.sin_port);*/
-	ISocket	*newConnection = new WSocket(fd);
+	SOCKET								fd;
+	struct sockaddr_in		s_in;
+	int										sizeS_in = sizeof(s_in);
+
+	if ((fd = WSAAccept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sizeS_in, NULL, NULL)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+
+	WSocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }
 
 void					WSocket::_bind(const eSocketFamily family, const unsigned short port) const {
-	sockaddr_in			service;
-	service.sin_family = family;
-	service.sin_addr.s_addr = htons(INADDR_ANY);
-	service.sin_port = htons(port);
-	if (bind(this->_fd, (SOCKADDR *)&(service), sizeof(service)) == SOCKET_ERROR) {
-		throw std::runtime_error("bind funtion failed");
-		_close();
-		WSACleanup();
-	}
-	return;
+	struct sockaddr_in			s_in;
+
+	s_in.sin_family = family;
+	s_in.sin_port = htons(port);
+	s_in.sin_addr.s_addr = htons(INADDR_ANY);
+
+	if (bind(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_listen(const int backlog) const {
-	if (listen(this->_fd, backlog) == SOCKET_ERROR)
-		throw std::runtime_error("listen function failed");
-
-	return;
+	if (listen(_fd, backlog) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_select(const int sec, const int usec) {
 	struct timeval	tv;
 
-  	tv.tv_sec = sec;
-  	tv.tv_usec = usec;
-	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == SOCKET_ERROR) {
-		throw std::runtime_error("Select function failed");
-	}
-
-	return;
+  tv.tv_sec = sec;
+  tv.tv_usec = usec;
+	if (select(0, &_readfds, &_writefds, NULL, &tv) == -1)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_FD_ZERO(const std::string &mode) {
@@ -137,7 +126,7 @@ void					WSocket::_FD_ZERO(const std::string &mode) {
 		FD_ZERO(&_writefds);
 	}
 	else
-		std::runtime_error("[Error]: bad mode for _FD_ZERO()");
+		throw std::runtime_error("[Error]: bad mode for _FD_ZERO()");
 
 	return;
 }
@@ -204,106 +193,149 @@ bool					WSocket::_FD_ISSET(const ISocket * const socket, const char mode) const
 
 void					WSocket::_close(void) const {
 	if (closesocket(_fd) == -1)
-		throw std::runtime_error(strerror(errno));
-
-	return;
+		throw std::runtime_error(_strerror());
 }
 
 char					*WSocket::_recv(const int flags) const {
 	char				*msg = new char[30721];
-	size_t				ret;
+	int					ret;
 
-	if ((ret = recv(_fd, msg, 30720, flags)) <= 0)
-		throw std::runtime_error(strerror(errno));
+	if ((ret = recv(_fd, msg, 30720, flags)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 	msg[ret] = '\0';
 
 	return msg;
 }
 
-char					*WSocket::_recv(const size_t size, const int flags) const {
+char					*WSocket::_recv(const int size, const int flags) const {
 	char				*msg = new char[size + 1];
-	size_t			ret;
+	int					ret;
 
-	if ((ret = recv(_fd, msg, size, flags)) <= 0)
-		throw std::runtime_error(strerror(errno));
+	if ((ret = recv(_fd, msg, size, flags)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 	msg[ret] = '\0';
 
 	return msg;
 }
 
-char					*WSocket::_recvfrom(const int flags, tSocketAdress *adresse) const {
-	(void)flags;
-	(void)adresse;
+char					*WSocket::_recvfrom(const int flags, tSocketAdress *adress) const {
+	char									*msg = new char[30721];
+	int										ret;
+	struct sockaddr_in		src_addr;
 
-	return "Work in progress ...";
+	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+	msg[ret] = '\0';
+
+	if (src_addr.sin_family == AF_INET)
+		adress->family = IPv4;
+	else if (src_addr.sin_family == AF_INET6)
+		adress->family = IPv6;
+	adress->ip = inet_ntoa(src_addr.sin_addr);
+	adress->port = ntohs(src_addr.sin_port);
+
+	return msg;
 }
 
-char					*WSocket::_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const {
-	(void)size;
-	(void)flags;
-	(void)adress;
+char					*WSocket::_recvfrom(const int size, const int flags, tSocketAdress *adress) const {
+	char										*msg = new char[size + 1];
+	int											ret;
+	struct sockaddr_in			src_addr;
 
-	return "Work in progress ...";
+	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+	msg[ret] = '\0';
+
+	if (src_addr.sin_family == AF_INET)
+		adress->family = IPv4;
+	else if (src_addr.sin_family == AF_INET6)
+		adress->family = IPv6;
+	adress->ip = inet_ntoa(src_addr.sin_addr);
+	adress->port = ntohs(src_addr.sin_port);
+
+	return msg;
 }
 
 void					WSocket::_send(const char * const msg, const int flags) const {
-	size_t			ret;
-
-	if ((ret = send(_fd, msg, strlen(msg), flags)) == SOCKET_ERROR)
-		throw std::runtime_error(strerror(errno));
-
-	return;
+	if (send(_fd, msg, strlen(msg), flags) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
-void					WSocket::_send(const char * const msg, const size_t size, const int flags) const {
-	size_t			ret;
-
-	if ((ret = send(_fd, msg, size, flags)) == SOCKET_ERROR)
-		throw std::runtime_error(strerror(errno));
-
-	return;
+void					WSocket::_send(const char * const msg, const int size, const int flags) const {
+	if (send(_fd, msg, size, flags) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_send(const std::string &msg, const int flags) const {
-	size_t			ret;
-
-	if ((ret = send(_fd, msg.c_str(), msg.size(), flags)) == SOCKET_ERROR)
-		throw std::runtime_error(strerror(errno));
-
-	return;
+	if (send(_fd, msg.c_str(), msg.size(), flags) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
-void					WSocket::_send(const std::string &msg, const size_t size, const int flags) const {
-	size_t			ret;
-
-	if ((ret = send(_fd, msg.c_str(), size, flags)) == SOCKET_ERROR)
-		throw std::runtime_error(strerror(errno));
-
-	return;
-}
-
-void					WSocket::_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
-	(void)msg;
-	(void)size;
-	(void)flags;
-	(void)adress;
-}
-
-void					WSocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {
-	(void)msg;
-	(void)flags;
-	(void)adress;
-}
-
-void					WSocket::_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
-	(void)msg;
-	(void)size;
-	(void)flags;
-	(void)adress;
+void					WSocket::_send(const std::string &msg, const int size, const int flags) const {
+	if (send(_fd, msg.c_str(), size, flags) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }
 
 void					WSocket::_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const {
-	(void)msg;
-	(void)flags;
-	(void)adress;
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+}
+
+void					WSocket::_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+}
+
+void					WSocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg.c_str(), msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
+}
+
+void					WSocket::_sendto(const std::string &msg, const int size, const int flags, const tSocketAdress * const adress) const {
+	struct sockaddr_in	dest_addr;
+	struct in_addr			addr;
+	struct hostent			*h;
+
+	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
+		throw std::runtime_error(strerror(errno));
+	memcpy(&addr, h->h_addr, sizeof(addr));
+	dest_addr.sin_family = adress->family;
+	dest_addr.sin_port = htons(adress->port);
+	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
+
+	if (sendto(_fd, msg.c_str(), size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
+		throw std::runtime_error(_strerror());
 }

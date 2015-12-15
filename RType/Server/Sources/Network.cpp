@@ -4,7 +4,7 @@
 #include			"Client.hpp"
 #include			"Game.hpp"
 
-#ifdef WIN32
+#ifdef _WIN32
 # include			"WConditionVariable.hpp"
 #else
 # include			"UConditionVariable.hpp"

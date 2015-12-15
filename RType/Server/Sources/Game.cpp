@@ -174,7 +174,7 @@ bool	Game::handleInputClient(Client * c)
   else
     {
       // send Packet error
-		_proto._createResponsePacket(INVALID_ACTION, c->getPlayer()->getId());
+		_proto._createResponsePacket(INVALID_ACTION, (unsigned int)c->getPlayer()->getId());
 		_proto._getLastPacket();
     }
   return true;

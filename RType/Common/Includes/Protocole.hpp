@@ -43,6 +43,11 @@ typedef struct {
 }					identifantPacket;
 
 typedef struct {
+	string			type;
+	string			name;
+}					deadEntityPacket;
+
+typedef struct {
 	uint16_t		pos_x;
 	uint16_t		pos_y;
 	uint16_t		size_x;
@@ -82,8 +87,10 @@ private:
 	parametersPacket		_params;
 	scrollingPacket			_scroll;
 	identifantPacket		_identifiant;
+	deadEntityPacket		_deadEntity;
 	int						_posInArray;
 	std::vector<char *>		_listPacket;
+	unsigned int			_id;
 
 	/*
 	** Functions Private to set Packets
@@ -95,28 +102,29 @@ private:
 	void					_setPositionStruct(const char *);
 	void					_setScrollingPacket(const char *);
 	void					_setIdentifiantPacket(const char *);
+	void					_setDeadEntityPacket(const char *);
 
 public:
-	Protocole(void);
+	Protocole(unsigned int id = 0);
 	~Protocole(void);
 
 	/* 
 	** Functions to create Packets 
 	*/
 
-	void					_createResponsePacket(ERROR_PROTO err, unsigned int);
-	void					_createConnectPacket(unsigned int);
-	void					_createActionPacket(ACTION act, unsigned int);
-	void					_createParametersPacket(int, int, unsigned int);
-	void					_addPositionPacket(int, int, unsigned int, unsigned int, const char *, const char *);
-	void					_putPositionPacketOnList(unsigned int);
-	void					_createPingPacket(unsigned int);
-	void					_createPongPacket(unsigned int);
-	void					_createDisconnectPacket(unsigned int);
-	void					_createScrollingPacket(int, unsigned int);
-	void					_createQuitPacket(unsigned int);
+	void					_createResponsePacket(ERROR_PROTO err);
+	void					_createConnectPacket(void);
+	void					_createActionPacket(ACTION act);
+	void					_createParametersPacket(int, int);
+	void					_addPositionPacket(unsigned int, unsigned int, unsigned int, unsigned int, const char *, const char *);
+	void					_putPositionPacketOnList(void);
+	void					_createPingPacket(void);
+	void					_createPongPacket(void);
+	void					_createDisconnectPacket(void);
+	void					_createScrollingPacket(int);
+	void					_createQuitPacket(void);
 	void					_createIdentifiantPacket(unsigned int, unsigned int);
-
+	void					_createDeadEntityPacket(const std::string &, const std::string &);
 	/*
 	** Functions to handle new Packets
 	*/
@@ -150,8 +158,18 @@ public:
 	uint8_t					_getScrolling(void) const;
 	uint8_t					_getIdentifiantIdPlayer(void) const;
 	uint8_t					_getIdentifiantNbGame(void) const;
+	uint8_t					_getDeadEntityNameLenght(void) const;
+	uint8_t					*_getDeadEntityNameData(void) const;
+	uint8_t					_getDeadEntityTypeLenght(void) const;
+	uint8_t					*_getDeadEntityTypeData(void) const;
 	unsigned int			_getSizePacket(const char *) const;
 	unsigned int			_getSizePacketHeader(void) const;
+
+	/*
+	** Setter
+	*/
+
+	void					_setId(unsigned int id);
 };
 
 #endif // !PROTOCOLE_HPP_

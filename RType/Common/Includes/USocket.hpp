@@ -44,17 +44,17 @@ public:
 	virtual bool				_FD_ISSET(const ISocket * const socket, const char mode) const;
 	virtual void				_close(void) const;
 	virtual char				*_recv(const int flags) const;
-	virtual char				*_recv(const size_t size, const int flags) const;
+	virtual char				*_recv(const int size, const int flags) const;
 	virtual char				*_recvfrom(const int flags, tSocketAdress *adress) const;
-	virtual char				*_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const;
+	virtual char				*_recvfrom(const int size, const int flags, tSocketAdress *adress) const;
 	virtual void				_send(const char * const msg, const int flags) const;
-	virtual void				_send(const char * const msg, const size_t size, const int flags) const;
+	virtual void				_send(const char * const msg, const int size, const int flags) const;
 	virtual void				_send(const std::string &msg, const int flags) const;
-	virtual void				_send(const std::string &msg, const size_t size, const int flags) const;
+	virtual void				_send(const std::string &msg, const int size, const int flags) const;
 	virtual void				_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const;
-	virtual void				_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const;
 	virtual void				_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const;
-	virtual void				_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const std::string &msg, const int size, const int flags, const tSocketAdress * const adress) const;
 
 	virtual int					getfd(void) const;
 

@@ -8,23 +8,23 @@
 // Last update Mon Oct 26 15:36:22 2015 Florent BEAURAIN
 //
 
-#ifndef							__WSOCKET_HPP__
+#ifndef								__WSOCKET_HPP__
 # define							__WSOCKET_HPP__
 
 # define							_WINSOCK_DEPRECATED_NO_WARNINGS
 # define							_CRT_SECURE_NO_WARNINGS
 # define							SEND_COUNT 10
 
-# include						<string.h>
-# include						<WinSock2.h>
-# include						<Windows.h>
-# include						<winsock.h>
-# include						<WS2tcpip.h>
-# include						<stdio.h>
-# include						<exception>
-# include						<iostream>
-# include						<stdexcept>
-# include						"ISocket.hpp"
+# include							<string.h>
+# include							<WinSock2.h>
+# include							<Windows.h>
+# include							<winsock.h>
+# include							<WS2tcpip.h>
+# include							<stdio.h>
+# include							<exception>
+# include							<iostream>
+# include							<stdexcept>
+# include							"ISocket.hpp"
 
 # pragma comment(lib, "ws2_32.lib")
 
@@ -47,30 +47,31 @@ public:
 	virtual bool				_FD_ISSET(const ISocket * const socket, const char mode) const;
 	virtual void				_close(void) const;
 	virtual char				*_recv(const int flags) const;
-	virtual char				*_recv(const size_t size, const int flags) const;
+	virtual char				*_recv(const int size, const int flags) const;
 	virtual char				*_recvfrom(const int flags, tSocketAdress *adress) const;
-	virtual char				*_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const;
+	virtual char				*_recvfrom(const int size, const int flags, tSocketAdress *adress) const;
 	virtual void				_send(const char * const msg, const int flags) const;
-	virtual void				_send(const char * const msg, const size_t size, const int flags) const;
+	virtual void				_send(const char * const msg, const int size, const int flags) const;
 	virtual void				_send(const std::string &msg, const int flags) const;
-	virtual void				_send(const std::string &msg, const size_t size, const int flags) const;
-	virtual void				_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_send(const std::string &msg, const int size, const int flags) const;
+	virtual void				_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const;
 	virtual void				_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const;
-	virtual void				_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const;
+	virtual void				_sendto(const std::string &msg, const int size, const int flags, const tSocketAdress * const adress) const;
 	virtual void				_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const;
 
-	SOCKET						getfd(void) const;
+	SOCKET							getfd(void) const;
 
 private:
-	WORD						wVersionRequested;
-	WSADATA						wsaData;
-	WSABUF						DataBuf;
-	WSAOVERLAPPED				SendOverlapped;
-	WSAOVERLAPPED				RecvOverlapped;
-	SOCKET						_fd;
-	SOCKET						_fd_max;
-	fd_set						_readfds;
-	fd_set						_writefds;
+	WORD								_wVersionRequested;
+	WSADATA							_wsaData;
+	WSABUF							_DataBuf;
+	WSAOVERLAPPED				_SendOverlapped;
+	WSAOVERLAPPED				_RecvOverlapped;
+	SOCKET							_fd;
+	fd_set							_readfds;
+	fd_set							_writefds;
+
+	char 								*_strerror(void) const;
 };
 
-#endif					/* !__WSOCKET_HPP__ */
+#endif								/* !__WSOCKET_HPP__ */

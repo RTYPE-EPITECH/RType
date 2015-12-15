@@ -102,7 +102,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+<<<<<<< HEAD
+      <AdditionalIncludeDirectories>./Includes/;../Common/Includes/;</AdditionalIncludeDirectories>
+=======
       <AdditionalIncludeDirectories>Z:\rendu\RType\RType\Common\Includes;Z:\rendu\RType\RType\Server\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+>>>>>>> bf0bc74094cf9973931c29713d59d8bbe3cf3c1d
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

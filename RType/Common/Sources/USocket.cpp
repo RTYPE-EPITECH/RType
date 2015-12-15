@@ -95,7 +95,7 @@ void					USocket::_connect(const eSocketFamily family, const std::string &ip, co
 }
 
 USocket				*USocket::_accept(void) {
-	int						fd;
+	int									fd;
 	struct sockaddr_in	s_in;
 
 	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), reinterpret_cast<socklen_t *>(sizeof(s_in)))) == -1)
@@ -231,7 +231,7 @@ char					*USocket::_recv(const int flags) const {
 	return msg;
 }
 
-char					*USocket::_recv(const size_t size, const int flags) const {
+char					*USocket::_recv(const int size, const int flags) const {
 	char				*msg = new char[size + 1];
 	ssize_t			ret;
 
@@ -243,8 +243,8 @@ char					*USocket::_recv(const size_t size, const int flags) const {
 }
 
 char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
-	char						*msg = new char[30721];
-	ssize_t					ret;
+	char								*msg = new char[30721];
+	ssize_t							ret;
 	struct sockaddr_in	src_addr;
 
 	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
@@ -261,9 +261,9 @@ char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 	return msg;
 }
 
-char					*USocket::_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const {
-	char						*msg = new char[size + 1];
-	ssize_t					ret;
+char					*USocket::_recvfrom(const int size, const int flags, tSocketAdress *adress) const {
+	char								*msg = new char[size + 1];
+	ssize_t							ret;
 	struct sockaddr_in	src_addr;
 
 	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
@@ -287,7 +287,7 @@ void					USocket::_send(const char * const msg, const int flags) const {
 	return;
 }
 
-void					USocket::_send(const char * const msg, const size_t size, const int flags) const {
+void					USocket::_send(const char * const msg, const int size, const int flags) const {
 	if (send(_fd, msg, size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
@@ -301,7 +301,7 @@ void					USocket::_send(const std::string &msg, const int flags) const {
 	return;
 }
 
-void					USocket::_send(const std::string &msg, const size_t size, const int flags) const {
+void					USocket::_send(const std::string &msg, const int size, const int flags) const {
 	if (send(_fd, msg.c_str(), size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
 
@@ -326,7 +326,7 @@ void					USocket::_sendto(const char * const msg, const int flags, const tSocket
 	return;
 }
 
-void					USocket::_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+void					USocket::_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const {
 	struct sockaddr_in	dest_addr;
 	struct in_addr			addr;
 	struct hostent			*h;
@@ -362,7 +362,7 @@ void					USocket::_sendto(const std::string &msg, const int flags, const tSocket
 	return;
 }
 
-void					USocket::_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+void					USocket::_sendto(const std::string &msg, const int size, const int flags, const tSocketAdress * const adress) const {
 	struct sockaddr_in	dest_addr;
 	struct in_addr			addr;
 	struct hostent			*h;

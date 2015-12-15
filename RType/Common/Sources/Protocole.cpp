@@ -1,5 +1,4 @@
 #include "Protocole.hpp"
-#include "AObject.hpp"
 
 Protocole::Protocole(void) {
 	this->_posInArray = 0;

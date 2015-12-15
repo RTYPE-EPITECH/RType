@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Nov 24 16:51:40 2015 Probola
-// Last update Sun Dec  6 23:33:12 2015 Probola
+// Last update Mon Dec 14 17:15:18 2015 Pierre Noel
 //
 
 #ifndef					_SPRITEFACTORY_HPP_
@@ -16,13 +16,14 @@
 class					SpriteFactory
 {
 private:
-  std::map<std::string, RSprite *>	_stack;
   bool					_exist(const std::string &);
 
 public:
+  std::map<std::string, RSprite *>	_stack;
+
   SpriteFactory();
   ~SpriteFactory();
-  bool					initialize(std::string &, std::string &);
+  bool					initialize(const std::string &, const std::string &, float x, float y);
 };
 
 #endif

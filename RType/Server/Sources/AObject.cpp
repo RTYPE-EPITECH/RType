@@ -8,7 +8,7 @@
 
 std::vector<size_t> AObject::_ids;
 
-AObject::AObject(void) 
+AObject::AObject(void)
 {
 	x = 0;
 	y = 0;
@@ -122,63 +122,64 @@ void	AObject::moveBot(size_t &, size_t &y, size_t s) const
 
 bool	AObject::move(Game * g, ACTION a, size_t t)
 {
-	static std::map<ACTION,
-					void(AObject::*)(size_t &, 
-									size_t &, 
-									size_t) const> tomove;
-	static bool check = true;
-	size_t fx = x;
-	size_t fy = y;
-	if (check == true) {
-		tomove[UP] = &AObject::moveTop;
-		tomove[DOWN] = &AObject::moveBot;
-		tomove[LEFT] = &AObject::moveLeft;
-		tomove[RIGHT] = &AObject::moveRight;
-		check = false;
-	}
-	(this->*tomove[a])(fx, fy, t);
+  static std::map<ACTION,
+		  void(AObject::*)(size_t &, 
+				   size_t &, 
+				   size_t) const> tomove;
+  static bool check = true;
+  size_t fx = x;
+  size_t fy = y;
+  if (check == true) {
+    tomove[UP] = &AObject::moveTop;
+    tomove[DOWN] = &AObject::moveBot;
+    tomove[LEFT] = &AObject::moveLeft;
+    tomove[RIGHT] = &AObject::moveRight;
+    check = false;
+  }
+  (this->*tomove[a])(fx, fy, t);
 
-	// Check collision with Player/ScreenEdge. If true, then do nothing
-	if (g->checkCollisionObject("Player", this) != NULL
-		|| g->checkCollisionObject("Screen", this) != NULL)
-		return true;
+  // Check collision with Player/ScreenEdge. If true, then do nothing
+  if (g->checkCollisionObject("Player", this) != NULL
+      || g->checkCollisionObject("Screen", this) != NULL)
+    return true;
 
-	// check collision with enemies/obstacle/missile . If true, then player dies
-	if (g->checkCollisionObject("Monster", this) != NULL
-		|| g->checkCollisionObject("Obstacle", this) != NULL)
+  // check collision with enemies/obstacle/missile . If true, then player dies
+  if (g->checkCollisionObject("Monster", this) != NULL
+      || g->checkCollisionObject("Obstacle", this) != NULL)
+    {
+      die(g);
+      return false;
+    }
+  // Collision with Missile : Takin Dmg
+  AObject * o = g->checkCollisionObject("Missile", this);
+  if (o != NULL)
+    {
+      Missile * m = reinterpret_cast<Missile *>(o);
+      //descrease life
+      if (type == PLAYER)
 	{
-		die(g);
-		return false;
+	  Player * p = reinterpret_cast<Player *>(this);
+	  p->setLife(p->getLife() - m->getDamage());
+	  if (p->getLife() == 0)
+	    die(g);
 	}
-	// Collision with Missile : Takin Dmg
-	AObject * o = g->checkCollisionObject("Missile", this);
-	if (o != NULL)
+      else if (type == MONSTER)
 	{
-		Missile * m = reinterpret_cast<Missile *>(o);
-		//descrease life
-		if (type == PLAYER)
-		{
-			Player * p = reinterpret_cast<Player *>(this);
-			p->setLife(p->getLife() - m->getDamage());
-			if (p->getLife() == 0)
-				die(g);
-		}
-		else if (type == MONSTER)
-		{
-			Monster * p = reinterpret_cast<Monster *>(this);
-			p->setLife(p->getLife() - m->getDamage());
-			if (p->getLife() == 0)
-				die(g);
-		}
-		o->die(g);
+	  Monster * p = reinterpret_cast<Monster *>(this);
+	  p->setLife(p->getLife() - m->getDamage());
+	  if (p->getLife() == 0)
+	    die(g);
 	}
-	if (isDead())
-		return false;
-	// no collision, apply position
-	x = fx;
-	y = fy;
-	// Create PACKET to move
-	return true;
+      o->die(g);
+    }
+  if (isDead())
+    return false;
+  // no collision, apply position
+  x = fx;
+  y = fy;
+  g->_proto._addPositionPacket(fx, fy, 1, 1, "afaire", "unknown");
+  // Create PACKET to move
+  return true;
 }
 
 void	AObject::die(Game *)

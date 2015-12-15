@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:53:03 2015 Probola
-// Last update Sat Dec 12 18:06:11 2015 Probola
+// Last update Mon Dec 14 14:17:57 2015 Probola
 //
 
 #ifndef					_TEXTUREFACTORY_HPP_
@@ -17,10 +17,11 @@
 class					TextureFactory
 {
   private:
-  std::map<std::string, RTexture *>	_stack;
-  bool					_exist(const std::string &);
+   bool					_exist(const std::string &);
 
 public:
+ std::map<std::string, RTexture *>	_stack;
+
   TextureFactory();
   ~TextureFactory();
   bool					initialize(const std::string &);

@@ -14,8 +14,8 @@ int				main(void) {
   SFML			ui;
 
   try {
-    ntw.init("127.0.0.1", 4242);
-    ntw.run();
+    //ntw.init("127.0.0.1", 4242);
+    //ntw.run();
   }
   catch (const std::exception &msg) {
     std::cout << msg.what() << std::endl;

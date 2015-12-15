@@ -55,7 +55,8 @@ typedef				enum {
 					NONE = 0,
 					UNKNOW = 1,
 					SHOOT_FAIL = 2,
-					MOOVE_FAIL = 3
+					MOOVE_FAIL = 3,
+					INVALID_ACTION = 4
 }					ERROR_PROTO;
 
 typedef				enum {

@@ -49,9 +49,21 @@ void				Network::newClient(void) {
 
 void				Network::deleteClient(unsigned int i) {
 (void)i;
-	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _listClient[i]->getSocket()->getfd() << ")" << std::endl;
-	delete _clients[i];
-	_clients.erase(_listClient.begin() + i);
+#ifdef _WIN23
+	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _clients[i]->getSocket()->getfd() << ")" << std::endl;
+#else
+	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
+#endif
+	_games[findGame(_clients[i])]->removeClient(_clients[i]);
+}
+
+size_t				Network::findGame(Client *c)
+{
+	for (size_t i = 0; i < _games.size(); i++)
+		if (_games[i]->getIdThread() == c->getIdThreadGame())
+			return i;
+	throw std::runtime_error("[Network] Cannot find game");
+	return 0;
 }
 
 void				Network::init(const std::string & port) {
@@ -74,11 +86,11 @@ void				Network::init(const std::string & port) {
 void				Network::setClient(void) {
 	_socket->_FD_ZERO("rw");
 	_socket->_FD_SET("r");
-	/*for (unsigned int i = 0; i < _listClient.size(); i++) {
-		_socket->_FD_SET(_listClient[i]->getSocket(), "r");
-		if (_listClient[i]->getInput()->_getListMsg().size() != 0)
-			_socket->_FD_SET(_listClient[i]->getSocket(), "w");
-	}*/
+	for (unsigned int i = 0; i < _clients.size(); i++) {
+		_socket->_FD_SET(_clients[i]->getSocket(), "r");
+		if (_clients[i]->getOutput() != NULL)
+			_socket->_FD_SET(_clients[i]->getSocket(), "w");
+	}
 }
 
 bool				Network::readClient(unsigned int i) {
@@ -108,7 +120,8 @@ void				Network::createGame(Client * e)
 	_games.push_back(g);
 }
 
-void				Network::run(void) {
+void				Network::run(void)
+{
 	while (true) {
 		setClient();
 		_socket->_select(60, 0);
@@ -126,4 +139,5 @@ void				Network::run(void) {
 						return;
 			}
 		}
+	}
 }

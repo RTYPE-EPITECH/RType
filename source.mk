@@ -1,3 +1,4 @@
+
 ##
 ## source.mk for source.mk
 ## 
@@ -5,7 +6,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Mon Dec 14 17:07:27 2015 Pierre Noel
+## Last update Tue Dec 15 16:11:55 2015 Probola
 ##
 
 ## Server sources
@@ -56,4 +57,4 @@ CLIENT                  +=	$(DIR_CLIENT_S)TextureFactory.cpp
 CLIENT			+=	$(DIR_CLIENT_S)RTexture.cpp
 CLIENT			+=	$(DIR_CLIENT_S)SpriteFactory.cpp
 
-DIR_LIB			=	RType/Common/Library/
+DIR_LIB			=	RType/Common/Library

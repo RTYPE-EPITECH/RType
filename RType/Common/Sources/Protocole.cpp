@@ -11,6 +11,7 @@ Protocole::Protocole(void) {
 	_generateData[6] = NULL;
 	_generateData[7] = NULL;
 	_generateData[8] = &Protocole::_setScrollingPacket;
+	_generateData[9] = &Protocole::_setIdentifiantPacket;
 }
 
 Protocole::~Protocole(void) {}
@@ -155,6 +156,21 @@ void		Protocole::_createQuitPacket(unsigned int id) {
 	this->_listPacket.push_back(result);
 }
 
+void		Protocole::_createIdentifiantPacket(unsigned int idPlayer, unsigned int nbGame) {
+	char *result = new char[sizeof(headerPacket) + sizeof(identifantPacket)];
+	memset(result, 0, sizeof(headerPacket));
+	memset(&(this->_header), 0, sizeof(headerPacket));
+	memset(&(this->_identifiant), 0, sizeof(identifantPacket));
+	this->_header.opcode = 10;
+	this->_header.id = 0;
+	this->_header.size = sizeof(identifantPacket);
+	this->_identifiant.idPlayer = idPlayer;
+	this->_identifiant.nbGame = nbGame;
+	memcpy(result, &(this->_header), sizeof(headerPacket));
+	memcpy(result + sizeof(headerPacket), &(this->_identifiant), sizeof(identifantPacket));
+	this->_listPacket.push_back(result);
+}
+
 /*
 ** Functions to handle new Packets
 */
@@ -197,6 +213,10 @@ void		Protocole::_setPositionStruct(const char *packet) {
 
 void		Protocole::_setScrollingPacket(const char *packet) {
 	memcpy(&(this->_scroll), packet, sizeof(scrollingPacket));
+}
+
+void		Protocole::_setIdentifiantPacket(const char *packet) {
+	memcpy(&(this->_identifiant), packet, sizeof(identifantPacket));
 }
 
 /*
@@ -277,6 +297,14 @@ uint8_t			Protocole::_getActionOpcode(void) const {
 
 uint8_t			Protocole::_getScrolling(void) const {
 	return this->_scroll.scroll;
+}
+
+uint8_t			Protocole::_getIdentifiantIdPlayer(void) const {
+	return this->_identifiant.idPlayer;
+}
+
+uint8_t			Protocole::_getIdentifiantNbGame(void) const {
+	return this->_identifiant.nbGame;
 }
 
 unsigned int	Protocole::_getSizePacket(const char *packet) const {

@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:40:49 2015 Probola
-// Last update Fri Nov 20 13:47:04 2015 Probola
+// Last update Tue Dec 15 17:57:36 2015 Probola
 //
 
 #include				"Sound.hpp"
@@ -35,7 +35,7 @@ Sound::~Sound()
     }
 }
 
-bool					Sound::initializeSound(const std::string &file, bool loop, int start, int volume)
+bool					Sound::initializeSound(const std::string &file, bool loop, float start, float volume)
 {
   _buffer = new sf::SoundBuffer;
   _sound = new sf::Sound;

@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:34:30 2015 Probola
-// Last update Fri Nov 20 13:40:34 2015 Probola
+// Last update Tue Dec 15 17:58:42 2015 Probola
 //
 
 #include				"SoundFactory.hpp"
@@ -18,7 +18,7 @@ SoundFactory::~SoundFactory()
 {
 }
 
-bool					SoundFactory::initialize(const std::string &file, bool loop, int start, int volume)
+bool					SoundFactory::initialize(const std::string &file, bool loop, float start, float volume)
 {
   if (!_exist(file))
     {
@@ -38,7 +38,7 @@ bool					SoundFactory::play(const std::string &file)
       _stack[file]->playSound();
       return true;
     }
-  if (initialize(file, fasle, 0, 100))
+  if (initialize(file, false, 0, 100))
     {
       _stack[file]->playSound();
       return true;
@@ -53,7 +53,7 @@ bool					SoundFactory::_exist(const std::string &file)
   return true;
 }
 
-Sound					SoundFactory::_load(const std::string &file, bool loop, int start, int volume)
+Sound					*SoundFactory::_load(const std::string &file, bool loop, float start, float volume)
 {
   Sound					*tmp = new Sound();
 

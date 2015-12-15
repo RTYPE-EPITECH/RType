@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Mon Dec 14 17:43:21 2015 Pierre Noel
+// Last update Tue Dec 15 15:59:45 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -20,6 +20,10 @@
 #include			"SFML/Network.hpp"
 #include			"SFML/System.hpp"
 #include			"SFML/Window.hpp"
+#include			"Protocole.hpp"
+
+class				SpriteFactory;
+class				SoundFactory;
 
 class				SFML
 {
@@ -30,7 +34,9 @@ class				SFML
 public:
   SFML();
   ~SFML();
-  void				loop();
+  void				endLoop();
+  bool				isOpen();
+  ACTION			getInput();
   void				update(const std::string &, const std::string &, float, float);
 };
 

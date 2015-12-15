@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:53:03 2015 Probola
-// Last update Mon Dec 14 14:17:57 2015 Probola
+// Last update Tue Dec 15 15:58:34 2015 Probola
 //
 
 #ifndef					_TEXTUREFACTORY_HPP_
@@ -13,6 +13,8 @@
 
 #include				"RTexture.hpp"
 #include				"Tools.hpp"
+
+class					RTexture;
 
 class					TextureFactory
 {
@@ -24,7 +26,7 @@ public:
 
   TextureFactory();
   ~TextureFactory();
-  bool					initialize(const std::string &);
+  bool					initialize(const std::string &, const std::string &);
   bool					setAssets();
 };
 

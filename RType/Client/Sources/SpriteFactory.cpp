@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Sun Dec  6 23:24:03 2015 Probola
-// Last update Mon Dec  7 00:40:55 2015 Probola
+// Last update Tue Dec 15 16:03:51 2015 Probola
 //
 
 #include			"SpriteFactory.hpp"
@@ -22,9 +22,9 @@ SpriteFactory::~SpriteFactory()
 
 bool		SpriteFactory::initialize(const std::string &name, const std::string &TextureName, float x, float y)
 {
-  if (!exist(name))
+  if (!_exist(name))
     {
-      RSprite			*sprite(name, TextureName, x, y);
+      RSprite			*sprite = new RSprite(TextureName, x, y);
       if (sprite != 0)
 	_stack[name] = sprite;
       else
@@ -35,7 +35,7 @@ bool		SpriteFactory::initialize(const std::string &name, const std::string &Text
 
 bool		SpriteFactory::_exist(const std::string &name)
 {
-  if (this->_stack.count(file) == 0)
+  if (this->_stack.count(name) == 0)
     return false;
   return true;
 }

@@ -5,15 +5,19 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-** Last update Tue Dec 15 12:23:40 2015 Jérémy MATHON
+** Last update Tue Dec 15 17:29:23 2015 Jérémy MATHON
 */
 
 #include	"Game.hpp"
 
 #ifdef	WIN32
 # include	"WMutex.hpp"
+# include	"WTimer.hpp"
+# include	"WThread.hpp"
 #else
 # include	"UMutex.hpp"
+# include	"UTimer.hpp"
+# include	"UThread.hpp"
 #endif
 
 Game::Game()
@@ -28,16 +32,20 @@ bool		Game::init()
 {
  #ifdef	WIN32
   _mutexGame = new WMutex();
+  thread_t = new WThread();
+  time = new WTimer();
 #else
   _mutexGame = new UMutex();
+  thread_t = new UThread();
+  time = new UTimer();
 #endif
 
   this->setStart(false);
   if(!(this->_mutexGame->initialize()))
     return false;
-  this->time.start();
+  this->time->start();
   try {
-    thread_t.initialize(&loop, this);
+    thread_t->initialize(&loop, this);
   }
   catch (const std::runtime_error &error) {
     std::cerr << error.what() << std::endl;
@@ -46,7 +54,7 @@ bool		Game::init()
   return true;
 }
 
-static void	*Game::loop(void * arg)
+void	*Game::loop(void * arg)
 {
   Game *_this = reinterpret_cast<Game *>(arg);
   SFML display;
@@ -67,8 +75,8 @@ static void	*Game::loop(void * arg)
     {
       _lastInput = _this->getInput();
       ACTION  a = display.getInput();
-      _this->_protocole._createActionPacket(a);
-      output.addOutput(_this->_protocole._getLastPacket());
+      _this->_protocole._createActionPacket(a, _this->_idPlayer);
+      _this->addOutput(_this->_protocole._getLastPacket());
       display.endLoop();
     }
   return arg;

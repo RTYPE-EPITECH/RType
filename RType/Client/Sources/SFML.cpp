@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Mon Dec 14 17:46:34 2015 Pierre Noel
+// Last update Tue Dec 15 16:25:55 2015 Probola
 //
 
 #include			"SFML.hpp"
@@ -35,22 +35,32 @@ void				SFML::endLoop()
 
 ACTION				SFML::getInput()
 {
-  int				nbr = 0;
   std::string			screenshot = "screenshot";
   sf::Event			Event;
+  static bool check  = true;
+  static std::map<int, ACTION> gen;
 
+  if (check)
+    {
+      gen[sf::Keyboard::Left] = LEFT;
+      gen[sf::Keyboard::Right] = RIGHT;
+      gen[sf::Keyboard::Up] = UP;
+      gen[sf::Keyboard::Down] = DOWN;
+      gen[sf::Keyboard::Space] = SHOOT;
+      check = false;
+    }
   if (win.pollEvent(Event))
     {
       if (Event.key.code == sf::Keyboard::Escape)
-	win.close();
-      /* if (Event.key.code == sf::Keyboard::F1)
 	{
-	  sf::Image				Screen = win.capture();
-	  Screen.saveToFile(screenshot + NumberToString(nbr) + ".jpg");
-	  nbr++;
-	  }*/
+	  win.close();
+	  return UNKNOW_ACTION;
+	}
+      else
+	if (gen.count(Event.key.code) > 0)
+	  return gen[Event.key.code];
     }
-  return UNKNOW;
+  return UNKNOW_ACTION;
 }
 
 void	SFML::update(const std::string &name, const std::string &TextureName, float x, float y)

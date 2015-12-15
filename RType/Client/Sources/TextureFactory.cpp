@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:34:58 2015 Probola
-// Last update Tue Dec 15 15:55:36 2015 Probola
+// Last update Tue Dec 15 17:57:09 2015 Probola
 //
 
 #include			"TextureFactory.hpp"
@@ -42,13 +42,6 @@ bool			TextureFactory::_exist(const std::string &name)
 
 bool			TextureFactory::setAssets()
 {
-  /*int			i = 0;
-  std::string		FileToLoad = "client/Assets/r-typesheet";
-
-  while (i < 45)
-    {
-      initialize(FileToLoad + NumberToString(i) + ".gif";
-      i++;
-      }*/
+  
   return false;
 }

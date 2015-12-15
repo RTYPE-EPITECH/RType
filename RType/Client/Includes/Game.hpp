@@ -5,7 +5,7 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:47:59 2015 Jérémy MATHON
-** Last update Tue Dec  1 11:27:05 2015 Jérémy MATHON
+** Last update Tue Dec 15 11:13:50 2015 Jérémy MATHON
 */
 
 #ifndef GAME_HPP_
@@ -21,22 +21,27 @@
 class	Game : public Network
 {
 private:
-  vector<char *>	input;
-  vector<char *>	output;
-  IMutex		*_mutexInput;
-  IMutex		*_mutexOutput;
+  std::vector<char *>	input;
+  std::vector<char *>	output;
+  IMutex		*_mutexGame;
   IThread		thread_t;
   ITimer		time;
+  bool			_start;
+  int			_idGame;
+  int			_idPlayer;
+  Protocole		_protocole;
 
 public:
   Game();
   ~Game();
   bool			init();
   static	void	*loop(void *);
-  void			getInput(ACTION input);
-  void			getOutput(ACTION output);
-  void			addInput(ACTION input);
-  void			addOutput(ACTION output);
+  std::vector<char *>	getInput();
+  std::vector<char *>	getOutput();
+  void			addInput(char *input);
+  void			addOutput(char *output);
+  bool			getStart();
+  void			setStart(bool ret);
 };
 
 #endif /* !GAME_HPP_ */

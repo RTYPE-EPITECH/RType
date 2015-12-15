@@ -5,7 +5,7 @@
 #include "Client.hpp"
 #include "Missile.hpp"
 #include <iostream>
-
+#include "Client.hpp"
 #ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
@@ -47,7 +47,11 @@ bool Game::addClient(Client * cl)
 void Game::removeClient(Client * c)
 {
 	mutex->lock();
-
+	for (std::vector<Client *>::iterator i = _clients.begin(); 
+			i != _clients.end(); ++i)
+		if ((*i)->getPlayer()->getId() == c->getPlayer()->getId())
+			_clients.erase(i);
+			//c->getSocket();
 	mutex->unlock();
 }
 
@@ -170,7 +174,8 @@ bool	Game::handleInputClient(Client * c)
   else
     {
       // send Packet error
-      std::cerr << "NEED SEND PACKET ERROR - CHECK THE CODE" << std::endl;
+		_proto._createResponsePacket(INVALID_ACTION);
+		_proto._getLastPacket();
     }
   return true;
 }

@@ -53,6 +53,7 @@ private:
 	void					writeClient(unsigned int);
 
 	void					createGame(Client *);
+	size_t					findGame(Client *);
 };
 
 #endif                 /* !__NETWORK_HPP__ */

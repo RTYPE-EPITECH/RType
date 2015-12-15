@@ -178,7 +178,8 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   // no collision, apply position
   x = fx;
   y = fy;
-  g->_proto._addPositionPacket(fx, fy, width, height, (Tools::getName(type, id)).c_str() , "unknown");
+  g->_proto._addPositionPacket((unsigned int)fx, (unsigned int)fy,
+	  (unsigned int)width, (unsigned int)height, (Tools::getName(type, id)).c_str() , "unknown");
   return true;
 }
 

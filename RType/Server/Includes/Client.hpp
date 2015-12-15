@@ -28,6 +28,8 @@ public:
 	void	setSocket(ISocket *);
 	ISocket *	getSocket() const;
 
+	size_t	getIdThreadGame();
+
 	// Mutexed function to get input/output from vector
 	char *	getInput();
 	char *	getOutput();

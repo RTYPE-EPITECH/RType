@@ -257,7 +257,7 @@ char					*WSocket::_recvfrom(const int size, const int flags, tSocketAdress *adr
 }
 
 void					WSocket::_send(const char * const msg, const int flags) const {
-	if (send(_fd, msg, strlen(msg), flags) == SOCKET_ERROR)
+	if (send(_fd, msg, (int)strlen(msg), flags) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
 }
 
@@ -267,7 +267,7 @@ void					WSocket::_send(const char * const msg, const int size, const int flags)
 }
 
 void					WSocket::_send(const std::string &msg, const int flags) const {
-	if (send(_fd, msg.c_str(), msg.size(), flags) == SOCKET_ERROR)
+	if (send(_fd, msg.c_str(), (int)msg.size(), flags) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
 }
 
@@ -288,7 +288,7 @@ void					WSocket::_sendto(const char * const msg, const int flags, const tSocket
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -SOCKET_ERROR)
+	if (sendto(_fd, msg, (int)strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
 }
 
@@ -320,7 +320,7 @@ void					WSocket::_sendto(const std::string &msg, const int flags, const tSocket
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg.c_str(), msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
+	if (sendto(_fd, msg.c_str(), (int)msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
 }
 

@@ -69,19 +69,6 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createScrollingPacket(int scroll) {
-	char	*result = new char[sizeof(headerPacket) + sizeof(scrollingPacket)];
-	memset(result, 0, sizeof(headerPacket) + sizeof(scrollingPacket));
-	memset(&(this->_header), 0, sizeof(headerPacket));
-	memset(&(this->_scroll), 0, sizeof(scrollingPacket));
-	this->_header.opcode = 8;
-	this->_header.size = sizeof(scrollingPacket);
-	this->_action.action = (uint8_t)scroll;
-	memcpy(result, &(this->_header), sizeof(headerPacket));
-	memcpy(result + sizeof(headerPacket), &(this->_scroll), sizeof(scrollingPacket));
-	this->_listPacket.push_back(result);
-}
-
 void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite, const char *path) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
@@ -105,7 +92,7 @@ void		Protocole::_putPositionPacketOnList(void) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createPingCommand(void) {
+void		Protocole::_createPingPacket(void) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
@@ -115,7 +102,7 @@ void		Protocole::_createPingCommand(void) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole:: _createPongCommand(void) {
+void		Protocole:: _createPongPacket(void) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
@@ -125,11 +112,34 @@ void		Protocole:: _createPongCommand(void) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createDisconnectCommand(void) {
+void		Protocole::_createDisconnectPacket(void) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 7;
+	this->_header.size = 0;
+	memcpy(result, &(this->_header), sizeof(headerPacket));
+	this->_listPacket.push_back(result);
+}
+
+void		Protocole::_createScrollingPacket(int scroll) {
+	char	*result = new char[sizeof(headerPacket) + sizeof(scrollingPacket)];
+	memset(result, 0, sizeof(headerPacket) + sizeof(scrollingPacket));
+	memset(&(this->_header), 0, sizeof(headerPacket));
+	memset(&(this->_scroll), 0, sizeof(scrollingPacket));
+	this->_header.opcode = 8;
+	this->_header.size = sizeof(scrollingPacket);
+	this->_action.action = (uint8_t)scroll;
+	memcpy(result, &(this->_header), sizeof(headerPacket));
+	memcpy(result + sizeof(headerPacket), &(this->_scroll), sizeof(scrollingPacket));
+	this->_listPacket.push_back(result);
+}
+
+void		Protocole::_createQuitPacket(void) {
+	char *result = new char[sizeof(headerPacket)];
+	memset(result, 0, sizeof(headerPacket));
+	memset(&(this->_header), 0, sizeof(headerPacket));
+	this->_header.opcode = 9;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);

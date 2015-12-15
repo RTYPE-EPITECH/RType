@@ -102,10 +102,11 @@ public:
 	void					_createParametersPacket(int, int);
 	void					_addPositionPacket(int, int, int, int, const char *, const char *);
 	void					_putPositionPacketOnList(void);
-	void					_createPingCommand(void);
-	void					_createPongCommand(void);
-	void					_createDisconnectCommand(void);
+	void					_createPingPacket(void);
+	void					_createPongPacket(void);
+	void					_createDisconnectPacket(void);
 	void					_createScrollingPacket(int);
+	void					_createQuitPacket(void);
 
 	/*
 	** Functions to handle new Packets

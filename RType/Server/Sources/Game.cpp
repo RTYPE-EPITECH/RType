@@ -127,7 +127,7 @@ bool Game::loop()
 	      _proto._setNewPacket(input);
 	      handleInputClient(_clients[i]);
 	    }
-	  _proto._putPositionPacketOnList(0);
+	  _proto._putPositionPacketOnList();
 	  char * packet = _proto._getLastPacket();
 	  for (size_t i = 0; i < _clients.size(); i++)
 		  _clients[i]->addOutput(packet);
@@ -138,7 +138,7 @@ bool Game::loop()
 	{
 	  mutex->lock();
 	  AllMove();
-	  _proto._putPositionPacketOnList(0);
+	  _proto._putPositionPacketOnList();
 	  char * packet = _proto._getLastPacket();
 	  for (size_t i = 0; i < _clients.size(); i++)
 		  _clients[i]->addOutput(packet);
@@ -174,7 +174,7 @@ bool	Game::handleInputClient(Client * c)
   else
     {
       // send Packet error
-		_proto._createResponsePacket(INVALID_ACTION, (unsigned int)c->getPlayer()->getId());
+		_proto._createResponsePacket(INVALID_ACTION);
 		_proto._getLastPacket();
     }
   return true;

@@ -255,6 +255,13 @@ uint8_t			Protocole::_getScrolling(void) const {
 	return this->_scroll.scroll;
 }
 
+unsigned int	Protocole::_getSizePacket(const char *packet) const {
+	headerPacket	tmp;
+	memset(&tmp, 0, sizeof(headerPacket));
+	memcpy(&tmp, packet, sizeof(headerPacket));
+	return (unsigned int)(sizeof(headerPacket) + tmp.size);
+}
+
 unsigned int	Protocole::_getSizePacketHeader(void) const {
 	return sizeof(headerPacket);
 }

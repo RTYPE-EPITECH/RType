@@ -137,6 +137,7 @@ public:
 	uint8_t					_getParametersNbGame(void) const;
 	uint8_t					_getActionOpcode(void) const;
 	uint8_t					_getScrolling(void) const;
+	unsigned int			_getSizePacket(const char *) const;
 	unsigned int			_getSizePacketHeader(void) const;
 };
 

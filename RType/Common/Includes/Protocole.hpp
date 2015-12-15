@@ -16,6 +16,7 @@ typedef struct {
 
 typedef struct {
 	uint8_t			opcode;
+	uint8_t			id;
 	uint16_t		size;
 }					headerPacket;
 
@@ -96,17 +97,17 @@ public:
 	** Functions to create Packets 
 	*/
 
-	void					_createResponsePacket(ERROR_PROTO err);
-	void					_createConnectPacket(void);
-	void					_createActionPacket(ACTION act);
-	void					_createParametersPacket(int, int);
-	void					_addPositionPacket(int, int, int, int, const char *, const char *);
-	void					_putPositionPacketOnList(void);
-	void					_createPingPacket(void);
-	void					_createPongPacket(void);
-	void					_createDisconnectPacket(void);
-	void					_createScrollingPacket(int);
-	void					_createQuitPacket(void);
+	void					_createResponsePacket(ERROR_PROTO err, unsigned int);
+	void					_createConnectPacket(unsigned int);
+	void					_createActionPacket(ACTION act, unsigned int);
+	void					_createParametersPacket(int, int, unsigned int);
+	void					_addPositionPacket(int, int, unsigned int, unsigned int, const char *, const char *);
+	void					_putPositionPacketOnList(unsigned int);
+	void					_createPingPacket(unsigned int);
+	void					_createPongPacket(unsigned int);
+	void					_createDisconnectPacket(unsigned int);
+	void					_createScrollingPacket(int, unsigned int);
+	void					_createQuitPacket(unsigned int);
 
 	/*
 	** Functions to handle new Packets
@@ -123,6 +124,7 @@ public:
 	char					*_getLastPacket(void) const;
 	std::vector<char *>		_getListPacket(void) const;
 	uint8_t					_getHeaderOpcode(void) const;
+	uint8_t					_getHeaderId(void) const;
 	uint16_t				_getHeaderSize(void) const;
 	uint8_t					_getArrayPositionLenght(void) const;
 	uint16_t				_getPositionPosX(size_t) const;

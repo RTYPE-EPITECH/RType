@@ -19,12 +19,13 @@ Protocole::~Protocole(void) {}
 ** Functions to create Packets
 */
 
-void		Protocole::_createResponsePacket(ERROR_PROTO err) {
+void		Protocole::_createResponsePacket(ERROR_PROTO err, unsigned int id) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(responsePacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(responsePacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	memset(&(this->_response), 0, sizeof(responsePacket));
 	this->_header.opcode = 0;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = sizeof(responsePacket);
 	this->_response.opcode = (uint8_t)err;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
@@ -32,22 +33,24 @@ void		Protocole::_createResponsePacket(ERROR_PROTO err) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createConnectPacket(void) {
+void		Protocole::_createConnectPacket(unsigned int id) {
 	char	*result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 1;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createParametersPacket(int difficulty, int nbGame) {
+void		Protocole::_createParametersPacket(int difficulty, int nbGame, unsigned int id) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(parametersPacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(parametersPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	memset(&(this->_params), 0, sizeof(parametersPacket));
 	this->_header.opcode = 2;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = sizeof(parametersPacket);
 	this->_params.difficulty = (uint8_t)difficulty;
 	this->_params.nbGame = (uint8_t)nbGame;
@@ -56,12 +59,13 @@ void		Protocole::_createParametersPacket(int difficulty, int nbGame) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createActionPacket(ACTION act) {
+void		Protocole::_createActionPacket(ACTION act, unsigned int id) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(actionPacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(actionPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	memset(&(this->_action), 0, sizeof(actionPacket));
 	this->_header.opcode = 3;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = sizeof(actionPacket);
 	this->_action.action = (uint8_t)act;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
@@ -69,7 +73,7 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, const char *sprite, const char *path) {
+void		Protocole::_addPositionPacket(int posX, int posY, unsigned int sizeX, unsigned int sizeY, const char *sprite, const char *path) {
 	this->_arrayPositionPacket.lenght = (this->_posInArray + 1) * sizeof(positionPacket);
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
@@ -80,11 +84,12 @@ void		Protocole::_addPositionPacket(int posX, int posY, int sizeX, int sizeY, co
 	this->_posInArray = this->_posInArray + 1;
 }
 
-void		Protocole::_putPositionPacketOnList(void) {
+void		Protocole::_putPositionPacketOnList(unsigned int id) {
 	char *result = new char[sizeof(headerPacket) + sizeof(arrayPositionPacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(arrayPositionPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 4;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = sizeof(arrayPositionPacket);
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	memcpy(result + sizeof(headerPacket), &(this->_arrayPositionPacket), sizeof(arrayPositionPacket));
@@ -92,42 +97,46 @@ void		Protocole::_putPositionPacketOnList(void) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createPingPacket(void) {
+void		Protocole::_createPingPacket(unsigned int id) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 5;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole:: _createPongPacket(void) {
+void		Protocole:: _createPongPacket(unsigned int id) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 6;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createDisconnectPacket(void) {
+void		Protocole::_createDisconnectPacket(unsigned int id) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 7;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createScrollingPacket(int scroll) {
+void		Protocole::_createScrollingPacket(int scroll, unsigned int id) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(scrollingPacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(scrollingPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	memset(&(this->_scroll), 0, sizeof(scrollingPacket));
 	this->_header.opcode = 8;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = sizeof(scrollingPacket);
 	this->_action.action = (uint8_t)scroll;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
@@ -135,11 +144,12 @@ void		Protocole::_createScrollingPacket(int scroll) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createQuitPacket(void) {
+void		Protocole::_createQuitPacket(unsigned int id) {
 	char *result = new char[sizeof(headerPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
 	this->_header.opcode = 9;
+	this->_header.id = (uint8_t)id;
 	this->_header.size = 0;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	this->_listPacket.push_back(result);
@@ -203,6 +213,10 @@ std::vector<char *>		Protocole::_getListPacket(void) const {
 
 uint8_t			Protocole::_getHeaderOpcode(void) const {
 	return this->_header.opcode;
+}
+
+uint8_t			Protocole::_getHeaderId(void) const {
+	return this->_header.id;
 }
 
 uint16_t		Protocole::_getHeaderSize(void) const {

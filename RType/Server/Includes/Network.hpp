@@ -34,10 +34,11 @@ public:
 	~Network(void);
 
 	void					run(void);
-	void					init(const std::string &);
+	void					init(const std::string &, const std::string &);
 
 private:
-	ISocket					*_socket;
+	ISocket					*_socketGame;
+	ISocket					*_socketConnexion;
 	IConditionVariable		*_i;
 	Protocole				_proto;
 	HandleThread			_handle;

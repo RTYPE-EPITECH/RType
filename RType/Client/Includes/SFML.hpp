@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Tue Dec 15 19:11:25 2015 Probola
+// Last update Wed Dec 16 19:07:53 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -19,6 +19,7 @@
 #include			"SFML/System.hpp"
 #include			"SFML/Window.hpp"
 #include			"Protocole.hpp"
+#include			"EObject.hpp"
 
 class				SpriteFactory;
 class				SoundFactory;
@@ -32,10 +33,11 @@ class				SFML
 public:
   SFML();
   ~SFML();
-  void				endLoop();
+  void				clear();
+  void				display();
   bool				isOpen();
   ACTION			getInput();
-  void				update(const std::string &, const std::string &, float, float);
+  void				update(const std::string &, EObject, float, float);
 };
 
 #endif

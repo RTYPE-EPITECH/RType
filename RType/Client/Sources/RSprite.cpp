@@ -5,18 +5,18 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Dec  1 16:09:36 2015 Probola
-// Last update Tue Dec 15 19:01:41 2015 Probola
+// Last update Wed Dec 16 19:29:13 2015 Probola
 //
 
 #include			"RSprite.hpp"
 
-RSprite::RSprite(const std::string &TextureName, float x, float y)
+RSprite::RSprite(EObject type, float x, float y)
 {
   _textureFactory = TextureFactory::getInstance();
-  if (this->_textureFactory->_stack.count(TextureName) > 0)
+  if (type == 1)
     {
-      sf::Texture u = this->_textureFactory->_stack[TextureName]->_texture;
-      this->_sprite.setTexture(u, false);
+      this->_sprite.setTexture(this->_textureFactory->_stack["1"]->_texture, false);
+      this->_sprite.setTextureRect(sf::IntRect(100, 0, 25, 25));
       this->_sprite.setPosition(x, y);
     }
   else

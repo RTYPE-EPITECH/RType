@@ -5,22 +5,17 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:34:58 2015 Probola
-// Last update Tue Dec 15 18:55:29 2015 Probola
+// Last update Wed Dec 16 19:32:49 2015 Probola
 //
 
 #include			"TextureFactory.hpp"
 #include			<stdexcept>
 #include			<iostream>
+#include			<string>
 
-TextureFactory::TextureFactory()
-{
+TextureFactory::TextureFactory() {}
 
-}
-
-TextureFactory::~TextureFactory()
-{
-
-}
+TextureFactory::~TextureFactory() {}
 
 TextureFactory *	TextureFactory::getInstance()
 {
@@ -57,10 +52,14 @@ bool			TextureFactory::_exist(const std::string &name)
 
 bool			TextureFactory::setAssets()
 {
-  if (!initialize("first", "RType/Client/Assets/r-typesheet1.gif"))
+  int			nbr = 1;
+
+  while (nbr < 45)
     {
-      std::cout << "lel" << std::endl;
-      return (false);
+      if (nbr != 4 && nbr != 6 && nbr != 15)
+	if (!initialize(std::to_string(nbr), "RType/Client/Assets/r-typesheet" + std::to_string(nbr)+ ".gif"))
+	  return (false);
+      nbr++;
     }
   return true;
 }

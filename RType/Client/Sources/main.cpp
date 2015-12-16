@@ -17,11 +17,12 @@ int				main(void) {
   try {
     //ntw.init("127.0.0.1", 4242);
     //ntw.run();
-    texturefactory->setAssets();
     while (ui.isOpen())
       {
-	ui.endLoop();
-	ui.update("Test", "first", 100, 100);
+	texturefactory->setAssets();
+	ui.clear();
+	ui.update("test", PLAYER, 100, 100);
+	ui.display();
 	sleep(1);
       }
   }

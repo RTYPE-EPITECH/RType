@@ -5,14 +5,12 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Tue Dec 15 15:59:45 2015 Probola
+// Last update Tue Dec 15 19:11:25 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
 # define			_SFML_HPP_
 
-#include			"SpriteFactory.hpp"
-#include			"SoundFactory.hpp"
 #include	                "SFML.hpp"
 #include		        "SFML/Audio.hpp"
 #include			"SFML/Config.hpp"
@@ -27,7 +25,7 @@ class				SoundFactory;
 
 class				SFML
 {
-  sf::RenderWindow		win;
+  static sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
 

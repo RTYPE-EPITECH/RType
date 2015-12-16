@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:53:03 2015 Probola
-// Last update Tue Dec 15 15:58:34 2015 Probola
+// Last update Tue Dec 15 18:46:56 2015 Probola
 //
 
 #ifndef					_TEXTUREFACTORY_HPP_
@@ -20,11 +20,13 @@ class					TextureFactory
 {
   private:
    bool					_exist(const std::string &);
-
-public:
- std::map<std::string, RTexture *>	_stack;
-
   TextureFactory();
+  TextureFactory(const TextureFactory &);
+  TextureFactory & operator=(const TextureFactory &);
+public:
+  std::map<std::string, RTexture *>	_stack;
+
+  static TextureFactory *		getInstance();
   ~TextureFactory();
   bool					initialize(const std::string &, const std::string &);
   bool					setAssets();

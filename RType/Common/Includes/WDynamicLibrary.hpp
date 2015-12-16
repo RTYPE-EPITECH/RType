@@ -11,12 +11,13 @@ class		WDynamicLibrary : public IDynamicLibrary<T> {
 private:
 	HINSTANCE hinstLib;
 public:
-	WDynamicLibrary(void);
-	virtual ~WDynamicLibrary(void);
+	WDynamicLibrary(void) {}
+	virtual ~WDynamicLibrary(void) {}
 
 	virtual void	loadLibrary(const std::string &);
 	virtual T		useFunction(void) const;
 	virtual void	freeLibrary(void);
 };
+
 
 #endif // !__WDYNAMICLIBRARY_HPP__

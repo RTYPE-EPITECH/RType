@@ -8,7 +8,7 @@ class			IDynamicLibrary {
 public:
 	virtual		~IDynamicLibrary(void) {};
 	virtual void	loadLibrary(const std::string &) = 0;
-	virtual T		useFunction(const std::string &) const = 0;
+	virtual T		useFunction() const = 0;
 	virtual void	freeLibrary(void) = 0;
 };
 

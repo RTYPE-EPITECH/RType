@@ -4,20 +4,26 @@
 
 #include <map>
 #include <stdexcept>
+#include <vector>
 #include "IDynamicLibrary.hpp"
+#include "IMonster.hpp"
 
 class Monster;
 
 class MonsterFactory
 {
 public:
-	MonsterFactory();
+	static MonsterFactory * getInstance();
 	~MonsterFactory();
 	bool addLibrary(const std::string &);
 	Monster *	getInstance(const std::string &);
+	std::vector<std::string> & getAllMonsterName();
 private:
-	std::map<std::string, IDynamicLibrary *> gen;
-	
+	MonsterFactory();
+	MonsterFactory & operator=(const MonsterFactory &);
+	MonsterFactory(const MonsterFactory &);
+	std::map<std::string, IDynamicLibrary<IMonster*> *> gen;
+	std::vector<std::string> _listMonster;
 };
 
 #endif // MONSTERFACTORY_HPP_

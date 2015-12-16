@@ -5,7 +5,8 @@
 #include "Client.hpp"
 #include "Missile.hpp"
 #include <iostream>
-
+#include "Client.hpp"
+#include "MonsterFactory.hpp"
 #ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
@@ -47,7 +48,11 @@ bool Game::addClient(Client * cl)
 void Game::removeClient(Client * c)
 {
 	mutex->lock();
-
+	for (std::vector<Client *>::iterator i = _clients.begin(); 
+			i != _clients.end(); ++i)
+		if ((*i)->getPlayer()->getId() == c->getPlayer()->getId())
+			_clients.erase(i);
+			//c->getSocket();
 	mutex->unlock();
 }
 
@@ -59,10 +64,14 @@ size_t Game::getSizeAvailable() const
 	return size;
 }
 
-bool Game::init(const std::vector<std::string> &)
+bool Game::init(const std::vector<std::string> & _lib)
 {
 	// Create waves and init monster with dynamic lib
-
+	MonsterFactory * mf = MonsterFactory::getInstance();
+	for (size_t i = 0; i < _lib.size(); i++)
+		mf->addLibrary(_lib[i]);
+	for (size_t i = 0; i < _lib.size(); i++)
+		mf->getInstance(_lib[i]);
 	// init all the type of monster to the proto
 	// store the command in special command to send
 
@@ -170,7 +179,8 @@ bool	Game::handleInputClient(Client * c)
   else
     {
       // send Packet error
-      std::cerr << "NEED SEND PACKET ERROR - CHECK THE CODE" << std::endl;
+		_proto._createResponsePacket(INVALID_ACTION);
+		_proto._getLastPacket();
     }
   return true;
 }

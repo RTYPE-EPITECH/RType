@@ -102,7 +102,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Z:\rendu\RType\RType\Common\Includes;Z:\rendu\RType\RType\Server\Includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./Includes/;../Common/Includes/;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,8 +165,10 @@
     <ClInclude Include="Includes\Client.hpp" />
     <ClInclude Include="Includes\Game.hpp" />
     <ClInclude Include="Includes\HandleThread.hpp" />
+    <ClInclude Include="Includes\IMonster.hpp" />
     <ClInclude Include="Includes\Missile.hpp" />
     <ClInclude Include="Includes\Monster.hpp" />
+    <ClInclude Include="Includes\MonsterFactory.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\Obstacle.hpp" />
     <ClInclude Include="Includes\Player.hpp" />
@@ -187,6 +189,7 @@
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Missile.cpp" />
     <ClCompile Include="Sources\Monster.cpp" />
+    <ClCompile Include="Sources\MonsterFactory.cpp" />
     <ClCompile Include="Sources\Network.cpp" />
     <ClCompile Include="Sources\Obstacle.cpp" />
     <ClCompile Include="Sources\Player.cpp" />

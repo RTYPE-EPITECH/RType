@@ -54,8 +54,6 @@ void					USocket::_socket(const eSocketFamily family, const eSocketType type, co
 
 	_fd_max = _fd;
 	_FD_ZERO("rw");
-
-	return;
 }
 
 void					USocket::_connect(const eSocketFamily family, const char * const ip, const unsigned short port) const {
@@ -72,8 +70,6 @@ void					USocket::_connect(const eSocketFamily family, const char * const ip, co
 
 	if (connect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_connect(const eSocketFamily family, const std::string &ip, const unsigned short port) const {
@@ -90,12 +86,10 @@ void					USocket::_connect(const eSocketFamily family, const std::string &ip, co
 
 	if (connect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 USocket				*USocket::_accept(void) {
-	int						fd;
+	int									fd;
 	struct sockaddr_in	s_in;
 
 	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), reinterpret_cast<socklen_t *>(sizeof(s_in)))) == -1)
@@ -115,15 +109,11 @@ void					USocket::_bind(const eSocketFamily family, const unsigned short port) c
 	s_in.sin_addr.s_addr = htons(INADDR_ANY);
 	if (bind(_fd, reinterpret_cast<const struct sockaddr *>(&s_in), sizeof(s_in)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_listen(const int backlog) const {
 	if (listen(_fd, backlog) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_select(const int sec, const int usec) {
@@ -134,8 +124,6 @@ void					USocket::_select(const int sec, const int usec) {
 	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
 		throw std::runtime_error(strerror(errno));
 	}
-
-	return;
 }
 
 void					USocket::_FD_ZERO(const std::string &mode) {
@@ -148,9 +136,7 @@ void					USocket::_FD_ZERO(const std::string &mode) {
 		FD_ZERO(&_writefds);
 	}
 	else
-		std::runtime_error("[Error]: bad mode for _FD_ZERO()");
-
-	return;
+		throw std::runtime_error("[Error]: bad mode for _FD_ZERO()");
 }
 
 void					USocket::_FD_SET(const std::string &mode) {
@@ -164,8 +150,6 @@ void					USocket::_FD_SET(const std::string &mode) {
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_SET()");
-
-	return;
 }
 
 void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
@@ -179,8 +163,6 @@ void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode)
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_SET()");
-
-	return;
 }
 
 bool					USocket::_FD_ISSET(const char mode) const {
@@ -216,8 +198,6 @@ bool					USocket::_FD_ISSET(const ISocket * const socket, const char mode) const
 void					USocket::_close(void) const {
 	if (close(_fd) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 char					*USocket::_recv(const int flags) const {
@@ -231,7 +211,7 @@ char					*USocket::_recv(const int flags) const {
 	return msg;
 }
 
-char					*USocket::_recv(const size_t size, const int flags) const {
+char					*USocket::_recv(const int size, const int flags) const {
 	char				*msg = new char[size + 1];
 	ssize_t			ret;
 
@@ -243,8 +223,8 @@ char					*USocket::_recv(const size_t size, const int flags) const {
 }
 
 char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
-	char						*msg = new char[30721];
-	ssize_t					ret;
+	char								*msg = new char[30721];
+	ssize_t							ret;
 	struct sockaddr_in	src_addr;
 
 	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
@@ -261,9 +241,9 @@ char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 	return msg;
 }
 
-char					*USocket::_recvfrom(const size_t size, const int flags, tSocketAdress *adress) const {
-	char						*msg = new char[size + 1];
-	ssize_t					ret;
+char					*USocket::_recvfrom(const int size, const int flags, tSocketAdress *adress) const {
+	char								*msg = new char[size + 1];
+	ssize_t							ret;
 	struct sockaddr_in	src_addr;
 
 	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
@@ -283,29 +263,21 @@ char					*USocket::_recvfrom(const size_t size, const int flags, tSocketAdress *
 void					USocket::_send(const char * const msg, const int flags) const {
 	if (send(_fd, msg, strlen(msg), flags) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
-void					USocket::_send(const char * const msg, const size_t size, const int flags) const {
+void					USocket::_send(const char * const msg, const int size, const int flags) const {
 	if (send(_fd, msg, size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_send(const std::string &msg, const int flags) const {
 	if (send(_fd, msg.c_str(), msg.size(), flags) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
-void					USocket::_send(const std::string &msg, const size_t size, const int flags) const {
+void					USocket::_send(const std::string &msg, const int size, const int flags) const {
 	if (send(_fd, msg.c_str(), size, flags) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_sendto(const char * const msg, const int flags, const tSocketAdress * const adress) const {
@@ -322,11 +294,9 @@ void					USocket::_sendto(const char * const msg, const int flags, const tSocket
 
 	if (sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
-void					USocket::_sendto(const char * const msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+void					USocket::_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const {
 	struct sockaddr_in	dest_addr;
 	struct in_addr			addr;
 	struct hostent			*h;
@@ -340,8 +310,6 @@ void					USocket::_sendto(const char * const msg, const size_t size, const int f
 
 	if (sendto(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
 void					USocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {
@@ -358,11 +326,9 @@ void					USocket::_sendto(const std::string &msg, const int flags, const tSocket
 
 	if (sendto(_fd, msg.c_str(), msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }
 
-void					USocket::_sendto(const std::string &msg, const size_t size, const int flags, const tSocketAdress * const adress) const {
+void					USocket::_sendto(const std::string &msg, const int size, const int flags, const tSocketAdress * const adress) const {
 	struct sockaddr_in	dest_addr;
 	struct in_addr			addr;
 	struct hostent			*h;
@@ -376,6 +342,4 @@ void					USocket::_sendto(const std::string &msg, const size_t size, const int f
 
 	if (sendto(_fd, msg.c_str(), size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
-
-	return;
 }

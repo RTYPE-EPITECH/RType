@@ -6,16 +6,18 @@
 
 typedef int(__cdecl *MYPROC)(LPWSTR);
 
-class		WDynamicLibrary : public IDynamicLibrary {
+template <typename T>
+class		WDynamicLibrary : public IDynamicLibrary<T> {
 private:
 	HINSTANCE hinstLib;
 public:
-	WDynamicLibrary(void);
-	virtual ~WDynamicLibrary(void);
+	WDynamicLibrary(void) {}
+	virtual ~WDynamicLibrary(void) {}
 
 	virtual void	loadLibrary(const std::string &);
-	virtual void	useFunction(const std::string &) const;
+	virtual T		useFunction(void) const;
 	virtual void	freeLibrary(void);
 };
+
 
 #endif // !__WDYNAMICLIBRARY_HPP__

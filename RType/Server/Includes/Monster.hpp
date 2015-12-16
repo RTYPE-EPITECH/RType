@@ -3,6 +3,7 @@
 
 #include "AObject.hpp"
 #include "EMissile.hpp"
+#include "IMonster.hpp"
 
 class Missile;
 
@@ -13,6 +14,9 @@ public:
 	~Monster(void);
 
 	Missile * shoot(Game *);
+
+	void	loadIMonster(IMonster *);
+	std::string getTypeMonster() const;
 
 	size_t getLife() const;
 	size_t getMaxLife() const;
@@ -31,5 +35,6 @@ protected:
 	size_t maxMissile;
 	size_t currentMissile;
 	EMissile typeMissile;
+	std::string monsterType;
 };
 #endif /* MONSTER_HPP */

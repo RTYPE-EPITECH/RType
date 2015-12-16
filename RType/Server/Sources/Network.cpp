@@ -15,12 +15,15 @@
 */
 
 Network::Network(void) {
-	_socket = NULL;
+	_socketGame = NULL;
+	_socketConnexion = NULL;
 }
 
 Network::~Network(void) {
-	if (_socket != NULL)
-		delete _socket;
+	if (_socketGame != NULL)
+		delete _socketGame;
+	if (_socketConnexion != NULL)
+		delete _socketConnexion;
 }
 
 /*
@@ -31,7 +34,7 @@ void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
 	Client * newClient = new Client();
 	ISocket * newSocket = NULL;
-	newClient->setSocket(_socket->_accept());
+	newClient->setSocket(_socketConnexion->_accept());
 
 	// Trouver une game pour lui
 	bool check = true;
@@ -49,36 +52,50 @@ void				Network::newClient(void) {
 
 void				Network::deleteClient(unsigned int i) {
 (void)i;
-	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _listClient[i]->getSocket()->getfd() << ")" << std::endl;
-	delete _clients[i];
-	_clients.erase(_listClient.begin() + i);
+#ifdef _WIN23
+	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _clients[i]->getSocket()->getfd() << ")" << std::endl;
+#else
+	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
+#endif
+	_games[findGame(_clients[i])]->removeClient(_clients[i]);
 }
 
-void				Network::init(const std::string & port) {
+size_t				Network::findGame(Client *c)
+{
+	for (size_t i = 0; i < _games.size(); i++)
+		if (_games[i]->getIdThread() == c->getIdThreadGame())
+			return i;
+	throw std::runtime_error("[Network] Cannot find game");
+	return 0;
+}
+
+void				Network::init(const std::string & portConnexion, const std::string &portGame) {
 #ifdef WIN32
-	_socket = new WSocket();
+	_socketConnexion = new WSocket();
+	_socketGame = new WSocket();
 	_i = new WConditionVariable();
 #else
-	_socket = new USocket();
+	_socketConnecion = new WSocket();
+	_socketGame = new USocket();
 	_i = new UConditionVariable();
 #endif
-	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
-	//_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
-	std::cout << "socket ok" << std::endl;
-	_socket->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(port));
-	std::cout << "bind ok" << std::endl;
-	_socket->_FD_ZERO("rw");
-	std::cout << "Welcome on the RType Server (port : " << port.c_str() << ")" << std::endl;
+	_socketConnexion->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
+	_socketGame->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
+	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portGame));
+	_socketGame->_FD_ZERO("rw");
+	_socketConnexion->_FD_ZERO("rw");
+	std::cout << "Welcome on the RType Server (Connexionport : " << portConnexion.c_str() << ")" << std::endl;
 }
 
 void				Network::setClient(void) {
-	_socket->_FD_ZERO("rw");
-	_socket->_FD_SET("r");
-	/*for (unsigned int i = 0; i < _listClient.size(); i++) {
-		_socket->_FD_SET(_listClient[i]->getSocket(), "r");
-		if (_listClient[i]->getInput()->_getListMsg().size() != 0)
-			_socket->_FD_SET(_listClient[i]->getSocket(), "w");
-	}*/
+	_socketConnexion->_FD_ZERO("rw");
+	_socketConnexion->_FD_SET("r");
+	for (unsigned int i = 0; i < _clients.size(); i++) {
+		_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
+		if (_clients[i]->getOutput() != NULL)
+			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
+	}
 }
 
 bool				Network::readClient(unsigned int i) {
@@ -108,22 +125,24 @@ void				Network::createGame(Client * e)
 	_games.push_back(g);
 }
 
-void				Network::run(void) {
+void				Network::run(void)
+{
 	while (true) {
 		setClient();
-		_socket->_select(60, 0);
+		_socketConnexion->_select(60, 0);
 		std::cout << "Selected passed" << std::endl;
 		/* Nouveau Client */
-		if (_socket->_FD_ISSET('r') == true)
+		if (_socketConnexion->_FD_ISSET('r') == true)
 			newClient();
 		else
 		{
 			for (unsigned int i = 0; i < _clients.size(); i++) {
-				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
+				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
 					writeClient(i);
-				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
+				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
 					if (readClient(i) == false)
 						return;
 			}
 		}
+	}
 }

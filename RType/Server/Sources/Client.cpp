@@ -43,6 +43,14 @@ bool	Client::init(Game * g)
 	return true;
 }
 
+size_t	Client::getIdThreadGame()
+{
+	if (_game)
+		return _game->getIdThread();
+	throw std::runtime_error("[Client] No game instancied");
+	return 0;
+}
+
 char *	Client::getInput()
 {
 	char * result = NULL;

@@ -16,8 +16,8 @@ int    			main(int argc, char **argv) {
   Network		network;
 
   try {
-     if (argc == 2) {
-        network.init(argv[1]);
+     if (argc == 3) {
+        network.init(argv[1], argv[2]);
         network.run();
     }
    else {

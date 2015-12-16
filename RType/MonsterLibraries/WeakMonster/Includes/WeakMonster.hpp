@@ -9,4 +9,10 @@ public:
 	~WeakMonster(void);
 };
 
+extern "C" {
+	Monster 	*getInstance(void) {
+		return new WeakMonster();
+	}
+}
+
 #endif

@@ -5,15 +5,20 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Tue Dec 15 16:25:55 2015 Probola
+// Last update Tue Dec 15 19:11:31 2015 Probola
 //
 
 #include			"SFML.hpp"
+#include			"SpriteFactory.hpp"
+#include			"SoundFactory.hpp"
+#include			"RSprite.hpp"
 
-sf::RenderWindow win(sf::VideoMode(800, 600), "RType");
+sf::RenderWindow SFML::win(sf::VideoMode(800, 600), "RType");
 
 SFML::SFML()
 {
+  _spritefactory = new SpriteFactory();
+  _soundfactory = new SoundFactory();
   win.setFramerateLimit(60);
 }
 

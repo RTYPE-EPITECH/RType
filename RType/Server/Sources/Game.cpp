@@ -6,6 +6,7 @@
 #include "Missile.hpp"
 #include <iostream>
 #include "Client.hpp"
+#include "MonsterFactory.hpp"
 #ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
@@ -63,10 +64,14 @@ size_t Game::getSizeAvailable() const
 	return size;
 }
 
-bool Game::init(const std::vector<std::string> &)
+bool Game::init(const std::vector<std::string> & _lib)
 {
 	// Create waves and init monster with dynamic lib
-
+	MonsterFactory * mf = MonsterFactory::getInstance();
+	for (size_t i = 0; i < _lib.size(); i++)
+		mf->addLibrary(_lib[i]);
+	for (size_t i = 0; i < _lib.size(); i++)
+		mf->getInstance(_lib[i]);
 	// init all the type of monster to the proto
 	// store the command in special command to send
 

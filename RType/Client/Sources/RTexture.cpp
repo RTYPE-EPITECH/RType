@@ -5,19 +5,25 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:44:12 2015 Probola
-// Last update Tue Dec 15 15:50:04 2015 Probola
+// Last update Wed Dec 16 18:33:54 2015 Probola
 //
 
 #include			"RTexture.hpp"
+#include			<stdexcept>
+#include			<iostream>
 
 RTexture::RTexture(const std::string &file)
 {
-   _texture.loadFromFile(file);
-
-  // /!\ Ca peut fail ici, pense a throw ^^ // 
+  if (!_texture.loadFromFile(file))
+    {
+      std::cout << "file:" << file << std::endl;
+      std::string e = "Cannot load ";
+      e += file;
+      throw std::runtime_error(e);
+    }
 }
 
 RTexture::~RTexture()
 {
-
+  std::cout << "ICI C SUPP" << std::endl;
 }

@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 //
 // Started on  Tue Nov 24 16:32:34 2015 Probola
-// Last update Tue Dec 15 15:57:58 2015 Probola
+// Last update Wed Dec 16 19:12:36 2015 Probola
 //
 
 #ifndef				_RSPRITE_HPP_
@@ -20,17 +20,18 @@
 #include		        "SFML/Network.hpp"
 #include	                "SFML/System.hpp"
 #include			"SFML/Window.hpp"
+#include			"EObject.hpp"
 
 class				TextureFactory;
 
 class				RSprite
 {
-  TextureFactory		*_textureFactory;
+  TextureFactory		* _textureFactory;
 
 public:
   sf::Sprite			_sprite;
 
-  RSprite(const std::string &, float, float);
+  RSprite(EObject, float, float);
   ~RSprite();
   void				setPosition(float x, float y);
 };

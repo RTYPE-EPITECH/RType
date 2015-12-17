@@ -14,14 +14,13 @@
 # include	<iostream>
 # include	<vector>
 # include	<stdexcept>
-# include	"Network.hpp"
 # include	"Protocole.hpp"
 # include	"SFML.hpp"
 # include	"IMutex.hpp"
 # include	"IThread.hpp"
 # include	"ITimer.hpp"
 
-class	Game : public Network {
+class	Game {
 private:
   std::vector<char *>	input;
   std::vector<char *>	output;

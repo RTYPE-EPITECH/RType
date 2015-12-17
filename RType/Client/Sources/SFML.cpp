@@ -5,31 +5,37 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Tue Dec 15 16:25:55 2015 Probola
+// Last update Wed Dec 16 19:07:58 2015 Probola
 //
 
 #include			"SFML.hpp"
+#include			"SpriteFactory.hpp"
+#include			"SoundFactory.hpp"
+#include			"RSprite.hpp"
 
-sf::RenderWindow win(sf::VideoMode(800, 600), "RType");
+sf::RenderWindow SFML::win(sf::VideoMode(800, 600), "RType");
 
 SFML::SFML()
 {
+  _spritefactory = new SpriteFactory();
+  _soundfactory = new SoundFactory();
   win.setFramerateLimit(60);
 }
 
-SFML::~SFML()
-{
-
-}
+SFML::~SFML() {}
 
 bool				SFML::isOpen()
 {
   return win.isOpen();
 }
 
-void				SFML::endLoop()
+void				SFML::clear()
 {
   win.clear();
+}
+
+void				SFML::display()
+{
   win.display();
 }
 
@@ -63,9 +69,9 @@ ACTION				SFML::getInput()
   return UNKNOW_ACTION;
 }
 
-void	SFML::update(const std::string &name, const std::string &TextureName, float x, float y)
+void	SFML::update(const std::string &name, EObject type, float x, float y)
 {
-  if (this->_spritefactory->initialize(name, TextureName, x, y) == true)
+  if (this->_spritefactory->initialize(name, type, x, y) == true)
     this->_spritefactory->_stack[name]->setPosition(x, y);
   win.draw(this->_spritefactory->_stack[name]->_sprite);
 }

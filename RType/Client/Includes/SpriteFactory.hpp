@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Nov 24 16:51:40 2015 Probola
-// Last update Tue Dec 15 16:05:09 2015 Probola
+// Last update Wed Dec 16 19:09:59 2015 Probola
 //
 
 #ifndef					_SPRITEFACTORY_HPP_
@@ -13,7 +13,7 @@
 
 #include				<iostream>
 #include				<map>
-#include				"RSprite.hpp"
+#include				"EObject.hpp"
 
 class					RSprite;
 
@@ -27,7 +27,7 @@ public:
 
   SpriteFactory();
   ~SpriteFactory();
-  bool					initialize(const std::string &, const std::string &, float x, float y);
+  bool					initialize(const std::string &, EObject, float x, float y);
 };
 
 #endif

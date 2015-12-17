@@ -5,14 +5,12 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Tue Dec 15 15:59:45 2015 Probola
+// Last update Wed Dec 16 19:07:53 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
 # define			_SFML_HPP_
 
-#include			"SpriteFactory.hpp"
-#include			"SoundFactory.hpp"
 #include	                "SFML.hpp"
 #include		        "SFML/Audio.hpp"
 #include			"SFML/Config.hpp"
@@ -21,23 +19,25 @@
 #include			"SFML/System.hpp"
 #include			"SFML/Window.hpp"
 #include			"Protocole.hpp"
+#include			"EObject.hpp"
 
 class				SpriteFactory;
 class				SoundFactory;
 
 class				SFML
 {
-  sf::RenderWindow		win;
+  static sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
 
 public:
   SFML();
   ~SFML();
-  void				endLoop();
+  void				clear();
+  void				display();
   bool				isOpen();
   ACTION			getInput();
-  void				update(const std::string &, const std::string &, float, float);
+  void				update(const std::string &, EObject, float, float);
 };
 
 #endif

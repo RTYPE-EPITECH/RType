@@ -5,6 +5,7 @@ Monster::Monster(void) : AObject()
 {
 	life = 1;
 	maxLife = 1;
+	monsterType = "normalMonster";
 }
 
 Monster::~Monster()
@@ -61,4 +62,18 @@ Missile * Monster::shoot(Game *)
 		return missiles.back();
 	}
 	return NULL;
+}
+
+std::string Monster::getTypeMonster() const
+{
+	return monsterType;
+}
+
+void	Monster::loadIMonster(IMonster * m)
+{
+	life = m->getLife();
+	maxLife = m->getMaxLife();
+	maxMissile = m->getMaxMissile();
+	typeMissile = m->getTypeMissile();
+	monsterType = m->getTypeMonster();
 }

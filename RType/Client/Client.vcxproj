@@ -144,6 +144,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Common\Includes\EMissile.hpp" />
+    <ClInclude Include="..\Common\Includes\EObject.hpp" />
+    <ClInclude Include="..\Common\Includes\IConditionVariable.hpp" />
+    <ClInclude Include="..\Common\Includes\IDynamicLibrary.hpp" />
+    <ClInclude Include="..\Common\Includes\IMutex.hpp" />
+    <ClInclude Include="..\Common\Includes\ISocket.hpp" />
+    <ClInclude Include="..\Common\Includes\IThread.hpp" />
+    <ClInclude Include="..\Common\Includes\ITimer.hpp" />
+    <ClInclude Include="..\Common\Includes\Protocole.hpp" />
+    <ClInclude Include="..\Common\Includes\StateConnexion.hpp" />
+    <ClInclude Include="..\Common\Includes\Tools.hpp" />
+    <ClInclude Include="..\Common\Includes\WConditionVariable.hpp" />
+    <ClInclude Include="..\Common\Includes\WDynamicLibrary.hpp" />
+    <ClInclude Include="..\Common\Includes\WMutex.hpp" />
+    <ClInclude Include="..\Common\Includes\WSocket.hpp" />
+    <ClInclude Include="..\Common\Includes\WThread.hpp" />
+    <ClInclude Include="..\Common\Includes\WTimer.hpp" />
     <ClInclude Include="Includes\Game.hpp" />
     <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\RSprite.hpp" />
@@ -155,6 +172,14 @@
     <ClInclude Include="Includes\TextureFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Common\Sources\Protocole.cpp" />
+    <ClCompile Include="..\Common\Sources\Tools.cpp" />
+    <ClCompile Include="..\Common\Sources\WConditionVariable.cpp" />
+    <ClCompile Include="..\Common\Sources\WDynamicLibrary.cpp" />
+    <ClCompile Include="..\Common\Sources\WMutex.cpp" />
+    <ClCompile Include="..\Common\Sources\WSocket.cpp" />
+    <ClCompile Include="..\Common\Sources\WThread.cpp" />
+    <ClCompile Include="..\Common\Sources\WTimer.cpp" />
     <ClCompile Include="Sources\Game.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Network.cpp" />

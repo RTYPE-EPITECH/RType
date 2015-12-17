@@ -3,11 +3,12 @@
 
 #include		<iostream>
 
+template <typename T>
 class			IDynamicLibrary {
 public:
 	virtual		~IDynamicLibrary(void) {};
 	virtual void	loadLibrary(const std::string &) = 0;
-	virtual void	useFunction(const std::string &) const = 0;
+	virtual T		useFunction(void) const = 0;
 	virtual void	freeLibrary(void) = 0;
 };
 

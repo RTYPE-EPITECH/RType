@@ -30,6 +30,12 @@ public:
 		UDP = 17
 	};
 
+	enum 							eMode {
+		R,
+		W,
+		RW
+	};
+
 	typedef struct				sSocketAdress {
 		eSocketFamily			family;
 		std::string				ip;

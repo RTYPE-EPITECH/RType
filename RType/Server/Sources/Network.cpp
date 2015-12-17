@@ -70,21 +70,37 @@ size_t				Network::findGame(Client *c)
 }
 
 void				Network::init(const std::string & portConnexion, const std::string &portGame) {
+
+/* Création des sockets en fonction de l'OS */
 #ifdef WIN32
+	WSocket *entreStandard = new WSocket(0);
 	_socketConnexion = new WSocket();
 	_socketGame = new WSocket();
 	_i = new WConditionVariable();
 #else
-	_socketConnecion = new WSocket();
+	USocket *entreStandard = new WSocket(0);
+	_socketConnecion = new USocket();
 	_socketGame = new USocket();
+	entreStandard = new USocket(0);
 	_i = new UConditionVariable();
 #endif
+
+/* Initialisation des sockets */
 	_socketConnexion->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
 	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
+
 	_socketGame->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
-	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portGame));
-	_socketGame->_FD_ZERO("rw");
-	_socketConnexion->_FD_ZERO("rw");
+	_socketGame->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portGame));
+
+/* Ajout de l'entré standard et de _socketGame dans _clients */
+	Client		*clientEntreStandard = new Client();
+	Client		*clientSocketGame = new Client();
+
+	clientSocketGame->setSocket(_socketGame);
+	clientEntreStandard->setSocket(entreStandard);
+	_clients.push_back(clientSocketGame);
+	_clients.push_back(clientEntreStandard);
+
 	std::cout << "Welcome on the RType Server (Connexionport : " << portConnexion.c_str() << ")" << std::endl;
 }
 

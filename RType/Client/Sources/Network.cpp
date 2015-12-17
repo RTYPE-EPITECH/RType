@@ -5,7 +5,7 @@
 */
 
 Network::Network(void) {
-#ifdef WIN32
+#ifdef _WIN32
 	_socket = new WSocket();
 #else
 	_socket = new USocket();

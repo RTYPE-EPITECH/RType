@@ -6,7 +6,7 @@
 # include					<vector>
 # include					<algorithm>
 
-#ifdef WIN32
+#ifdef _WIN32
 # include					"WSocket.hpp"
 #else
 # include					"USocket.hpp"

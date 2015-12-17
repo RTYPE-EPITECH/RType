@@ -10,7 +10,7 @@
 
 #include	"Game.hpp"
 
-#ifdef	WIN32
+#ifdef	_WIN32
 # include	"WMutex.hpp"
 # include	"WTimer.hpp"
 # include	"WThread.hpp"
@@ -30,7 +30,7 @@ Game::~Game()
 
 bool		Game::init()
 {
- #ifdef	WIN32
+ #ifdef	_WIN32
   _mutexGame = new WMutex();
   thread_t = new WThread();
   time = new WTimer();

@@ -52,7 +52,7 @@ void				Network::newClient(void) {
 
 void				Network::deleteClient(unsigned int i) {
 (void)i;
-#ifdef _WIN23
+#ifdef _WIN32
 	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _clients[i]->getSocket()->getfd() << ")" << std::endl;
 #else
 	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
@@ -72,14 +72,14 @@ size_t				Network::findGame(Client *c)
 void				Network::init(const std::string & portConnexion, const std::string &portGame) {
 
 /* Création des sockets en fonction de l'OS */
-#ifdef WIN32
+#ifdef _WIN32
 	WSocket *entreStandard = new WSocket(0);
 	_socketConnexion = new WSocket();
 	_socketGame = new WSocket();
 	_i = new WConditionVariable();
 #else
-	USocket *entreStandard = new WSocket(0);
-	_socketConnecion = new USocket();
+	USocket *entreStandard = new USocket(0);
+	_socketConnexion = new USocket();
 	_socketGame = new USocket();
 	entreStandard = new USocket(0);
 	_i = new UConditionVariable();

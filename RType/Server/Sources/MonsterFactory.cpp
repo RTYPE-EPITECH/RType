@@ -28,7 +28,7 @@ bool MonsterFactory::addLibrary(const std::string & m)
 #ifdef _WIN32
 	o = new WDynamicLibrary<IMonster *>();
 #else
-	o = new IDynamicLibrary<IMonster *>();
+	o = new UDynamicLibrary<IMonster *>();
 #endif
 	try
 	{

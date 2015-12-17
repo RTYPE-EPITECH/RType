@@ -23,7 +23,6 @@ int				main(void) {
 	ui.clear();
 	ui.update("test", PLAYER, 100, 100);
 	ui.display();
-	sleep(1);
       }
   }
   catch (const std::exception &msg) {

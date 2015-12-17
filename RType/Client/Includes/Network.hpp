@@ -5,11 +5,14 @@
 # include					<iostream>
 # include					<vector>
 # include					<algorithm>
+
 #ifdef WIN32
 # include					"WSocket.hpp"
 #else
 # include					"USocket.hpp"
 #endif // WIN32
+
+# include					"Game.hpp"
 
 
 # define		RED			"\x1B[31m"
@@ -31,10 +34,11 @@ public:
 	~Network(void);
 
 	void					run(void);
-	void					init(char *, int);
+	void					init(const char *, int);
 
 private:
 	ISocket					*_socket;
+	Game					*_game;
 	
 	void					setClient(void);
 	bool					readServer(void);

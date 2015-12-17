@@ -21,13 +21,11 @@ Network::~Network(void) {
 ** Méthodes
 */
 
-void				Network::init(char *ip, int port) {
-	_socket->_socket(SOCK_DGRAM);
-	std::cout << "socket ok" << std::endl;
-	_socket->_connect(ip, port);
-	std::cout << "connect ok" << std::endl;
+void				Network::init(const char *ip, int port) {
+	_game = new Game();
+	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	_socket->_connect(ISocket::IPv4, ip, port);
 	_socket->_FD_ZERO("rw");
-	_socket->_send("TEST", 0);
 }
 
 void				Network::setClient(void) {
@@ -36,18 +34,14 @@ void				Network::setClient(void) {
 }
 
 bool				Network::readServer(void) {
-	try {
-		_socket->_recv(0);
-	}
-	catch (const std::exception) {
-		//	deleteClient(i);
-	}
+	_game->addInput(_socket->_recv(0));
 	return true;
 }
 
 void				Network::writeServer(void) {
-	std::cout << "Write on server : test" << std::endl;
-	_socket->_send("test\n", 0);
+	std::vector<char *> listOutput = _game->getOutput();
+	for (unsigned int i = 0; i < listOutput.size(); i++)
+		_socket->_send(listOutput[i], 0);
 	return;
 }
 
@@ -55,7 +49,6 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		_socket->_select(60, 0);
-
 		if (_socket->_FD_ISSET('w') == true)
 			writeServer();
 		if (_socket->_FD_ISSET('r') == true)

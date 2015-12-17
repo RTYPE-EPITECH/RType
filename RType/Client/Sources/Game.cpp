@@ -75,9 +75,9 @@ void	*Game::loop(void * arg)
     {
       _lastInput = _this->getInput();
       ACTION  a = display.getInput();
-      _this->_protocole._createActionPacket(a, _this->_idPlayer);
+      _this->_protocole._createActionPacket(a);
       _this->addOutput(_this->_protocole._getLastPacket());
-      display.endLoop();
+      //display.endLoop();
     }
   return arg;
 }

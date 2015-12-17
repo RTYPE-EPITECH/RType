@@ -8,9 +8,9 @@
 // Last update Tue Dec  1 15:01:35 2015 Pierre Noel
 //
 
-#include		<iostream>
-#include		"Network.hpp"
-#include		"Tools.hpp"
+#include       <iostream>
+#include       "Network.hpp"
+#include       "Tools.hpp"
 
 int    			main(int argc, char **argv) {
   Network		network;
@@ -19,11 +19,11 @@ int    			main(int argc, char **argv) {
      if (argc == 2) {
         network.init(argv[1]);
         network.run();
-    }
-   else {
-      std::cerr << "Usage " << argv[0] << " [port] " << std::endl;
-      return 1;
-   }
+     }
+     else {
+        std::cerr << "Usage ./" << argv[0] << " [port] " << std::endl;
+        return 1;
+     }
   }
   catch (const std::exception &msg) {
     std::cout << msg.what() << std::endl;

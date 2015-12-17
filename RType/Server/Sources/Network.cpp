@@ -15,12 +15,15 @@
 */
 
 Network::Network(void) {
-	_socket = NULL;
+	_socketGame = NULL;
+	_socketConnexion = NULL;
 }
 
 Network::~Network(void) {
-	if (_socket != NULL)
-		delete _socket;
+	if (_socketGame != NULL)
+		delete _socketGame;
+	if (_socketConnexion != NULL)
+		delete _socketConnexion;
 }
 
 /*
@@ -31,7 +34,7 @@ void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
 	Client * newClient = new Client();
 	ISocket * newSocket = NULL;
-	newClient->setSocket(_socket->_accept());
+	newClient->setSocket(_socketConnexion->_accept());
 
 	// Trouver une game pour lui
 	bool check = true;
@@ -66,30 +69,48 @@ size_t				Network::findGame(Client *c)
 	return 0;
 }
 
-void				Network::init(const std::string & port) {
+void				Network::init(const std::string & portConnexion, const std::string &portGame) {
+
+/* Création des sockets en fonction de l'OS */
 #ifdef WIN32
-	_socket = new WSocket();
+	WSocket *entreStandard = new WSocket(0);
+	_socketConnexion = new WSocket();
+	_socketGame = new WSocket();
 	_i = new WConditionVariable();
 #else
-	_socket = new USocket();
+	USocket *entreStandard = new WSocket(0);
+	_socketConnecion = new USocket();
+	_socketGame = new USocket();
+	entreStandard = new USocket(0);
 	_i = new UConditionVariable();
 #endif
-	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
-	//_socket->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
-	std::cout << "socket ok" << std::endl;
-	_socket->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(port));
-	std::cout << "bind ok" << std::endl;
-	_socket->_FD_ZERO("rw");
-	std::cout << "Welcome on the RType Server (port : " << port.c_str() << ")" << std::endl;
+
+/* Initialisation des sockets */
+	_socketConnexion->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
+
+	_socketGame->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
+	_socketGame->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portGame));
+
+/* Ajout de l'entré standard et de _socketGame dans _clients */
+	Client		*clientEntreStandard = new Client();
+	Client		*clientSocketGame = new Client();
+
+	clientSocketGame->setSocket(_socketGame);
+	clientEntreStandard->setSocket(entreStandard);
+	_clients.push_back(clientSocketGame);
+	_clients.push_back(clientEntreStandard);
+
+	std::cout << "Welcome on the RType Server (Connexionport : " << portConnexion.c_str() << ")" << std::endl;
 }
 
 void				Network::setClient(void) {
-	_socket->_FD_ZERO("rw");
-	_socket->_FD_SET("r");
+	_socketConnexion->_FD_ZERO("rw");
+	_socketConnexion->_FD_SET("r");
 	for (unsigned int i = 0; i < _clients.size(); i++) {
-		_socket->_FD_SET(_clients[i]->getSocket(), "r");
+		_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
 		if (_clients[i]->getOutput() != NULL)
-			_socket->_FD_SET(_clients[i]->getSocket(), "w");
+			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
 	}
 }
 
@@ -124,17 +145,17 @@ void				Network::run(void)
 {
 	while (true) {
 		setClient();
-		_socket->_select(60, 0);
+		_socketConnexion->_select(60, 0);
 		std::cout << "Selected passed" << std::endl;
 		/* Nouveau Client */
-		if (_socket->_FD_ISSET('r') == true)
+		if (_socketConnexion->_FD_ISSET('r') == true)
 			newClient();
 		else
 		{
 			for (unsigned int i = 0; i < _clients.size(); i++) {
-				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
+				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
 					writeClient(i);
-				if (_socket->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
+				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
 					if (readClient(i) == false)
 						return;
 			}

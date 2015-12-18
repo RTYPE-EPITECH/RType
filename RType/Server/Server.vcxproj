@@ -172,6 +172,7 @@
     <ClInclude Include="Includes\Network.hpp" />
     <ClInclude Include="Includes\Obstacle.hpp" />
     <ClInclude Include="Includes\Player.hpp" />
+    <ClInclude Include="Includes\WaveFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="Sources\Network.cpp" />
     <ClCompile Include="Sources\Obstacle.cpp" />
     <ClCompile Include="Sources\Player.cpp" />
+    <ClCompile Include="Sources\WaveFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

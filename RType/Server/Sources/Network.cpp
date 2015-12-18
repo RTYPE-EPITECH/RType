@@ -51,12 +51,7 @@ void				Network::newClient(void) {
 }
 
 void				Network::deleteClient(unsigned int i) {
-(void)i;
-#ifdef _WIN32
-	std::cout << CYAN << HIGHLIGHT << "Client disconnect (fd : " << _clients[i]->getSocket()->getfd() << ")" << std::endl;
-#else
 	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
-#endif
 	_games[findGame(_clients[i])]->removeClient(_clients[i]);
 }
 

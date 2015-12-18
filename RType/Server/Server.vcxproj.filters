@@ -99,6 +99,9 @@
     <ClInclude Include="Includes\IMonster.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Includes\WaveFactory.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\AObject.cpp">
@@ -156,6 +159,9 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Sources\MonsterFactory.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\WaveFactory.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

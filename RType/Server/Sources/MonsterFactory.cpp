@@ -48,7 +48,7 @@ bool MonsterFactory::addLibrary(const std::string & m)
 	return true;
 }
 
-Monster	* MonsterFactory::getInstance(const std::string & m)
+Monster	* MonsterFactory::getInstanceMonster(const std::string & m)
 {
 	if (gen.count(m) > 0)
 	{
@@ -60,6 +60,12 @@ Monster	* MonsterFactory::getInstance(const std::string & m)
 	}
 	throw std::runtime_error("Invalid instance monster");
 	return NULL;
+}
+
+Monster	* MonsterFactory::getInstanceMonster()
+{
+	Monster * mo = new Monster();
+	return mo;
 }
 
 std::vector<std::string> & MonsterFactory::getAllMonsterName()

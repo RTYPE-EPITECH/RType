@@ -104,21 +104,25 @@ void	AObject::setType(EObject _t)
 
 void	AObject::moveRight(size_t &x , size_t &, size_t s) const
 {
-	x += s;
+	if (x + width + s < WIDTH)
+		x += s;
 }
 
 void	AObject::moveLeft(size_t &x, size_t &, size_t s) const
 {
-	x -= s;
+	if (x - s > 0)
+		x -= s;
 }
 
 void	AObject::moveTop(size_t &, size_t &y, size_t s) const
 {
-	y -= s;
+	if (y - s > 0)
+		y -= s;
 }
 void	AObject::moveBot(size_t &, size_t &y, size_t s) const
 {
-	y += s;
+	if (y + height + s < HEIGHT)
+		y += s;
 }
 
 bool	AObject::move(Game * g, ACTION a, size_t t)
@@ -140,13 +144,11 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   (this->*tomove[a])(fx, fy, t);
 
   // Check collision with Player/ScreenEdge. If true, then do nothing
-  if (g->checkCollisionObject("Player", this) != NULL
-      || g->checkCollisionObject("Screen", this) != NULL)
+  if (g->checkCollisionObject("Player", this) != NULL)
     return true;
 
   // check collision with enemies/obstacle/missile . If true, then player dies
-  if (g->checkCollisionObject("Monster", this) != NULL
-      || g->checkCollisionObject("Obstacle", this) != NULL)
+  if (g->checkCollisionObject("Objects", this) != NULL)
     {
       die(g);
       return false;
@@ -173,19 +175,22 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 	}
       o->die(g);
     }
+  if (fx < ZONE - width)
+	  die(g);
   if (isDead())
     return false;
   // no collision, apply position
   x = fx;
   y = fy;
   g->_proto._addPositionPacket((unsigned int)fx, (unsigned int)fy,
-	  (unsigned int)width, (unsigned int)height, (Tools::getName(type, id)).c_str() , "unknown");
+	  (unsigned int)width, (unsigned int)height, type, (Tools::getName(type, id)).c_str() , "unknown");
   return true;
 }
 
-void	AObject::die(Game *)
+void	AObject::die(Game *g)
 {
 	// create Packet die
-
+	_proto._createDeadEntityPacket((Tools::getName(type, id)).c_str(), "unknown");
+	g->addPacketForClients(_proto._getLastPacket());
 	_dead = true;
 }

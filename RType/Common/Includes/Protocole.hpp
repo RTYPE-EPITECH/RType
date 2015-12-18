@@ -6,6 +6,7 @@
 #include			<cstdint>
 #include			<vector>
 #include			<map>
+#include			"EObject.hpp"
 
 class AObject;
 
@@ -52,6 +53,7 @@ typedef struct {
 	uint16_t		pos_y;
 	uint16_t		size_x;
 	uint16_t		size_y;
+	uint8_t			type;
 	string			sprite;
 	string			path;
 }					positionPacket;
@@ -117,7 +119,7 @@ public:
 	void					_createConnectPacket(void);
 	void					_createActionPacket(ACTION act);
 	void					_createParametersPacket(int, int);
-	void					_addPositionPacket(unsigned int, unsigned int, unsigned int, unsigned int, const char *, const char *);
+	void					_addPositionPacket(unsigned int, unsigned int, unsigned int, unsigned int, EObject, const char *, const char *);
 	void					_putPositionPacketOnList(void);
 	void					_createPingPacket(void);
 	void					_createPongPacket(void);
@@ -152,6 +154,7 @@ public:
 	uint8_t					*_getPositionSpriteData(size_t) const;
 	uint8_t					_getPositionPathLength(size_t) const;
 	uint8_t					*_getPositionPathData(size_t) const;
+	EObject					_getType(size_t) const;
 	uint8_t					_getResponseOpcode(void) const;
 	uint8_t					_getParametersDifficulty(void) const;
 	uint8_t					_getParametersNbGame(void) const;

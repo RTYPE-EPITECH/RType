@@ -5,7 +5,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:05 2015 Florent Beaurain
-## Last update Thu Dec 17 18:00:24 2015 Pierre Noel
+## Last update Sat Dec 19 01:31:04 2015 Pierre Noel
 ##
 
 include			source.mk
@@ -20,7 +20,7 @@ DEBUG			?=	no
 
 CXXFLAGS_S		=	-I$(DIR_SERVER_I)
 
-CXXFLAGS_C		=	-I$(DIR_CLIENT_I) -I$(DIR_LIB)SFML-Unix/include -L$(DIR_LIB)SFML-Unix/lib -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window
+CXXFLAGS_C		=	-I$(DIR_CLIENT_I) -I$(DIR_LIB)/SFML-Unix/include -L$(DIR_LIB)/SFML-Unix/lib -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window
 
 CXXFLAGS_COMMON		=	-I$(DIR_COMMON_I)
 

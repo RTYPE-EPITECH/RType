@@ -4,6 +4,7 @@
 
 #include "EObject.hpp"
 #include <vector>
+#include <string>
 
 class AObject;
 

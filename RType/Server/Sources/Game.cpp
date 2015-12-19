@@ -88,7 +88,6 @@ bool Game::init(const std::vector<std::string> & _lib)
 	for (size_t i = 0; i < _lib.size(); i++)
 		mf->addLibrary(_lib[i]);
 	std::vector<std::string> _monsters = mf->getAllMonsterName();
-	Monster * tmp = NULL;
 	for (size_t i = 0; i < _monsters.size(); i++)
 		_proto._addPositionPacket(0, 0, 0, 0, MONSTER, _monsters[i].c_str(), _monsters[i].c_str());
 	_proto._addPositionPacket(0, 0, 0, 0, PLAYER, "Player", "Player");
@@ -309,10 +308,12 @@ AObject * Game::checkCollisionObject(const std::string & type, AObject* obj) con
 bool			Game::isEnded(bool op) const
 {
 	bool result = false;
-	mutex->lock();
+	if (op)
+	  mutex->lock();
 	if (_currwave == _waves.size())
 		result = true;
-	mutex->unlock();
+	if (op)
+	  mutex->unlock();
 	return result;
 }
 

@@ -6,7 +6,7 @@
 ## Login   <beauraF@epitech.net>
 ## 
 ## Started on  Sat Jul 25 17:11:32 2015 Florent Beaurain
-## Last update Thu Dec 17 17:53:01 2015 Pierre Noel
+## Last update Sat Dec 19 01:31:40 2015 Pierre Noel
 ##
 
 ## Server sources
@@ -26,6 +26,7 @@ SERVER			+=	$(DIR_SERVER_S)Obstacle.cpp
 SERVER			+=	$(DIR_SERVER_S)AObject.cpp
 SERVER			+=	$(DIR_SERVER_S)Missile.cpp
 SERVER			+=	$(DIR_SERVER_S)MonsterFactory.cpp
+SERVER			+=	$(DIR_SERVER_S)WaveFactory.cpp
 
 ## Common sources
 

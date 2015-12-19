@@ -33,7 +33,6 @@ Network::~Network(void) {
 void				Network::newClient(void) {
 	std::cout <<  "A new client try to connect to the server..." << std::endl;
 	Client * newClient = new Client();
-	ISocket * newSocket = NULL;
 	newClient->setSocket(_socketConnexion->_accept());
 
 	// Trouver une game pour lui

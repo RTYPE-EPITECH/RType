@@ -16,7 +16,7 @@ int				main(void) {
   
   try {
 	  Network *ntw = new Network();
-	  ntw->init("10.26.112.78", 4242);
+	  ntw->init("10.26.113.33", 4242);
 	ntw->run();
    /* while (ui.isOpen())
       {

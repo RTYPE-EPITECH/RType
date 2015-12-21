@@ -72,6 +72,7 @@ void	*Game::loop(void * arg)
 			if (_this->_state == BEGINNING) {
 				_this->_protocole._createConnectPacket();
 				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "SEND CONNECT PACKET" << std::endl;
 				_this->_state = CONNECT_OK;
 			}
 
@@ -79,6 +80,7 @@ void	*Game::loop(void * arg)
 			if (_this->_protocole._getHeaderOpcode() == 0 && _this->_protocole._getResponseOpcode() == 0 && _this->_state == CONNECT_OK) {
 				_this->_protocole._createParametersPacket(0, 0);
 				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "SEND PARAMETERS PACKET" << std::endl;
 				_this->_state = PARAMETERS_SET;
 			}
 
@@ -88,6 +90,7 @@ void	*Game::loop(void * arg)
 				_this->_idPlayer = _this->_protocole._getIdentifiantIdPlayer();
 				_this->_protocole._createResponsePacket(NONE);
 				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "RECEIVE ID PACKET" << std::endl;
 				_this->_state = ID_SET;
 			}
 
@@ -101,6 +104,7 @@ void	*Game::loop(void * arg)
 			}
 			_this->_protocole._createResponsePacket(NONE);
 			_this->addOutput(_this->_protocole._getLastPacket());
+			std::cout << "SEND POSITION PACKET" << std::endl;
 			_this->_state = POSITION_PACKET_SET;
 		}
       // Reçoit idGame idPlayer

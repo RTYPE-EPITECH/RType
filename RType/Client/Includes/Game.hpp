@@ -20,6 +20,15 @@
 # include	"IThread.hpp"
 # include	"ITimer.hpp"
 
+typedef enum {
+		BEGINNING,
+		CONNECT_OK,
+		PARAMETERS_SET,
+		RESPONSE_SET,
+		ID_SET,
+		POSITION_PACKET_SET
+}		ESTATE;
+
 class	Game {
 private:
   std::vector<char *>	input;
@@ -27,10 +36,12 @@ private:
   IMutex		*_mutexGame;
   IThread		*thread_t;
   ITimer		*time;
+  SFML			*_display;
   bool			_start;
   int			_idGame;
   int			_idPlayer;
   Protocole		_protocole;
+  ESTATE		_state;
 
 public:
   Game();

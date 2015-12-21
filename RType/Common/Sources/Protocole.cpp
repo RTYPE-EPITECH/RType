@@ -76,7 +76,7 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, EObject sprite, const char * path, const char * type) {
+void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, unsigned int sprite, const char * path, const char * type) {
 	this->_arrayPositionPacket.lenght = static_cast<uint8_t>((this->_posInArray + 1) * sizeof(positionPacket));
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
@@ -305,8 +305,8 @@ uint8_t			*Protocole::_getPositionPathData(size_t pos) const {
 	return (uint8_t *)this->_arrayPositionPacket.data[pos].path.data;
 }
 
-EObject			Protocole::_getType(size_t pos) const {
-	return (EObject)this->_arrayPositionPacket.data[pos].type;
+uint8_t			Protocole::_getPositionType(size_t pos) const {
+	return this->_arrayPositionPacket.data[pos].type;
 }
 
 uint8_t			Protocole::_getResponseOpcode(void) const {

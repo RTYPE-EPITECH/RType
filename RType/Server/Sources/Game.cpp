@@ -20,8 +20,9 @@
 
 std::vector<size_t>		Game::_ids;
 
-Game::Game(IConditionVariable & c) : _condVar(c)
+Game::Game(IConditionVariable * c)
 {
+_condVar = c;
 	_currwave = 0;
 	_stateScroll = 0;
 	timer = NULL;
@@ -48,8 +49,10 @@ bool Game::addClient(Client * cl)
 {
 	if (getSizeAvailable() <= 0)
 		return false;
-	if (cl->init(this))
+	std::cout << "Enough place" << std::endl;
+	if (!cl->init(this))
 		return false;
+	std::cout << "Client init" << std::endl;
 	mutex->lock();
 	_clients.push_back(cl);
 	mutex->unlock();
@@ -132,7 +135,7 @@ bool Game::haveInput(unsigned long long t)
 		}
 	mutex->unlock();
 	if (!check)
-		_condVar.wait(t);
+		_condVar->wait(t);
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
 		if ((input = _clients[i]->getInput()))
@@ -146,13 +149,15 @@ bool Game::haveInput(unsigned long long t)
 
 bool Game::loop()
 {
+	timer->start();
   while (!isEnded())
     {
 		if (_clients.size() == 0)
 		{
 			std::cout << "0 client, so we wait" << std::endl;
-			_condVar.wait();
+			_condVar->wait();
 		}
+		std::cout << FPS * 1000 << " - " << timer->getElapsedTimeInMicroSec() << std::endl;
 		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
 		{
 		  mutex->lock();
@@ -387,6 +392,7 @@ size_t			Game::getId() const
 
 void			Game::monstersShoot()
 {
+if (_objs != NULL)
 	for (size_t i = 0; i < _objs->size(); i++)
 		if ((*_objs)[i]->getType() == MONSTER)
 		{

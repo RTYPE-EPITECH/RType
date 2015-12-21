@@ -80,6 +80,7 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	_i = new UConditionVariable();
 #endif
 
+	_i->init();
 /* Initialisation des sockets */
 	_socketConnexion->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
 	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
@@ -91,6 +92,8 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	Client		*clientEntreStandard = new Client();
 	Client		*clientSocketGame = new Client();
 
+		clientEntreStandard->init(NULL);
+		clientSocketGame->init(NULL);
 	clientSocketGame->setSocket(_socketGame);
 	clientEntreStandard->setSocket(entreStandard);
 	_clients.push_back(clientSocketGame);
@@ -129,12 +132,16 @@ void				Network::writeClient(unsigned int i) {
 
 void				Network::createGame(Client * e)
 {
-	Game * g = new Game(*_i);
+	Game * g = new Game(_i);
 	g->init(_init);
-	e->init(g);
-	_handle.init(g);
-	g->addClient(e);
-	_games.push_back(g);
+	if (g->addClient(e))
+	{
+		_handle.init(g);
+		std::cout << "Client ajouté" << std::endl;
+		_games.push_back(g);
+	}
+	else
+		std::cout << "Client non ajouté !" << std::endl;
 }
 
 void				Network::run(void)
@@ -144,11 +151,10 @@ void				Network::run(void)
 		setClient();
 		std::cout << "Select ..." << std::endl;
 		_socketConnexion->_select(60, 0);
-
+		_i->sendSignal();
 		// Nouveau Client
 		if (_socketConnexion->_FD_ISSET('r') == true) {
 			newClient();
-			std::cout << "New Client" << std::endl;
 		}
 		else
 		{

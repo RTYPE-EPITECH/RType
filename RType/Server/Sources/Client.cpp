@@ -37,6 +37,7 @@ bool	Client::init(Game * g)
 {
 	if (!_mutexInput->initialize() || !_mutexOutput->initialize())
 		return false;
+	std::cout << " Mutex initialized " << std::endl;
 	player = new Player();
 	_game = g;
 	return true;

@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <sys/time.h>
+#include <unistd.h>
 
 UConditionVariable::UConditionVariable()
 {
@@ -29,6 +30,7 @@ bool UConditionVariable::init()
 
 void UConditionVariable::wait()
 {
+	std::cout << "WAIT INFINITE" << std::endl;
 	if (pthread_mutex_lock(&_mut) != 0)
 		throw std::runtime_error("Failed to lock Mutex");
 	while (condition == false)
@@ -43,7 +45,12 @@ void UConditionVariable::wait(unsigned long long t)
 	struct timespec timeToWait;
 	struct timeval now;
 
-	gettimeofday(&now, NULL);
+	sleep(1);
+	std::cout << "WAIT FOR " << t << std::endl;
+	if (gettimeofday(&now, NULL) == -1)
+		throw std::runtime_error("Get Time Of Day failed");
+	std::cout << t << std::endl;
+	std::cout << now.tv_sec << std::endl;
 	timeToWait.tv_sec = now.tv_sec + t / 1000.0;
 	timeToWait.tv_nsec = now.tv_usec * 1000;
 

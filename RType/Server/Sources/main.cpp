@@ -14,6 +14,7 @@
 
 int    			main(int argc, char **argv) {
   Network		network;
+  int			retur = 0;
 
   try {
      if (argc == 3) {
@@ -21,17 +22,16 @@ int    			main(int argc, char **argv) {
         network.run();
      }
      else {
-        std::cerr << "Usage ./" << argv[0] << " [port] " << std::endl;
-        return 1;
+        std::cerr << "Usage ./" << argv[0] << " [port] [port] " << std::endl;
+        retur = 1;
      }
   }
-  catch (const std::exception &msg) {
-    std::cout << msg.what() << std::endl;
-    return 1;
+  catch (const std::runtime_error &msg) {
+    std::cout << "[ERROR]" << msg.what() << std::endl;
+    retur = 1;
   }
-
 #ifdef _WIN32
   getchar();
 #endif
-  return 0;
+  return retur;
 }

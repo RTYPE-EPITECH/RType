@@ -78,9 +78,6 @@
     <ClInclude Include="..\Common\Includes\WConditionVariable.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\Includes\WDynamicLibrary.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="..\Common\Includes\WMutex.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -132,9 +129,6 @@
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Sources\WConditionVariable.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Common\Sources\WDynamicLibrary.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Sources\WMutex.cpp">

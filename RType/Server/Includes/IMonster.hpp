@@ -8,6 +8,7 @@
 class IMonster
 {
 public:
+	virtual ~IMonster() {}
 	virtual size_t getLife() const = 0;
 	virtual size_t getMaxLife() const = 0;
 	virtual size_t getMaxMissile() const = 0;

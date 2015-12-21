@@ -16,7 +16,8 @@ public:
 	static MonsterFactory * getInstance();
 	~MonsterFactory();
 	bool addLibrary(const std::string &);
-	Monster *	getInstance(const std::string &);
+	Monster *	getInstanceMonster(const std::string &);
+	Monster *	getInstanceMonster();
 	std::vector<std::string> & getAllMonsterName();
 private:
 	MonsterFactory();

@@ -76,14 +76,17 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, const char *sprite, const char *path) {
+void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, unsigned int sprite, const char * path, const char * type) {
 	this->_arrayPositionPacket.lenght = static_cast<uint8_t>((this->_posInArray + 1) * sizeof(positionPacket));
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
 	this->_arrayPositionPacket.data[this->_posInArray].size_x = (uint16_t)sizeX;
 	this->_arrayPositionPacket.data[this->_posInArray].size_y = (uint16_t)sizeY;
-	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), sprite, strlen(sprite));
-	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)(strlen(sprite));
+	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].path.data), path, strlen(path));
+	this->_arrayPositionPacket.data[this->_posInArray].path.lenght = (uint8_t)(strlen(path));
+	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), type, strlen(type));
+	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)(strlen(type));
+	this->_arrayPositionPacket.data[this->_posInArray].type = sprite;
 	this->_posInArray = this->_posInArray + 1;
 }
 
@@ -300,6 +303,10 @@ uint8_t			Protocole::_getPositionPathLength(size_t pos) const {
 
 uint8_t			*Protocole::_getPositionPathData(size_t pos) const {
 	return (uint8_t *)this->_arrayPositionPacket.data[pos].path.data;
+}
+
+uint8_t			Protocole::_getPositionType(size_t pos) const {
+	return this->_arrayPositionPacket.data[pos].type;
 }
 
 uint8_t			Protocole::_getResponseOpcode(void) const {

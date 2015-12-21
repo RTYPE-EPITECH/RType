@@ -10,6 +10,7 @@
 
 MonsterFactory::MonsterFactory()
 {
+	_listMonster.push_back("Monster");
 }
 
 MonsterFactory::~MonsterFactory()
@@ -24,11 +25,11 @@ MonsterFactory * MonsterFactory::getInstance()
 
 bool MonsterFactory::addLibrary(const std::string & m)
 {
-	IDynamicLibrary<IMonster *> * o = NULL;
+/*	IDynamicLibrary<IMonster *> * o = NULL;
 #ifdef _WIN32
 	o = new WDynamicLibrary<IMonster *>();
 #else
-	o = new IDynamicLibrary<IMonster *>();
+	o = new UDynamicLibrary<IMonster *>();
 #endif
 	try
 	{
@@ -44,13 +45,13 @@ bool MonsterFactory::addLibrary(const std::string & m)
 		std::cerr << e.what() << std::endl;
 		return false;
 	}
-
+	*/
 	return true;
 }
 
-Monster	* MonsterFactory::getInstance(const std::string & m)
+Monster	* MonsterFactory::getInstanceMonster(const std::string & m)
 {
-	if (gen.count(m) > 0)
+/*	if (gen.count(m) > 0)
 	{
 		Monster * mo = new Monster();
 		IMonster * im = gen[m]->useFunction();
@@ -59,7 +60,14 @@ Monster	* MonsterFactory::getInstance(const std::string & m)
 		return mo;
 	}
 	throw std::runtime_error("Invalid instance monster");
-	return NULL;
+	return NULL;*/
+	return new Monster();
+}
+
+Monster	* MonsterFactory::getInstanceMonster()
+{
+	Monster * mo = new Monster();
+	return mo;
 }
 
 std::vector<std::string> & MonsterFactory::getAllMonsterName()

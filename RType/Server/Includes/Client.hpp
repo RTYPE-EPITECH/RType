@@ -38,6 +38,7 @@ public:
 	void	addInput(char *);
 	void	addOutput(char *);
 
+	Protocole protocole;
 private:
 	ISocket * _socket;
 
@@ -47,8 +48,6 @@ private:
 	STATE_CONNECT _state;
 	Game  * _game;
 	Player * player;
-
-	Protocole protocole;
 
 	IMutex * _mutexOutput;
 	IMutex * _mutexInput;

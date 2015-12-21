@@ -51,30 +51,74 @@ bool		Game::init()
     std::cerr << error.what() << std::endl;
     return false;
   }
+  this->_state = BEGINNING;
+  this->_display = new SFML();
   return true;
 }
 
 void	*Game::loop(void * arg)
 {
   Game *_this = reinterpret_cast<Game *>(arg);
-  SFML display;
   std::vector<char *>	_lastInput;
   std::vector<char *>	_lastOutput;
-
   // check si la partie est commencée
   while (_this->getStart() == false)
     {
-      _lastInput = _this->getInput();
+		_lastInput = _this->getInput();
+		for (unsigned int i = 0; i < _lastInput.size(); i++) {
+			_this->_protocole._setNewPacket(_lastInput.at(i));
+			
+			// CONNECT PACKET
+			if (_this->_state == BEGINNING) {
+				_this->_protocole._createConnectPacket();
+				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "SEND CONNECT PACKET" << std::endl;
+				_this->_state = CONNECT_OK;
+			}
+
+			// RESPONSE PACKET SEND
+			if (_this->_protocole._getHeaderOpcode() == 0 && _this->_protocole._getResponseOpcode() == 0 && _this->_state == CONNECT_OK) {
+				_this->_protocole._createParametersPacket(0, 0);
+				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "SEND PARAMETERS PACKET" << std::endl;
+				_this->_state = PARAMETERS_SET;
+			}
+
+			// IDENTIFIANT PACKET
+			if (_this->_protocole._getHeaderOpcode() == 9) {
+				_this->_idGame = _this->_protocole._getIdentifiantNbGame();
+				_this->_idPlayer = _this->_protocole._getIdentifiantIdPlayer();
+				_this->_protocole._createResponsePacket(NONE);
+				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "RECEIVE ID PACKET" << std::endl;
+				_this->_state = ID_SET;
+			}
+
+			// LISTPOSITIONPACKET
+			if (_this->_protocole._getHeaderOpcode() == 4) {
+				for (unsigned int i = 0; i < _this->_protocole._getArrayPositionLenght(); i++)
+					_this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+						(EObject)(_this->_protocole._getPositionType(i)),
+						(float)(_this->_protocole._getPositionPosX(i)),
+						(float)(_this->_protocole._getPositionPosY(i)));
+			}
+			_this->_protocole._createResponsePacket(NONE);
+			_this->addOutput(_this->_protocole._getLastPacket());
+			std::cout << "SEND POSITION PACKET" << std::endl;
+			_this->_state = POSITION_PACKET_SET;
+		}
       // Reçoit idGame idPlayer
       // Appel update (init des sprites)
       // Si reçoit Packet : OK Server a tout envoyé
-      //     Client crée packet : CLIENT OK Partie commencée
-      _this->setStart(true);
+      //     Client crée packet : CLIENT OK Partie commencée*
+	  if (_this->_state == POSITION_PACKET_SET)
+		  _this->setStart(true);
     }
-  while (display.isOpen())
+
+  while (_this->_display->isOpen())
     {
       _lastInput = _this->getInput();
-      ACTION  a = display.getInput();
+      ACTION  a = _this->_display->getInput();
       _this->_protocole._createActionPacket(a);
       _this->addOutput(_this->_protocole._getLastPacket());
       //display.endLoop();

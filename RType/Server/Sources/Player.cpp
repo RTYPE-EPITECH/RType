@@ -1,5 +1,12 @@
 #include "Player.hpp"
 #include "Missile.hpp"
+#ifdef _WIN32
+#include "WTimer.hpp"
+#else
+#include "UTimer.hpp"
+#endif
+#include "Tools.hpp"
+#include "Game.hpp"
 
 Player::Player(void) : AObject()
 {
@@ -8,17 +15,43 @@ Player::Player(void) : AObject()
 	maxMissile = 3;
 	currentMissile = 0;
 	typeMissile = NORMAL;
+#ifdef _WIN32
+	_tShoot = new WTimer();
+	_tMove = new WTimer();
+#else
+	_tShoot = new UTimer();
+	_tMove = new UTimer();
+#endif
+	_tShoot->start();
+	_tMove->start();
 }
 
-Player::~Player() {}
+Player::~Player() {
+	delete (_tShoot);
+	delete (_tMove);
+}
 
-Missile * Player::shoot(Game *)
+Missile * Player::shoot(Game *g)
 {
-	if (currentMissile < maxMissile)
+	//	if (currentMissile < maxMissile)
+	//	{
+	if (_tShoot->getElapsedTimeInMicroSec() > SPEED_SHOT * 1000000)
 	{
 		currentMissile++;
 		missiles.push_back(Missile::newInstance(typeMissile, x + width + 1, y + width / 2));
 		// CREATE PACKET NEW SPRITE
+		_proto._addPositionPacket(
+			(unsigned int)missiles.back()->getX(),
+			(unsigned int)missiles.back()->getY(),
+			(unsigned int)missiles.back()->getWidth(),
+			(unsigned int)missiles.back()->getHeight(),
+			(EObject)missiles.back()->getType(),
+			Tools::EMissileToString(typeMissile).data(),
+			"unknow"
+			);
+		_proto._putPositionPacketOnList();
+		g->addPacketForClients(_proto._getLastPacket());
+		_tShoot->start();
 		return missiles.back();
 	}
 	return NULL;
@@ -62,4 +95,14 @@ void Player::setMaxMissile(size_t l)
 void Player::setTypeMissile(EMissile t)
 {
 	typeMissile = t;
+}
+
+bool Player::canMove()
+{
+	if (_tMove->getElapsedTimeInMicroSec() > SPEED_MOVE * 1000000)
+	{
+		_tMove->start();
+		return true;
+	}
+	return false;
 }

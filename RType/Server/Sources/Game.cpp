@@ -7,6 +7,9 @@
 #include <iostream>
 #include "Client.hpp"
 #include "MonsterFactory.hpp"
+#include "WaveFactory.hpp"
+#include "Tools.hpp"
+
 #ifdef _WIN32
 # include "WTimer.hpp"
 # include "WMutex.hpp"
@@ -15,30 +18,48 @@
 # include "UMutex.hpp"
 #endif
 
-Game::Game(IConditionVariable & c) : _condVar(c)
+std::vector<size_t>		Game::_ids;
+
+Game::Game(IConditionVariable * c)
 {
+_condVar = c;
 	_currwave = 0;
 	_stateScroll = 0;
 	timer = NULL;
+	mutex = NULL;
+	_objs = NULL;
 	_idThread = 0;
+	if (_ids.size() > 0)
+		_id = _ids.back() + 1;
+	else
+		_id = 1;
 }
 
 Game::~Game()
 {
+	if (timer)
+		delete(timer);
+	if (mutex)
+		delete(mutex);
+	if (_objs)
+		delete(_objs);
 }
 
 bool Game::addClient(Client * cl)
 {
 	if (getSizeAvailable() <= 0)
 		return false;
-	if (cl->init(this))
+	std::cout << "Enough place" << std::endl;
+	if (!cl->init(this))
 		return false;
+	std::cout << "Client init" << std::endl;
 	mutex->lock();
 	_clients.push_back(cl);
 	mutex->unlock();
 	cl->setState(CONNECT);
 	// send id Game, id Player
-
+	cl->protocole._createParametersPacket((int)_id, (int)cl->getPlayer()->getId());
+	cl->addOutput(cl->protocole._getLastPacket());
 	// send all init
 	for (size_t i = 0; _initToClient.size() > i; i++)
 		cl->addOutput(_initToClient[i]);
@@ -52,7 +73,6 @@ void Game::removeClient(Client * c)
 			i != _clients.end(); ++i)
 		if ((*i)->getPlayer()->getId() == c->getPlayer()->getId())
 			_clients.erase(i);
-			//c->getSocket();
 	mutex->unlock();
 }
 
@@ -66,14 +86,27 @@ size_t Game::getSizeAvailable() const
 
 bool Game::init(const std::vector<std::string> & _lib)
 {
-	// Create waves and init monster with dynamic lib
+	// init Monsters Library AND create Init packet Cmd
 	MonsterFactory * mf = MonsterFactory::getInstance();
 	for (size_t i = 0; i < _lib.size(); i++)
 		mf->addLibrary(_lib[i]);
-	for (size_t i = 0; i < _lib.size(); i++)
-		mf->getInstance(_lib[i]);
-	// init all the type of monster to the proto
-	// store the command in special command to send
+	std::vector<std::string> _monsters = mf->getAllMonsterName();
+	for (size_t i = 0; i < _monsters.size(); i++)
+		_proto._addPositionPacket(0, 0, 0, 0, MONSTER, _monsters[i].c_str(), _monsters[i].c_str());
+	_proto._addPositionPacket(0, 0, 0, 0, PLAYER, "Player", "Player");
+	_proto._addPositionPacket(0, 0, 0, 0, MISSILE, "Missile", "Missile");
+	_proto._addPositionPacket(0, 0, 0, 0, OBSTACLE, "Obstacle", "Obstacle");
+	_proto._putPositionPacketOnList();
+	_initToClient.push_back(_proto._getLastPacket());
+
+	// sample creation wave
+	WaveFactory  wf;
+	for (size_t i = 0; i < MAX_WAVES; i++)
+	{
+		wf.addObstacle();
+		wf.addMonster();
+		_waves.push_back(wf.getWaves());
+	}
 
 
 #ifdef _WIN32
@@ -85,6 +118,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 #endif
 	if (!mutex->initialize())
 		return false;
+	std::cout << "Game " << _id << " initialized : " << _waves.size() << " waves " << std::endl;
 	return true;
 }
 
@@ -101,7 +135,7 @@ bool Game::haveInput(unsigned long long t)
 		}
 	mutex->unlock();
 	if (!check)
-		_condVar.wait(t);
+		_condVar->wait(t);
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
 		if ((input = _clients[i]->getInput()))
@@ -115,50 +149,56 @@ bool Game::haveInput(unsigned long long t)
 
 bool Game::loop()
 {
-  while (1)
+	timer->start();
+  while (!isEnded())
     {
 		if (_clients.size() == 0)
-			_condVar.wait();
-      if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
-	{
-	  mutex->lock();
-	  // For each client, get the oldest Input
-	  for (size_t i = 0; i < _clients.size(); i++)
-	    {
-	      char * input = NULL;
-	      if (!(input = _clients[i]->getInput()))
-			continue;
-	      // set input into protocole to have the get/set
-	      _proto._setNewPacket(input);
-	      handleInputClient(_clients[i]);
-	    }
-	  _proto._putPositionPacketOnList();
-	  char * packet = _proto._getLastPacket();
-	  for (size_t i = 0; i < _clients.size(); i++)
-		  _clients[i]->addOutput(packet);
-	  mutex->unlock();
-	}
-      // Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
-      if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
-	{
-	  mutex->lock();
-	  AllMove();
-	  _proto._putPositionPacketOnList();
-	  char * packet = _proto._getLastPacket();
-	  for (size_t i = 0; i < _clients.size(); i++)
-		  _clients[i]->addOutput(packet);
-	  mutex->unlock();
-	  timer->start();
-	}
+		{
+			std::cout << "0 client, so we wait" << std::endl;
+			_condVar->wait();
+		}
+		std::cout << FPS * 1000 << " - " << timer->getElapsedTimeInMicroSec() << std::endl;
+		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
+		{
+		  mutex->lock();
+		  // For each client, get the oldest Input
+		  for (size_t i = 0; i < _clients.size(); i++)
+				if (GAME_CREATED == _clients[i]->getState())
+				{
+					char * input = NULL;
+					if (!(input = _clients[i]->getInput()))
+						continue;
+					// set input into protocole to have the get/set
+					_proto._setNewPacket(input);
+					handleInputClient(_clients[i]);
+				}
+		  _proto._putPositionPacketOnList();
+		  addPacketForClients(_proto._getLastPacket());
+		  mutex->unlock();
+		}
+
+		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
+		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
+		{
+			std::cout << "Game " << _id << "Let's scroll da game" << std::endl;
+		  mutex->lock();
+		  AllMove();
+		  _proto._putPositionPacketOnList();
+		  addPacketForClients(_proto._getLastPacket());
+		  mutex->unlock();
+		  timer->start();
+		}
+		monstersShoot();
+		if (isWaveEnded())
+		{
+			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
+			deleteWave();
+			nextWave();
+		}
     }
+  // PACKET GAME FINIE
+  std::cout << "Game " << _id << " finished" << std::endl;
   return true;
-}
-
-bool	Game::handleObjestScene()
-{
-	// Missiles
-
-	return true;
 }
 
 bool	Game::handleInputClient(Client * c)
@@ -178,9 +218,8 @@ bool	Game::handleInputClient(Client * c)
     }
   else
     {
-      // send Packet error
 		_proto._createResponsePacket(INVALID_ACTION);
-		_proto._getLastPacket();
+		c->addOutput(_proto._getLastPacket());
     }
   return true;
 }
@@ -197,6 +236,8 @@ void Game::setIdThread(unsigned int i)
 
 bool Game::conditionCollision(AObject * one, AObject * two) const
 {
+	if (one->isDead() || two->isDead())
+		return true;
 	if ((one->getX() < two->getX() && two->getX() < one->getX() + one->getWidth())
 		|| (one->getY() < two->getY() && two->getY() < one->getY() + one->getHeight()))
 		return false;
@@ -211,19 +252,13 @@ AObject* Game::listPlayer(AObject * obj) const
 	return NULL;
 }
 
-AObject* Game::listMonster(AObject * obj) const
+AObject * Game::listObjects(AObject *obj) const
 {
-	for (size_t i = 0; i < _monsters->size(); i++)
-		if (conditionCollision(obj, (*_monsters)[i]) == false)
-			return (*_monsters)[i];
-	return NULL;
-}
-
-AObject* Game::listObstacles(AObject * obj) const
-{
-	for (size_t i = 0; i < _obstacles.size(); i++)
-		if (conditionCollision(obj, _obstacles[i]) == false)
-			return _obstacles[i];
+	if (_objs == NULL)
+		return NULL;
+	for (size_t i = 0; i < _objs->size(); i++)
+		if (conditionCollision(obj, (*_objs)[i]) == false)
+			return (*_objs)[i];
 	return NULL;
 }
 
@@ -233,10 +268,17 @@ AObject* Game::listMissiles(AObject * obj) const
 		for (size_t j = 0; i < _clients[i]->getPlayer()->missiles.size(); j++)
 		if (conditionCollision(obj, _clients[i]->getPlayer()->missiles[j]) == false)
 			return _clients[i]->getPlayer()->missiles[j];
-	for (size_t i = 0; i < _monsters->size(); i++)
-		for (size_t j = 0; i < (*_monsters)[i]->missiles.size(); j++)
-			if (conditionCollision(obj, (*_monsters)[i]->missiles[j]) == false)
-				return (*_monsters)[i]->missiles[j];
+	if (_objs != NULL)
+	{
+		for (size_t i = 0; i < _objs->size(); i++)
+			if ((*_objs)[i]->getType() == MONSTER)
+			{
+				Monster * m = reinterpret_cast<Monster *>((*_objs)[i]);
+				for (size_t j = 0; i < m->missiles.size(); j++)
+					if (conditionCollision(obj, m->missiles[j]) == false)
+						return m->missiles[j];
+			}
+	}
 	return NULL;
 }
 
@@ -244,24 +286,19 @@ void	Game::AllMove()
 {
 	for (size_t i = 0; i < _clients.size(); i++)
 		for (size_t j = 0; i < _clients[i]->getPlayer()->missiles.size(); j++)
-		{
-			_clients[i]->getPlayer()->missiles[j]->move(this, RIGHT, 4);
-			//Create packet Move Sprite
-		}
-	for (size_t i = 0; i < _monsters->size(); i++)
+			_clients[i]->getPlayer()->missiles[j]->move(this, RIGHT, SPEED_MISSILE);
+	if (_objs != NULL)
 	{
-		(*_monsters)[i]->move(this, LEFT, 1);
-		// packet move sprite
-		for (size_t j = 0; i < (*_monsters)[i]->missiles.size(); j++)
+		for (size_t i = 0; i < _objs->size(); i++)
 		{
-			(*_monsters)[i]->missiles[j]->move(this, LEFT, 4);
-			//create packet Move Sprite
+			(*_objs)[i]->move(this, LEFT, SPEED);
+			if ((*_objs)[i]->getType() == MONSTER)
+			{
+				Monster * m = reinterpret_cast<Monster *>((*_objs)[i]);
+				for (size_t j = 0; i < m->missiles.size(); j++)
+					m->missiles[j]->move(this, LEFT, SPEED_MISSILE);
+			}
 		}
-	}
-	for (size_t i = 0; i < _obstacles.size(); i++)
-	{
-		_obstacles[i]->move(this, LEFT, 1);
-		//create packet move
 	}
 }
 
@@ -272,13 +309,94 @@ AObject * Game::checkCollisionObject(const std::string & type, AObject* obj) con
 
 	if (check) {
 		Tolist["Player"] = &Game::listPlayer;
-		Tolist["Monster"] = &Game::listMonster;
-		Tolist["Obstacle"] = &Game::listObstacles;
-		Tolist["Missile"] = &Game::listObstacles;
+		Tolist["Objects"] = &Game::listObjects;
+		Tolist["Missile"] = &Game::listMissiles;
 		check = false;
 	}
 	if (Tolist.count(type) > 0)
 		return (this->*Tolist[type])(obj);
 	std::cerr << "Collision with " << type << " not implemented yet" << std::endl;
 	return NULL;
+}
+
+bool			Game::isEnded(bool op) const
+{
+	bool result = false;
+	if (op)
+	  mutex->lock();
+	if (_currwave == _waves.size())
+		result = true;
+	if (op)
+	  mutex->unlock();
+	return result;
+}
+
+bool			Game::nextWave()
+{
+	mutex->lock();
+	_currwave++;
+	if (isEnded(false))
+		return true;
+	_objs = _waves[_currwave];
+	for (size_t i = 0; i < _waves[_currwave]->size(); i++)
+	{
+		AObject * tmp = (*_waves[_currwave])[i];
+		//_objs->push_back(tmp);
+		_proto._addPositionPacket((unsigned int)tmp->getX(),
+			(unsigned int)tmp->getY(),
+			(unsigned int)tmp->getWidth(),
+			(unsigned int)tmp->getHeight(),
+			tmp->getType(),
+			(Tools::getName(tmp->getType(), tmp->getId())).c_str(), "unknown");
+	}
+	_proto._putPositionPacketOnList();
+	addPacketForClients(_proto._getLastPacket());
+	mutex->unlock();
+	std::cout << "Game " << _id << " next waves " << _currwave << std::endl;
+	return false;
+}
+
+bool			Game::isWaveEnded() const
+{
+	for (size_t i = 0; i < _waves[_currwave]->size(); i++)
+		if (!(*_waves[_currwave])[i]->isDead())
+			return false;
+	mutex->lock();
+	return true;
+}
+
+void			Game::deleteWave()
+{
+	_objs = NULL;
+	/*for (size_t i = 0; i < _waves[_currwave]->size(); i++)
+	{
+		size_t idToFind = (*_waves[_currwave])[i]->getId();
+		for (size_t j = 0; i < _objs->size(); j++)
+			if ((*_objs)[j]->getId() == idToFind)
+			{
+				_objs->erase(_objs->begin() + j);
+			}
+	}*/
+}
+
+void			Game::addPacketForClients(char * packet)
+{
+	for (size_t i = 0; i < _clients.size(); i++)
+		_clients[i]->addOutput(packet);
+}
+
+size_t			Game::getId() const
+{
+	return _id;
+}
+
+void			Game::monstersShoot()
+{
+if (_objs != NULL)
+	for (size_t i = 0; i < _objs->size(); i++)
+		if ((*_objs)[i]->getType() == MONSTER)
+		{
+			Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
+			m->shoot(this);
+		}
 }

@@ -14,8 +14,7 @@
 
 Client::Client()
 {
-#ifndef WIN32
-
+#ifndef _WIN32
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();
 #else
@@ -38,6 +37,7 @@ bool	Client::init(Game * g)
 {
 	if (!_mutexInput->initialize() || !_mutexOutput->initialize())
 		return false;
+	std::cout << " Mutex initialized " << std::endl;
 	player = new Player();
 	_game = g;
 	return true;

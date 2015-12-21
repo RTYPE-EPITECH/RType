@@ -166,7 +166,6 @@
     <ClInclude Include="..\Common\Includes\StateConnexion.hpp" />
     <ClInclude Include="..\Common\Includes\Tools.hpp" />
     <ClInclude Include="..\Common\Includes\WConditionVariable.hpp" />
-    <ClInclude Include="..\Common\Includes\WDynamicLibrary.hpp" />
     <ClInclude Include="..\Common\Includes\WMutex.hpp" />
     <ClInclude Include="..\Common\Includes\WSocket.hpp" />
     <ClInclude Include="..\Common\Includes\WThread.hpp" />
@@ -185,7 +184,6 @@
     <ClCompile Include="..\Common\Sources\Protocole.cpp" />
     <ClCompile Include="..\Common\Sources\Tools.cpp" />
     <ClCompile Include="..\Common\Sources\WConditionVariable.cpp" />
-    <ClCompile Include="..\Common\Sources\WDynamicLibrary.cpp" />
     <ClCompile Include="..\Common\Sources\WMutex.cpp" />
     <ClCompile Include="..\Common\Sources\WSocket.cpp" />
     <ClCompile Include="..\Common\Sources\WThread.cpp" />

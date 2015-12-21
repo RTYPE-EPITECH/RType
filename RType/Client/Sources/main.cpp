@@ -12,19 +12,20 @@
 
 int				main(void) {
   TextureFactory	*texturefactory = TextureFactory::getInstance();
-  SFML			ui;
+//  SFML			ui;
   
   try {
-    //ntw.init("127.0.0.1", 4242);
-    //ntw.run();
-    while (ui.isOpen())
+	  Network *ntw = new Network();
+	  ntw->init("10.26.112.78", 4242);
+	ntw->run();
+   /* while (ui.isOpen())
       {
 		  if (!texturefactory->setAssets())
 			  break;
 	ui.clear();
 	ui.update("test", PLAYER, 100, 100);
 	ui.display();
-      }
+      }*/
   }
   catch (const std::exception &msg) {
     std::cout << msg.what() << std::endl;

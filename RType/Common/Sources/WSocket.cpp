@@ -64,8 +64,10 @@ void					WSocket::_connect(const eSocketFamily family, const char * const ip, co
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(ip);
 
-	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR)
-		throw std::runtime_error(_strerror());
+	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR) {
+		std::cout << "ip : " << ip << ", port " << port << ", error : " << WSAGetLastError() << std::endl;
+		throw std::runtime_error("[ERROR WSOCKET] : connect failed");
+	}
 }
 
 void					WSocket::_connect(const eSocketFamily family, const std::string &ip, const unsigned short port) const {
@@ -75,8 +77,9 @@ void					WSocket::_connect(const eSocketFamily family, const std::string &ip, co
 	s_in.sin_port = htons(port);
 	s_in.sin_addr.s_addr = inet_addr(ip.c_str());
 
-	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR)
-		throw std::runtime_error(_strerror());
+	if (WSAConnect(_fd, reinterpret_cast<struct sockaddr *>(&s_in), sizeof(struct sockaddr_in), 0, 0, 0, 0) == SOCKET_ERROR) {
+		throw std::runtime_error("[ERROR WSOCKET] : connect failed");
+	}
 }
 
 ISocket				*WSocket::_accept(void) {

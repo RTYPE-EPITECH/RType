@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:44:12 2015 Probola
-// Last update Wed Dec 16 18:33:54 2015 Probola
+// Last update Fri Dec 18 21:46:09 2015 Probola
 //
 
 #include			"RTexture.hpp"
@@ -23,7 +23,4 @@ RTexture::RTexture(const std::string &file)
     }
 }
 
-RTexture::~RTexture()
-{
-  std::cout << "ICI C SUPP" << std::endl;
-}
+RTexture::~RTexture() {}

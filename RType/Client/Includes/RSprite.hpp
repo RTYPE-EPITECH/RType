@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 //
 // Started on  Tue Nov 24 16:32:34 2015 Probola
-// Last update Wed Dec 16 19:12:36 2015 Probola
+// Last update Fri Dec 18 21:43:30 2015 Probola
 //
 
 #ifndef				_RSPRITE_HPP_
@@ -27,7 +27,10 @@ class				TextureFactory;
 class				RSprite
 {
   TextureFactory		* _textureFactory;
-
+  /* Découpage des textures */
+  float				x;
+  float				y;
+  /**/
 public:
   sf::Sprite			_sprite;
 

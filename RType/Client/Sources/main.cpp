@@ -17,11 +17,17 @@ int				main(void) {
   try {
     //ntw.init("127.0.0.1", 4242);
     //ntw.run();
+    ui.clear();
+    std::cout << "on entre dans l'intro" << std::endl;
+    ui.Intro();
+    std::cout << "on sort de l'intro" << std::endl;
     while (ui.isOpen())
       {
 	texturefactory->setAssets();
 	ui.clear();
-	ui.update("test", PLAYER, 100, 100);
+	ui.update("bite", PLAYER, 100, 100);
+	ui.update("bite", MONSTER, 200, 200);
+	ui.update("bite", OBSTACLE, 300, 300);
 	ui.display();
       }
   }

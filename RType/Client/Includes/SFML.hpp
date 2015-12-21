@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Wed Dec 16 19:07:53 2015 Probola
+// Last update Mon Dec 21 17:15:35 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -29,6 +29,8 @@ class				SFML
   static sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
+  sf::Clock			_clock;
+  sf::Time			_time;
 
 public:
   SFML();
@@ -38,6 +40,8 @@ public:
   bool				isOpen();
   ACTION			getInput();
   void				update(const std::string &, EObject, float, float);
+  void				Intro();
+  float				getTimeElapsed();
 };
 
 #endif

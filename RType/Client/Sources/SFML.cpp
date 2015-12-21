@@ -5,13 +5,14 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Wed Dec 16 19:07:58 2015 Probola
+// Last update Mon Dec 21 17:50:58 2015 Probola
 //
 
 #include			"SFML.hpp"
 #include			"SpriteFactory.hpp"
 #include			"SoundFactory.hpp"
 #include			"RSprite.hpp"
+#include			<unistd.h>
 
 sf::RenderWindow SFML::win(sf::VideoMode(800, 600), "RType");
 
@@ -69,9 +70,39 @@ ACTION				SFML::getInput()
   return UNKNOW_ACTION;
 }
 
-void	SFML::update(const std::string &name, EObject type, float x, float y)
+void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
   if (this->_spritefactory->initialize(name, type, x, y) == true)
     this->_spritefactory->_stack[name]->setPosition(x, y);
   win.draw(this->_spritefactory->_stack[name]->_sprite);
+}
+
+void				SFML::Intro()
+{
+  sf::Texture			text;
+  sf::Sprite			sprite;
+  sf::Event			event;
+
+  text.loadFromFile("RType/Client/Assets/intro.gif");
+  sprite.setTexture(text);
+  sprite.setPosition(0, 0);
+  win.draw(sprite);
+  while (isOpen())
+    {
+      _clock.restart();
+      if (win.pollEvent(event))
+	{
+	  if (event.type == sf::Event::KeyPressed)
+	    break;
+	}
+      _time += _clock.getElapsedTime();
+      win.draw(sprite);
+      win.display();
+      //sf::sleep(sf::milliseconds(600000 - _time.asMilliseconds()));
+    }
+}
+
+float				SFML::getTimeElapsed()
+{
+  return (this->_time.asSeconds());
 }

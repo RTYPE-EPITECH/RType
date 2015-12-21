@@ -89,7 +89,7 @@ void					USocket::_connect(const eSocketFamily family, const std::string &ip, co
 }
 
 USocket				*USocket::_accept(void) {
-	int									fd;
+	int						fd;
 	struct sockaddr_in	s_in;
 
 	if ((fd = accept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), reinterpret_cast<socklen_t *>(sizeof(s_in)))) == -1)
@@ -121,9 +121,8 @@ void					USocket::_select(const int sec, const int usec) {
 
   	tv.tv_sec = sec;
   	tv.tv_usec = usec;
-	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1) {
+	if (select(_fd_max + 1, &_readfds, &_writefds, NULL, &tv) == -1)
 		throw std::runtime_error(strerror(errno));
-	}
 }
 
 void					USocket::_FD_ZERO(const std::string &mode) {

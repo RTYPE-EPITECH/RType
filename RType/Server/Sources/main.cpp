@@ -27,7 +27,7 @@ int    			main(int argc, char **argv) {
      }
   }
   catch (const std::runtime_error &msg) {
-    std::cout << "[ERROR]" << msg.what() << std::endl;
+    std::cout << "[ERROR]:" << msg.what() << std::endl;
     retur = 1;
   }
 #ifdef _WIN32

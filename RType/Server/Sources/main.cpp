@@ -19,7 +19,6 @@ int    			main(int argc, char **argv) {
   try {
      if (argc == 3) {
         network.init(argv[1], argv[2]);
-		std::cout << "RUN" << std::endl;
         network.run();
      }
      else {
@@ -28,7 +27,7 @@ int    			main(int argc, char **argv) {
      }
   }
   catch (const std::runtime_error &msg) {
-    std::cout << msg.what() << std::endl;
+    std::cout << "[ERROR]:" << msg.what() << std::endl;
     retur = 1;
   }
 #ifdef _WIN32

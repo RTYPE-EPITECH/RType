@@ -94,7 +94,7 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	clientSocketGame->setSocket(_socketGame);
 	clientEntreStandard->setSocket(entreStandard);
 	_clients.push_back(clientSocketGame);
-	_clients.push_back(clientEntreStandard);
+	//_clients.push_back(clientEntreStandard);
 
 	std::cout << "Welcome on the RType Server (Connexion port : " << portConnexion.c_str() << ")" << std::endl;
 }

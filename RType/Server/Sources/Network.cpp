@@ -96,13 +96,14 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	_clients.push_back(clientSocketGame);
 	_clients.push_back(clientEntreStandard);
 
-	std::cout << "Welcome on the RType Server (Connexionport : " << portConnexion.c_str() << ")" << std::endl;
+	std::cout << "Welcome on the RType Server (Connexion port : " << portConnexion.c_str() << ")" << std::endl;
 }
 
 void				Network::setClient(void) {
 	_socketConnexion->_FD_ZERO("rw");
 	_socketConnexion->_FD_SET("r");
 	for (unsigned int i = 0; i < _clients.size(); i++) {
+		std::cout << "FD SET CLIENT " << i << std::endl;
 		_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
 		if (_clients[i]->getOutput() != NULL)
 			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
@@ -139,7 +140,9 @@ void				Network::createGame(Client * e)
 void				Network::run(void)
 {
 	while (true) {
+		std::cout << "Set client ..." << std::endl;
 		setClient();
+		std::cout << "Select ..." << std::endl;
 		_socketConnexion->_select(60, 0);
 		std::cout << "Selected passed" << std::endl;
 		// Nouveau Client 

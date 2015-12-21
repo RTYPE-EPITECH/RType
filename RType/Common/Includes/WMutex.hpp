@@ -2,12 +2,15 @@
 #define WMUTEX_H
 
 #include "IMutex.hpp"
-#include <windows.h>
+//#include <windows.h>
+#include <mutex>
+
 
 class WMutex : public IMutex
 {
 private:	
-	HANDLE ghMutex;
+	//HANDLE ghMutex;
+	std::mutex mtx;
 public:
 	WMutex();
 	virtual ~WMutex();

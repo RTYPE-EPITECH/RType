@@ -7,23 +7,23 @@ WMutex::WMutex()
 
 WMutex::~WMutex()
 {
-	CloseHandle(ghMutex);
+	//CloseHandle(ghMutex);
 }
 
  bool	WMutex::initialize()
 {
-	ghMutex = CreateMutex(NULL, FALSE, NULL);
-	if (ghMutex == NULL)
+	//ghMutex = CreateMutex(NULL, FALSE, NULL);
+	/*if (ghMutex == NULL)
 	{
 		std::cerr << "Error while creating mutex" << std::endl;
 		return false;
-	}
+	}*/
 	return true;
 }
 
  bool	WMutex::lock()
 {
-	std::cout << "LOCK" << std::endl;
+	/*std::cout << "LOCK" << std::endl;
 	DWORD dwWaitResult = WaitForSingleObject(
 		ghMutex,    // handle to mutex
 		INFINITE);  // no time-out interval
@@ -39,12 +39,15 @@ WMutex::~WMutex()
 			return false;
 	}
 	std::cout << "Fail" << std::endl;
-	return false;
+	return false;*/
+	mtx.lock();
+	return true;
 }
 
  void	WMutex::unlock()
 {
-	std::cout << "unlock" << std::endl;
+	/*std::cout << "unlock" << std::endl;
 	if (!ReleaseMutex(ghMutex))
-		throw std::runtime_error("Failed to unlock Mutex");
+		throw std::runtime_error("Failed to unlock Mutex");*/
+	mtx.unlock();
 }

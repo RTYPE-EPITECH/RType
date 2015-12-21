@@ -113,7 +113,7 @@ void					WSocket::_select(const int sec, const int usec) {
   tv.tv_sec = sec;
   tv.tv_usec = usec;
 	if (select(0, &_readfds, &_writefds, NULL, &tv) == -1)
-		throw std::runtime_error(_strerror());
+		throw std::runtime_error("Failed to select");
 }
 
 void					WSocket::_FD_ZERO(const std::string &mode) {

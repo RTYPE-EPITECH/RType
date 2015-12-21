@@ -88,8 +88,11 @@ ISocket				*WSocket::_accept(void) {
 	int										sizeS_in = sizeof(s_in);
 
 	if ((fd = WSAAccept(_fd, reinterpret_cast<struct sockaddr *>(&s_in), &sizeS_in, NULL, NULL)) == SOCKET_ERROR)
-		throw std::runtime_error(_strerror());
-
+		{
+			std::cerr << WSAGetLastError() << std::endl;
+			throw std::runtime_error(_strerror());
+		}
+	std::cout << "Accept ok" << std::endl;
 	WSocket	*newConnection = new WSocket(fd);
 	return newConnection;
 }

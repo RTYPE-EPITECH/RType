@@ -31,7 +31,7 @@ class IMutex;
 class Game
 {
 public:
-	Game(IConditionVariable &);
+	Game(IConditionVariable *);
 	~Game();
 	bool init(const std::vector<std::string> &);
 	bool addClient(Client *);
@@ -57,7 +57,7 @@ private:
 
 	static std::vector<size_t> _ids;
 
-	IConditionVariable & _condVar;
+	IConditionVariable * _condVar;
 	IMutex				* mutex;
 	ITimer				* timer;
 	size_t				_currwave;

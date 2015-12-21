@@ -24,7 +24,9 @@ Network::~Network(void) {
 void				Network::init(const char *ip, int port) {
 	_game = new Game();
 	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	std::cout << "New socket ok" << std::endl;
 	_socket->_connect(ISocket::IPv4, ip, port);
+	std::cout << "connext ok" << std::endl;
 	_socket->_FD_ZERO("rw");
 }
 

@@ -16,8 +16,8 @@ public:
 	size_t	getDamage();
 	void	setDamage(size_t);
 
-	void setType(EMissile);
-	EMissile getType();
+	void setTypeMissile(EMissile);
+	EMissile getTypeMissile();
 
 	static Missile * newInstance(EMissile, size_t, size_t);
 };

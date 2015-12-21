@@ -5,6 +5,8 @@
 #include "EMissile.hpp"
 #include "IMonster.hpp"
 
+class ITimer;
+
 class Missile;
 
 class Monster : public AObject
@@ -29,7 +31,9 @@ public:
 	void setTypeMissile(EMissile);
 
 	std::vector<Missile *> missiles;
+
 protected:
+	ITimer * _t;
 	size_t life;
 	size_t maxLife;
 	size_t maxMissile;

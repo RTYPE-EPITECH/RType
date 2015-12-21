@@ -4,6 +4,7 @@
 #include				<sstream>
 #include				<string>
 #include				"EObject.hpp"
+#include				"EMissile.hpp"
 
 class					Tools {
 public:
@@ -34,7 +35,7 @@ public:
 
   static std::string getName(EObject type, size_t id);
   static std::string EObjectToString(EObject);
-
+  static std::string EMissileToString(EMissile);
 };
 
 #endif					/* _TOOL_HPP_ */

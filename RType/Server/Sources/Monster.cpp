@@ -1,11 +1,24 @@
 #include "Monster.hpp"
 #include "Missile.hpp"
+#ifdef _WIN32
+#include "WTimer.hpp"
+#else
+#include "UTimer.hpp"
+#endif
+#include "Game.hpp"
+#include "Tools.hpp"
 
 Monster::Monster(void) : AObject()
 {
 	life = 1;
 	maxLife = 1;
 	monsterType = "normalMonster";
+#ifdef _WIN32
+	_t = new WTimer();
+#else
+	_t = new UTimer();
+#endif
+	_t->start();
 }
 
 Monster::~Monster()
@@ -52,13 +65,24 @@ EMissile Monster::getTypeMissile() const
 	return typeMissile;
 }
 
-Missile * Monster::shoot(Game *)
+Missile * Monster::shoot(Game *g)
 {
-	if (currentMissile < maxMissile)
+	if (_t->getElapsedTimeInMicroSec() > SPEED_SHOT_ENEMY * 1000000)
 	{
 		currentMissile++;
 		missiles.push_back(Missile::newInstance(typeMissile, x + width + 1, y + width / 2));
-		// CREATE PACKET NEW SPRITE
+		_proto._addPositionPacket(
+			(unsigned int)missiles.back()->getX(),
+			(unsigned int)missiles.back()->getY(),
+			(unsigned int)missiles.back()->getWidth(),
+			(unsigned int)missiles.back()->getHeight(),
+			(EObject)missiles.back()->getType(),
+			Tools::EMissileToString(typeMissile).data(),
+			"unknow"
+			);
+		_proto._putPositionPacketOnList();
+		g->addPacketForClients(_proto._getLastPacket());
+		_t->start();
 		return missiles.back();
 	}
 	return NULL;

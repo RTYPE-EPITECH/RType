@@ -16,8 +16,10 @@
 #define FPS				30
 #define MAX_WAVES		2
 #define SPEED			1
-#define SPEED_MISSILE	4
-
+#define SPEED_MISSILE	SPEED * 4
+#define SPEED_SHOT		SPEED * 0.5
+#define SPEED_MOVE		SPEED * 0.01
+#define SPEED_SHOT_ENEMY SPEED * 2
 class AObject;
 class Client;
 class Player;
@@ -83,6 +85,7 @@ private:
 	AObject* listMissiles(AObject *) const;
 
 	void AllMove();
+	void monstersShoot();
 	void deleteWave();
 	bool isWaveEnded() const;
 	bool nextWave();

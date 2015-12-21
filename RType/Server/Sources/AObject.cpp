@@ -141,6 +141,12 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
     tomove[RIGHT] = &AObject::moveRight;
     check = false;
   }
+
+  if (getType() == PLAYER)
+  {
+	  Player * p = reinterpret_cast<Player *>(this);
+  }
+
   (this->*tomove[a])(fx, fy, t);
 
   // Check collision with Player/ScreenEdge. If true, then do nothing
@@ -183,7 +189,7 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   x = fx;
   y = fy;
   g->_proto._addPositionPacket((unsigned int)fx, (unsigned int)fy,
-	  (unsigned int)width, (unsigned int)height, type, (Tools::getName(type, id)).c_str() , "unknown");
+	  (unsigned int)width, (unsigned int)height, (EObject)type, (Tools::getName(type, id)).c_str() , "unknown");
   return true;
 }
 

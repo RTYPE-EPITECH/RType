@@ -27,7 +27,6 @@ int    			main(int argc, char **argv) {
      }
   }
   catch (const std::runtime_error &msg) {
-	  
     std::cout << "[ERROR]" << msg.what() << std::endl;
     retur = 1;
   }

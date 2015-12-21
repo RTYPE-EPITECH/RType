@@ -8,6 +8,8 @@ class HandleThread {
 private:
 	IThread * _t;
 public:
+	HandleThread();
+	~HandleThread();
 	bool init(Game * cl);
 	bool destroy(Game * cl);
 	bool destroyAll();

@@ -20,12 +20,12 @@ void Missile::setDamage(size_t d)
 	_damage = d;
 }
 
-void Missile::setType(EMissile e)
+void Missile::setTypeMissile(EMissile e)
 {
 	_type = e;
 }
 
-EMissile Missile::getType()
+EMissile Missile::getTypeMissile()
 {
 	return _type;
 }
@@ -33,7 +33,7 @@ EMissile Missile::getType()
 Missile * Missile::newInstance(EMissile t, size_t _x, size_t _y)
 {
 	Missile * m = new Missile();
-	m->setType(t);
+	m->setTypeMissile(t);
 	m->setX(_x);
 	m->setY(_y);
 	return m;

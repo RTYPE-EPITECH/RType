@@ -5,6 +5,7 @@
 #include "EMissile.hpp"
 
 class Missile;
+class ITimer;
 
 class Player : public AObject {
 public:
@@ -25,7 +26,11 @@ public:
 	void setTypeMissile(EMissile);
 
 	std::vector<Missile *> missiles;
+
+	bool canMove();
 private:
+	ITimer * _tShoot;
+	ITimer * _tMove;
 	size_t life;
 	size_t maxLife;
 	size_t maxMissile;

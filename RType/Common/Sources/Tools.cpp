@@ -27,3 +27,20 @@ std::string Tools::EObjectToString(EObject t)
 		return gen.at(t);
 	return gen[UNKNOWN_OBJECT];
 }
+
+std::string Tools::EMissileToString(EMissile t)
+{
+	static std::map<EMissile, std::string> gen;
+	static bool check = true;
+
+	if (check) {
+		gen[NORMAL] = "normal";
+		gen[STRONG] = "strong";
+		gen[ONESHOT] = "oneshot";
+		gen[UNKNOW_MISSILE] = "unknow";
+		check = false;
+	}
+	if (gen.count(t) > 0)
+		return gen.at(t);
+	return gen[UNKNOW_MISSILE];
+}

@@ -134,9 +134,6 @@
     <ClCompile Include="..\Common\Sources\WConditionVariable.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\Sources\WDynamicLibrary.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\Common\Sources\WMutex.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>

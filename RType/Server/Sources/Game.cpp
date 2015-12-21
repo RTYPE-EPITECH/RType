@@ -55,7 +55,7 @@ bool Game::addClient(Client * cl)
 	mutex->unlock();
 	cl->setState(CONNECT);
 	// send id Game, id Player
-	cl->protocole._createParametersPacket((int)_id, cl->getPlayer()->getId());
+	cl->protocole._createParametersPacket((int)_id, (int)cl->getPlayer()->getId());
 	cl->addOutput(cl->protocole._getLastPacket());
 	// send all init
 	for (size_t i = 0; _initToClient.size() > i; i++)
@@ -115,6 +115,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 #endif
 	if (!mutex->initialize())
 		return false;
+	std::cout << "Game " << _id << " initialized : " << _waves.size() << " waves " << std::endl;
 	return true;
 }
 
@@ -145,10 +146,13 @@ bool Game::haveInput(unsigned long long t)
 
 bool Game::loop()
 {
-  while (isEnded())
+  while (!isEnded())
     {
 		if (_clients.size() == 0)
+		{
+			std::cout << "0 client, so we wait" << std::endl;
 			_condVar.wait();
+		}
 		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
 		{
 		  mutex->lock();
@@ -167,9 +171,11 @@ bool Game::loop()
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
 		}
+
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
 		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
 		{
+			std::cout << "Game " << _id << "Let's scroll da game" << std::endl;
 		  mutex->lock();
 		  AllMove();
 		  _proto._putPositionPacketOnList();
@@ -177,13 +183,16 @@ bool Game::loop()
 		  mutex->unlock();
 		  timer->start();
 		}
+		monstersShoot();
 		if (isWaveEnded())
 		{
+			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
 			deleteWave();
 			nextWave();
 		}
     }
   // PACKET GAME FINIE
+  std::cout << "Game " << _id << " finished" << std::endl;
   return true;
 }
 
@@ -338,6 +347,7 @@ bool			Game::nextWave()
 	_proto._putPositionPacketOnList();
 	addPacketForClients(_proto._getLastPacket());
 	mutex->unlock();
+	std::cout << "Game " << _id << " next waves " << _currwave << std::endl;
 	return false;
 }
 
@@ -373,4 +383,14 @@ void			Game::addPacketForClients(char * packet)
 size_t			Game::getId() const
 {
 	return _id;
+}
+
+void			Game::monstersShoot()
+{
+	for (size_t i = 0; i < _objs->size(); i++)
+		if ((*_objs)[i]->getType() == MONSTER)
+		{
+			Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
+			m->shoot(this);
+		}
 }

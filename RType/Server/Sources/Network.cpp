@@ -17,6 +17,7 @@
 Network::Network(void) {
 	_socketGame = NULL;
 	_socketConnexion = NULL;
+	_init.push_back("WeakMonster");
 }
 
 Network::~Network(void) {
@@ -141,7 +142,7 @@ void				Network::run(void)
 		setClient();
 		_socketConnexion->_select(60, 0);
 		std::cout << "Selected passed" << std::endl;
-		/* Nouveau Client */
+		// Nouveau Client 
 		if (_socketConnexion->_FD_ISSET('r') == true)
 			newClient();
 		else

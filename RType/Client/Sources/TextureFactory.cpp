@@ -57,7 +57,7 @@ bool			TextureFactory::setAssets()
   while (nbr < 45)
     {
       if (nbr != 4 && nbr != 6 && nbr != 15)
-	if (!initialize(std::to_string(nbr), "RType/Client/Assets/r-typesheet" + std::to_string(nbr)+ ".gif"))
+	if (!initialize(std::to_string(nbr), "Z:/rendu/RType/RType/Client/Assets/r-typesheet" + std::to_string(nbr)+ ".gif"))
 	  return (false);
       nbr++;
     }

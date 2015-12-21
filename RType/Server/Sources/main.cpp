@@ -19,6 +19,7 @@ int    			main(int argc, char **argv) {
   try {
      if (argc == 3) {
         network.init(argv[1], argv[2]);
+		std::cout << "RUN" << std::endl;
         network.run();
      }
      else {

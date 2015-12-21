@@ -14,8 +14,7 @@
 
 Client::Client()
 {
-#ifndef WIN32
-
+#ifndef _WIN32
 	_mutexOutput = new UMutex();
 	_mutexInput = new UMutex();
 #else

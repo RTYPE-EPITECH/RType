@@ -31,8 +31,8 @@ public:
 	size_t	getIdThreadGame();
 
 	// Mutexed function to get input/output from vector
-	char *	getInput();
-	char *	getOutput();
+	const char *	getInput();
+	const char *	getOutput();
 
 	// Mutexed function to add input/output to vector
 	void	addInput(const char *);

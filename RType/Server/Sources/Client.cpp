@@ -51,9 +51,9 @@ size_t	Client::getIdThreadGame()
 	return 0;
 }
 
-char *	Client::getInput()
+const char *	Client::getInput()
 {
-	char * result = NULL;
+	const char * result = NULL;
 	_mutexInput->lock();
 	if (_input.size() > 0)
 	{
@@ -64,9 +64,9 @@ char *	Client::getInput()
 	return result;
 }
 
-char *	Client::getOutput()
+const char *	Client::getOutput()
 {
-	char * result = NULL;
+	const char * result = NULL;
 	_mutexOutput->lock();
 	if (_output.size() > 0)
 	{

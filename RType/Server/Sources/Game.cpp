@@ -123,7 +123,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 bool Game::haveInput(unsigned long long t)
 {
 	bool check = false;
-	char * input = NULL;
+	const char * input = NULL;
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
 		if ((input = _clients[i]->getInput()))
@@ -169,7 +169,7 @@ bool Game::loop()
 		  for (size_t i = 0; i < _clients.size(); i++)
 				if (GAME_CREATED == _clients[i]->getState())
 				{
-					char * input = NULL;
+					const char * input = NULL;
 					if (!(input = _clients[i]->getInput()))
 						continue;
 					// set input into protocole to have the get/set

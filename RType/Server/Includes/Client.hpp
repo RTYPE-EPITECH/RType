@@ -5,8 +5,8 @@
 #include <string>
 #include "Protocole.hpp"
 #include "StateConnexion.hpp"
+#include "ISocket.hpp"
 
-class ISocket;
 class Game;
 class IMutex;
 class Player;
@@ -22,8 +22,8 @@ public:
 	Player * getPlayer() const;
 	void	setPlayer(Player *);
 
-	STATE_CONNECT getState() const;
-	void setState(STATE_CONNECT);
+	ESTATE getState() const;
+	void setState(ESTATE);
 
 	void	setSocket(ISocket *);
 	ISocket *	getSocket() const;
@@ -34,18 +34,21 @@ public:
 	const char *	getInput();
 	const char *	getOutput();
 
+	std::vector<const char *> getAllOutput();
+
 	// Mutexed function to add input/output to vector
 	void	addInput(const char *);
 	void	addOutput(const char *);
 
 	Protocole protocole;
+	ISocket::tSocketAdress _adr;
 private:
 	ISocket * _socket;
 
 	std::string ip;
 	short port;
 
-	STATE_CONNECT _state;
+	ESTATE _state;
 	Game  * _game;
 	Player * player;
 

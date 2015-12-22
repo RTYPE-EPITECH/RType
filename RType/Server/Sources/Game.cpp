@@ -54,13 +54,7 @@ bool Game::addClient(Client * cl)
 	mutex->lock();
 	_clients.push_back(cl);
 	mutex->unlock();
-	cl->setState(CONNECT);
-	// send id Game, id Player
-	cl->protocole._createParametersPacket((int)_id, (int)cl->getPlayer()->getId());
-	cl->addOutput(cl->protocole._getLastPacket());
-	// send all init
-	for (size_t i = 0; _initToClient.size() > i; i++)
-		cl->addOutput(_initToClient[i]);
+	cl->setState(BEGINNING);
 	return true;
 }
 
@@ -167,15 +161,18 @@ bool Game::loop()
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
-				if (GAME_CREATED == _clients[i]->getState())
-				{
-					const char * input = NULL;
-					if (!(input = _clients[i]->getInput()))
-						continue;
-					// set input into protocole to have the get/set
-					_proto._setNewPacket(input);
-					handleInputClient(_clients[i]);
-				}
+			  if (POSITION_PACKET_SET == _clients[i]->getState())
+			  {
+				  const char * input = NULL;
+				  if (!(input = _clients[i]->getInput()))
+					  continue;
+				  // set input into protocole to have the get/set
+				  _proto._setNewPacket(input);
+				  handleInputClient(_clients[i]);
+			  }
+				// Client trying to connect
+			  else
+				  handleClientConnexion(_clients[i]);
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
@@ -226,6 +223,49 @@ bool	Game::handleInputClient(Client * c)
 		c->addOutput(_proto._getLastPacket());
     }
   return true;
+}
+
+void		Game::handleClientConnexion(Client * c)
+{
+	const char * input = c->getInput();
+	if (input == NULL)
+		return;
+	_proto._setNewPacket(input);
+
+	// CONNECT PACKET
+	if (c->getState() == BEGINNING) {
+		if (_proto._getHeaderOpcode() == 1) {
+			c->protocole._createResponsePacket(NONE);
+			c->addOutput(_proto._getLastPacket());
+			c->setState(CONNECT_OK);
+		}
+	}
+
+	// PARAMETER PACKET
+	else if (c->getState() == CONNECT_OK) {
+		if (_proto._getHeaderOpcode() == 2) {
+			c->protocole._createParametersPacket((int)_id, (int)c->getPlayer()->getId());
+			c->addOutput(c->protocole._getLastPacket());
+			c->setState(PARAMETERS_SET);
+		}
+	}
+	// ALL init
+	else if (c->getState() == PARAMETERS_SET) {
+		if (_proto._getHeaderOpcode() == 0) {
+			for (size_t i = 0; _initToClient.size() > i; i++)
+				c->addOutput(_initToClient[i]);
+			c->setState(ID_SET);
+		}
+	}
+
+	// Game OK, let's begin
+	else if (c->getState() == ID_SET) {
+		if (_proto._getHeaderOpcode() == 0) {
+			c->protocole._createResponsePacket(NONE);
+			c->addOutput(_proto._getLastPacket());
+			c->setState(POSITION_PACKET_SET);
+		}
+	}
 }
 
 unsigned int Game::getIdThread() const

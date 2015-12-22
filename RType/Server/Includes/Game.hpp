@@ -78,6 +78,7 @@ private:
 
 	// factorisation 
 	bool handleInputClient(Client *);
+	void handleClientConnexion(Client *);
 	bool conditionCollision(AObject *, AObject *) const;
 
 	AObject* listPlayer(AObject *) const;

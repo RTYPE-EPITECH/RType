@@ -26,7 +26,7 @@ Client::Client()
 	port = _port;*/
 	player = NULL;
 	_game = NULL;
-	_state = DISCONNECT;
+	_state = BEGINNING;
 }
 
 Client::~Client()
@@ -77,6 +77,19 @@ const char *	Client::getOutput()
 	return result;
 }
 
+std::vector<const char *> Client::getAllOutput()
+{
+	std::vector<const char *> _res;
+	_mutexOutput->lock();
+	if (_output.size() > 0)
+	{
+		_res = _output;
+		_output.clear();
+	}
+	_mutexOutput->unlock();
+	return _res;
+}
+
 void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();
@@ -101,12 +114,12 @@ void	Client::setPlayer(Player *p)
 	player = p;
 }
 
-STATE_CONNECT Client::getState() const
+ESTATE Client::getState() const
 {
 	return _state;
 }
 
-void Client::setState(STATE_CONNECT e)
+void Client::setState(ESTATE e)
 {
 	_state = e;
 }

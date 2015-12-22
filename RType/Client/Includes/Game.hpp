@@ -19,7 +19,9 @@
 # include	"IMutex.hpp"
 # include	"IThread.hpp"
 # include	"ITimer.hpp"
+# include	"StateConnexion.hpp"
 
+/*
 typedef enum {
 		BEGINNING,
 		CONNECT_OK,
@@ -28,6 +30,7 @@ typedef enum {
 		ID_SET,
 		POSITION_PACKET_SET
 }		ESTATE;
+*/
 
 class	Game {
 private:

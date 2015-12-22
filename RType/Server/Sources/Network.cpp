@@ -4,7 +4,7 @@
 #include			"Client.hpp"
 #include			"Game.hpp"
 #include			"ISocket.hpp"
-
+#include			"Player.hpp"
 #ifdef _WIN32
 # include			"WConditionVariable.hpp"
 #else
@@ -93,10 +93,10 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	Client		*clientEntreStandard = new Client();
 	Client		*clientSocketGame = new Client();
 
-		clientEntreStandard->init(NULL);
+	//	clientEntreStandard->init(NULL);
 		clientSocketGame->init(NULL);
 	clientSocketGame->setSocket(_socketGame);
-	clientEntreStandard->setSocket(entreStandard);
+	//clientEntreStandard->setSocket(entreStandard);
 	_clients.push_back(clientSocketGame);
 	//_clients.push_back(clientEntreStandard);
 
@@ -118,7 +118,7 @@ bool				Network::readClient(unsigned int i) {
 	char * header = NULL;
 	char * body = NULL;
 	try {
-		if (_clients[i]->getState() < GAME_CREATED)
+		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
 			header = _socketConnexion->_recv(_proto._getSizePacketHeader());
 			if (header == NULL){
@@ -134,17 +134,26 @@ bool				Network::readClient(unsigned int i) {
 		}
 		else
 		{
-			header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, NULL);
+			ISocket::tSocketAdress add;
+			header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
 				if (header == NULL) {
 				std::cerr << "Fail to read header" << std::endl;
 				return false;
 			}
 			_proto._setNewPacketHeader(header);
-			body = _socketConnexion->_recv(_proto._getHeaderSize());
+			body = _socketConnexion->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
 			if (body == NULL) {
 				std::cerr << "Fail to read body packet" << std::endl;
 				return false;
 			}
+			short id = _proto._getHeaderId();
+			for (size_t j = 0; j < _clients.size(); j++)
+				if (_clients[j]->getPlayer()->getId() == (size_t)id)
+				{
+					i = (unsigned int)j;
+					break;
+				}
+			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
 		}
 		const char * packet = _proto._linkPacketHeaderBody(header, body);
 		_clients[i]->addInput(packet);
@@ -156,8 +165,26 @@ bool				Network::readClient(unsigned int i) {
 }
 
 void				Network::writeClient(unsigned int i) {
-(void)i;
-	//_listClient[i]->_send();
+	try {
+		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
+		if (_clients[i]->getState() < POSITION_PACKET_SET)
+		{
+			for (size_t i = 0; i < _toSend.size(); i++)
+				_socketConnexion->_send(_toSend[i], 0);
+		}
+		else
+		{
+			ISocket::tSocketAdress add;
+			for (size_t i = 0; i < _toSend.size(); i++)
+			{
+				_proto._setNewPacketHeader(_toSend[i]);
+				_socketGame->_sendto(_toSend[i], _proto._getHeaderSize(), &(_clients[i]->_adr));
+			}
+		}
+	}
+	catch (const std::exception) {
+		deleteClient(i);
+	}
 	return;
 }
 

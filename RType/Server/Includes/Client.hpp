@@ -30,15 +30,18 @@ public:
 
 	size_t	getIdThreadGame();
 
-	// Mutexed function to get input/output from vector
+	// Mutexed function to add input/output to vector
+
 	const char *	getInput();
 	const char *	getOutput();
 
 	std::vector<const char *> getAllOutput();
-
-	// Mutexed function to add input/output to vector
+	
 	void	addInput(const char *);
 	void	addOutput(const char *);
+
+	bool			haveInput();
+	bool			haveOutput();
 
 	Protocole protocole;
 	ISocket::tSocketAdress _adr;

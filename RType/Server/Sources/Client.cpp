@@ -88,6 +88,26 @@ std::vector<const char *> Client::getAllOutput()
 	return _res;
 }
 
+bool			Client::haveInput()
+{
+	bool tmp = false;
+	_mutexInput->lock();
+	if (_input.size() > 0)
+		tmp = true;
+	_mutexInput->unlock();
+	return tmp;
+}
+
+bool			Client::haveOutput()
+{
+	bool tmp = false;
+	_mutexOutput->lock();
+	if (_output.size() > 0)
+		tmp = true;
+	_mutexOutput->unlock();
+	return tmp;
+}
+
 void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();

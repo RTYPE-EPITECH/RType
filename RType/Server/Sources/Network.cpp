@@ -115,7 +115,7 @@ void				Network::setClient(void) {
 			if (i > 0)
 				std::cout << "Client " << i << " is trying to connect" << std::endl;
 			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
-			if (_clients[i]->getOutput() != NULL)
+			if (_clients[i]->haveOutput())
 				_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
 		}
 	}

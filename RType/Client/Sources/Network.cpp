@@ -40,8 +40,8 @@ void				Network::init(const char *ip, int port) {
 void				Network::setClient(void) {
 	_socket->_FD_ZERO("rw");
 	_socket->_FD_SET("r");
-	if (_game->getOutput().size() > 0) {
-		std::cout << "Set Select en écriture" << std::endl;
+	if (_game->haveOutput()) {
+		std::cout << "FD SET Write" << std::endl;
 		_socket->_FD_SET("w");
 	}
 }
@@ -60,9 +60,9 @@ bool				Network::readServer(void) {
 void				Network::writeServer(void) {
 
 	std::vector<char *> listOutput = _game->getOutput();
+	std::cout << "Write server (" << listOutput.size() << " packets)" << std::endl;
 	for (unsigned int i = 0; i < listOutput.size(); i++)
 		_socket->_send(listOutput[i], _proto._getSizePacket(listOutput[i]), 0);
-	std::cout << "Write server (" << listOutput.size() << " packets)" << std::endl;
 	return;
 }
 

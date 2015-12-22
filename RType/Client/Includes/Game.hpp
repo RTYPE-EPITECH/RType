@@ -53,6 +53,10 @@ public:
   static	void	*loop(void *);
   std::vector<char *>	getInput();
   std::vector<char *>	getOutput();
+
+  bool			haveInput();
+  bool			haveOutput();
+
   void			addInput(char *input);
   void			addOutput(char *output);
   bool			getStart();

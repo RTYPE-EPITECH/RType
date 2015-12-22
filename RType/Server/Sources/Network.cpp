@@ -114,9 +114,40 @@ void				Network::setClient(void) {
 }
 
 bool				Network::readClient(unsigned int i) {
-(void)i;
+	char * header = NULL;
+	char * body = NULL;
+	const char * packet = NULL;
 	try {
-		//_listClient[i]->_receive();
+		if (_clients[i]->getState() < GAME_CREATED)
+		{
+			header = _socketConnexion->_recv(_proto._getSizePacketHeader());
+			if (header == NULL){
+				std::cerr << "Fail to read header" << std::endl;
+				return false;
+			}
+			_proto._setNewPacketHeader(header);
+			body = _socketConnexion->_recv(_proto._getHeaderSize());
+			if (body == NULL) {
+				std::cerr << "Fail to read body packet" << std::endl;
+				return false;
+			}
+		}
+		else
+		{
+			/*header = _socketGame->_recvfrom()
+				if (header == NULL) {
+				std::cerr << "Fail to read header" << std::endl;
+				return false;
+			}
+			_proto._setNewPacketHeader(header);
+			body = _socketConnexion->_recv(_proto._getHeaderSize());
+			if (body == NULL) {
+				std::cerr << "Fail to read body packet" << std::endl;
+				return false;
+			}*/
+		}
+		packet = _proto._linkPacketHeaderBody(header, body);
+		_clients[i]->addInput(packet);
 	}
 	catch (const std::exception) {
 		deleteClient(i);

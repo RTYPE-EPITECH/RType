@@ -42,8 +42,13 @@ void				Network::setClient(void) {
 }
 
 bool				Network::readServer(void) {
+	char * header = NULL;
+	char * body = NULL;
 	std::cout << "read server" << std::endl;
-	_game->addInput(_socket->_recv(0));
+	//header = _socket->_recv(_proto.);
+
+	
+	_game->addInput(NULL);
 	return true;
 }
 
@@ -59,7 +64,7 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		std::cout << "client set" << std::endl;
-		_socket->_select(60, 0);
+		_socket->_select(0, (int)(1.0 / 60.0 * 1000.0));
 		std::cout << "select set" << std::endl;
 		if (_socket->_FD_ISSET('w') == true)
 			writeServer();

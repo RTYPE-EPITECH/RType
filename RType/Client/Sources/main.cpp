@@ -15,17 +15,15 @@ int				main(void) {
 //  SFML			ui;
   
   try {
-<<<<<<< HEAD
-    //ntw.init("127.0.0.1", 4242);
-    //ntw.run();
+/*
     ui.clear();
     std::cout << "on entre dans l'intro" << std::endl;
     ui.Intro();
     std::cout << "on sort de l'intro" << std::endl;
     while (ui.isOpen())
-=======
+*/
 	  Network *ntw = new Network();
-	  ntw->init("10.26.113.33", 4242);
+	  ntw->init("127.0.0.1", 4242);
 	ntw->run();
    /* while (ui.isOpen())
 >>>>>>> f299f47fbd1d584cc0eedb04cb57b8fb506ddd1f

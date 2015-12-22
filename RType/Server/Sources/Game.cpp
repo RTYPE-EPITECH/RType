@@ -49,10 +49,8 @@ bool Game::addClient(Client * cl)
 {
 	if (getSizeAvailable() <= 0)
 		return false;
-	std::cout << "Enough place" << std::endl;
 	if (!cl->init(this))
 		return false;
-	std::cout << "Client init" << std::endl;
 	mutex->lock();
 	_clients.push_back(cl);
 	mutex->unlock();
@@ -135,7 +133,7 @@ bool Game::haveInput(unsigned long long t)
 		}
 	mutex->unlock();
 	if (!check)
-		_condVar->wait(t);
+		_condVar->wait(t * 1000);
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
 		if ((input = _clients[i]->getInput()))
@@ -149,16 +147,22 @@ bool Game::haveInput(unsigned long long t)
 
 bool Game::loop()
 {
+	long long tmp = 0;
 	timer->start();
   while (!isEnded())
     {
 		if (_clients.size() == 0)
 		{
-			std::cout << "0 client, so we wait" << std::endl;
+			std::cout << "Game waiting for clients" << std::endl;
 			_condVar->wait();
+			timer->start();
 		}
-		std::cout << FPS * 1000 << " - " << timer->getElapsedTimeInMicroSec() << std::endl;
-		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
+		std::cout << FPS * 100 << " - " << timer->getElapsedTimeInSec() << std::endl;
+		tmp = FPS * 100 - timer->getElapsedTimeInSec();
+		if (tmp < 0)
+			tmp = 0;
+		std::cout << "Result : " << tmp << std::endl;
+		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
 		  mutex->lock();
 		  // For each client, get the oldest Input

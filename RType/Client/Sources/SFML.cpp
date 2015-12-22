@@ -12,7 +12,9 @@
 #include			"SpriteFactory.hpp"
 #include			"SoundFactory.hpp"
 #include			"RSprite.hpp"
+#ifndef _WIN32
 #include			<unistd.h>
+#endif
 
 sf::RenderWindow SFML::win(sf::VideoMode(800, 600), "RType");
 

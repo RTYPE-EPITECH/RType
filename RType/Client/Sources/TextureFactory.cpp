@@ -71,7 +71,7 @@ bool			TextureFactory::setAssets()
     return false;
   if (!initialize(MONSTER, "RType/Client/Assets/r-typesheet14.gif"))
     return false;
-=======
+/*
   while (nbr < 45)
     {
       if (nbr != 4 && nbr != 6 && nbr != 15)
@@ -79,6 +79,6 @@ bool			TextureFactory::setAssets()
 	  return (false);
       nbr++;
     }
->>>>>>> f299f47fbd1d584cc0eedb04cb57b8fb506ddd1f
+*/
   return true;
 }

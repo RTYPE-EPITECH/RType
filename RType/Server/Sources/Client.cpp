@@ -77,14 +77,14 @@ char *	Client::getOutput()
 	return result;
 }
 
-void	Client::addInput(char * e)
+void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();
 	_input.push_back(e);
 	_mutexInput->unlock();
 }
 
-void	Client::addOutput(char * e)
+void	Client::addOutput(const char * e)
 {
 	_mutexInput->lock();
 	_output.push_back(e);

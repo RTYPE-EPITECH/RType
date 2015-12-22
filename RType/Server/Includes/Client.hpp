@@ -35,8 +35,8 @@ public:
 	char *	getOutput();
 
 	// Mutexed function to add input/output to vector
-	void	addInput(char *);
-	void	addOutput(char *);
+	void	addInput(const char *);
+	void	addOutput(const char *);
 
 	Protocole protocole;
 private:
@@ -51,8 +51,8 @@ private:
 
 	IMutex * _mutexOutput;
 	IMutex * _mutexInput;
-	std::vector<char *> _input;
-	std::vector<char *> _output;
+	std::vector<const char *> _input;
+	std::vector<const char *> _output;
 
 };
 

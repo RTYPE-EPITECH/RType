@@ -3,6 +3,7 @@
 #include			"Tools.hpp"
 #include			"Client.hpp"
 #include			"Game.hpp"
+#include			"ISocket.hpp"
 
 #ifdef _WIN32
 # include			"WConditionVariable.hpp"
@@ -116,7 +117,6 @@ void				Network::setClient(void) {
 bool				Network::readClient(unsigned int i) {
 	char * header = NULL;
 	char * body = NULL;
-	const char * packet = NULL;
 	try {
 		if (_clients[i]->getState() < GAME_CREATED)
 		{
@@ -134,7 +134,7 @@ bool				Network::readClient(unsigned int i) {
 		}
 		else
 		{
-			/*header = _socketGame->_recvfrom()
+			header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, NULL);
 				if (header == NULL) {
 				std::cerr << "Fail to read header" << std::endl;
 				return false;
@@ -144,9 +144,9 @@ bool				Network::readClient(unsigned int i) {
 			if (body == NULL) {
 				std::cerr << "Fail to read body packet" << std::endl;
 				return false;
-			}*/
+			}
 		}
-		packet = _proto._linkPacketHeaderBody(header, body);
+		const char * packet = _proto._linkPacketHeaderBody(header, body);
 		_clients[i]->addInput(packet);
 	}
 	catch (const std::exception) {

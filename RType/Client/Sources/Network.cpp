@@ -22,14 +22,18 @@ Network::~Network(void) {
 */
 
 void				Network::init(const char *ip, int port) {
-	_game = new Game();
-	_game->init();
-	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
-	std::cout << "New socket ok" << std::endl;
-	Sleep(1000);
-	_socket->_connect(ISocket::IPv4, ip, port);
-	std::cout << "connext ok" << std::endl;
-	Sleep(1000);
+  _game = new Game();
+  _game->init();
+  _socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+  std::cout << "New socket ok" << std::endl;
+#ifdef _WIN32
+  Sleep(1000);
+#endif
+  _socket->_connect(ISocket::IPv4, ip, port);
+  std::cout << "connext ok" << std::endl;
+#ifdef _WIN32
+  Sleep(1000);
+#endif
 }
 
 void				Network::setClient(void) {

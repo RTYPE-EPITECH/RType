@@ -3,6 +3,7 @@
 
 #include "IDynamicLibrary.hpp"
 #include <dlfcn.h>
+#include <stdexcept>
 
 template<typename T>
 class		UDynamicLibrary : public IDynamicLibrary<T>

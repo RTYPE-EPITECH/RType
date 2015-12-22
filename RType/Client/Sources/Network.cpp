@@ -10,7 +10,6 @@ Network::Network(void) {
 #else
 	_socket = new USocket();
 #endif
-	//_listClient.clear();
 }
 
 Network::~Network(void) {
@@ -22,9 +21,8 @@ Network::~Network(void) {
 */
 
 void				Network::init(const char *ip, int port) {
-  _game = new Game();
-  _game->init();
-  _socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
+
   std::cout << "New socket ok" << std::endl;
 #ifdef _WIN32
   Sleep(1000);
@@ -34,12 +32,15 @@ void				Network::init(const char *ip, int port) {
 #ifdef _WIN32
   Sleep(1000);
 #endif
+  _game = new Game();
+  if (_game->init() == false)
+	  throw std::runtime_error("Failed to launch Game");
 }
 
 void				Network::setClient(void) {
 	_socket->_FD_ZERO("rw");
 	_socket->_FD_SET("r");
-	if (_game->getOutput().size() != 0) {
+	if (_game->getOutput().size() > 0) {
 		std::cout << "Set Select en écriture" << std::endl;
 		_socket->_FD_SET("w");
 	}
@@ -57,10 +58,11 @@ bool				Network::readServer(void) {
 }
 
 void				Network::writeServer(void) {
-	std::cout << "write server" << std::endl;
+
 	std::vector<char *> listOutput = _game->getOutput();
 	for (unsigned int i = 0; i < listOutput.size(); i++)
-		_socket->_send(listOutput[i], 0);
+		_socket->_send(listOutput[i], _proto._getSizePacket(listOutput[i]), 0);
+	std::cout << "Write server (" << listOutput.size() << " packets)" << std::endl;
 	return;
 }
 
@@ -68,8 +70,9 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		std::cout << "client set" << std::endl;
-		_socket->_select(0, (int)(1.0 / 60.0 * 1000.0));
-		std::cout << "select set" << std::endl;
+		int tmp = (int)(1.0 / 30.0 * 1000.0);
+		std::cout << "Select (Timeout : " << tmp << " ms)" << std::endl;
+		_socket->_select(5, tmp);
 		if (_socket->_FD_ISSET('w') == true)
 			writeServer();
 		if (_socket->_FD_ISSET('r') == true)

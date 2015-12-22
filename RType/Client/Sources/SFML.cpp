@@ -16,12 +16,13 @@
 #include			<unistd.h>
 #endif
 
-sf::RenderWindow SFML::win(sf::VideoMode(800, 600), "RType");
 
 SFML::SFML()
 {
+	std::cout << "Windows SFML Laucnhed " << std::endl;
   _spritefactory = new SpriteFactory();
   _soundfactory = new SoundFactory();
+  win.create(sf::VideoMode(800, 600), "RType");
   win.setFramerateLimit(60);
 }
 

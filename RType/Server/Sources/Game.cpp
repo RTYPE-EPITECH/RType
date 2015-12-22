@@ -61,11 +61,17 @@ bool Game::addClient(Client * cl)
 void Game::removeClient(Client * c)
 {
 	mutex->lock();
-	for (std::vector<Client *>::iterator i = _clients.begin(); 
-			i != _clients.end(); ++i)
+
+	for (std::vector<Client *>::iterator i = _clients.begin();
+	i != _clients.end(); ++i)
 		if ((*i)->getPlayer()->getId() == c->getPlayer()->getId())
+		{
+			(*i)->getPlayer()->die(this);
 			_clients.erase(i);
+			break;
+		}
 	mutex->unlock();
+	std::cout << "Client properly destroyed" << std::endl;
 }
 
 size_t Game::getSizeAvailable() const
@@ -143,6 +149,7 @@ bool Game::loop()
 {
 	long long tmp = 0;
 	timer->start();
+	std::cout << "Game " << _id << " loop begin" << std::endl;
   while (!isEnded())
     {
 		if (_clients.size() == 0)
@@ -151,11 +158,9 @@ bool Game::loop()
 			_condVar->wait();
 			timer->start();
 		}
-		std::cout << FPS * 100 << " - " << timer->getElapsedTimeInSec() << std::endl;
 		tmp = FPS * 100 - timer->getElapsedTimeInSec();
 		if (tmp < 0)
 			tmp = 0;
-		std::cout << "Result : " << tmp << std::endl;
 		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
 		  mutex->lock();
@@ -181,7 +186,7 @@ bool Game::loop()
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
 		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
 		{
-			std::cout << "Game " << _id << "Let's scroll da game" << std::endl;
+			std::cout << "Game " << _id << " Let's scroll da game" << std::endl;
 		  mutex->lock();
 		  AllMove();
 		  _proto._putPositionPacketOnList();
@@ -208,6 +213,7 @@ bool	Game::handleInputClient(Client * c)
     {
       ACTION a = (ACTION)_proto._getActionOpcode();
       Missile * m = NULL;
+	  std::cout << " Client " << c->getPlayer()->getId() << " do an action" << std::endl;
       if (a == SHOOT)
 	{
 	  if ((m = c->getPlayer()->shoot(this)) == NULL)
@@ -219,6 +225,7 @@ bool	Game::handleInputClient(Client * c)
     }
   else
     {
+		std::cout << " Client " << c->getPlayer()->getId() << " is drunk and sent wrong packet" << std::endl;
 		_proto._createResponsePacket(INVALID_ACTION);
 		c->addOutput(_proto._getLastPacket());
     }
@@ -227,6 +234,7 @@ bool	Game::handleInputClient(Client * c)
 
 void		Game::handleClientConnexion(Client * c)
 {
+	std::cout << "Handle Client connexion" << std::endl;
 	const char * input = c->getInput();
 	if (input == NULL)
 		return;

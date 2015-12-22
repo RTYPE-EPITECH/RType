@@ -20,6 +20,7 @@ bool WConditionVariable::init()
 void WConditionVariable::wait()
 {
 	EnterCriticalSection(&CritSection);
+	condition = false;
 	while (condition == false)
 		SleepConditionVariableCS(&ConditionVar, &CritSection, INFINITE);
 	LeaveCriticalSection(&CritSection);
@@ -28,6 +29,7 @@ void WConditionVariable::wait()
 void WConditionVariable::wait(unsigned long long t)
 {
 	EnterCriticalSection(&CritSection);
+	condition = false;
 	while (condition == false)
 		SleepConditionVariableCS(&ConditionVar, &CritSection, (DWORD)(t / (unsigned long long)1000.0));
 	LeaveCriticalSection(&CritSection);

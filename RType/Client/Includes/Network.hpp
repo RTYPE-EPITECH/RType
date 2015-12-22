@@ -38,6 +38,7 @@ public:
 private:
 	ISocket					*_socket;
 	Game					*_game;
+	Protocole				_proto;
 	
 	void					setClient(void);
 	bool					readServer(void);

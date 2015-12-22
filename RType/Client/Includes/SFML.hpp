@@ -26,7 +26,7 @@ class				SoundFactory;
 
 class				SFML
 {
-  static sf::RenderWindow		win;
+ sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
   sf::Clock			_clock;

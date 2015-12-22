@@ -13,6 +13,19 @@
 # include					"IConditionVariable.hpp"
 # include					"Protocole.hpp"
 # include					"HandleThread.hpp"
+#ifdef _WIN32
+# define		RED			""
+# define		GREEN		""
+# define		YELLOW		""
+# define		BLUE		""
+# define		PURPLE		""
+# define		WHITE		""
+# define		CYAN		""
+# define		HIGHLIGHT	""
+# define		DEFAULT		""
+# define		BLINK		""
+# define		UNDERLINE	""
+#else
 # define		RED			"\x1B[31m"
 # define		GREEN		"\033[32m"
 # define		YELLOW		"\033[33m"
@@ -24,6 +37,7 @@
 # define		DEFAULT		"\033[0m"
 # define		BLINK		"\033[5m"
 # define		UNDERLINE	"\033[4m"
+#endif
 
 class Client;
 class Game;

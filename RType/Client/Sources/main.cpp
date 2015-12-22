@@ -24,7 +24,7 @@ int				main(void) {
 */
 	  Network *ntw = new Network();
 	  ntw->init("127.0.0.1", 4242);
-	ntw->run();
+		ntw->run();
    /* while (ui.isOpen())
 >>>>>>> f299f47fbd1d584cc0eedb04cb57b8fb506ddd1f
       {

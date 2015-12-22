@@ -52,12 +52,13 @@ bool		Game::init()
     return false;
   }
   this->_state = BEGINNING;
-  this->_display = new SFML();
+  //this->_display = new SFML();
   return true;
 }
 
 void	*Game::loop(void * arg)
 {
+	std::cout << "Game is running ..." << std::endl;
   Game *_this = reinterpret_cast<Game *>(arg);
   std::vector<char *>	_lastInput;
   std::vector<char *>	_lastOutput;
@@ -111,8 +112,11 @@ void	*Game::loop(void * arg)
       // Appel update (init des sprites)
       // Si reçoit Packet : OK Server a tout envoyé
       //     Client crée packet : CLIENT OK Partie commencée*
-	  if (_this->_state == POSITION_PACKET_SET)
-		  _this->setStart(true);
+		if (_this->_state == POSITION_PACKET_SET)
+		{
+			_this->setStart(true);
+			_this->setDisplaySFML(new SFML());
+		}
     }
 
   while (_this->_display->isOpen())
@@ -177,4 +181,9 @@ void		Game::addOutput(char *output)
   this->_mutexGame->lock();
   this->output.push_back(output);
   this->_mutexGame->unlock();
+}
+
+void		Game::setDisplaySFML(SFML * sfml)
+{
+	_display = sfml;
 }

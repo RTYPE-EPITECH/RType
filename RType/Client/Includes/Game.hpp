@@ -57,6 +57,7 @@ public:
   void			addOutput(char *output);
   bool			getStart();
   void			setStart(bool ret);
+  void			setDisplaySFML(SFML *);
 };
 
 #endif /* !GAME_HPP_ */

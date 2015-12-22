@@ -22,8 +22,6 @@ Client::Client()
 	_mutexInput = new WMutex();
 #endif
 	_socket = NULL;
-	/*ip = _ip;
-	port = _port;*/
 	player = NULL;
 	_game = NULL;
 	_state = BEGINNING;

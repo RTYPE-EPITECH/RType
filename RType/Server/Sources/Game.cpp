@@ -163,10 +163,9 @@ bool Game::loop()
 		tmp = FPS * 100 - timer->getElapsedTimeInSec();
 		if (tmp < 0)
 			tmp = 0;
-		std::cout << "Loop ?" << std::endl;
 		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
-		std::cout << "Look Input Game " << _id << std::endl;
+		std::cout << "[Game::loop] Look Input Game " << _id << std::endl;
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
@@ -185,31 +184,25 @@ bool Game::loop()
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
-		  std::cout << "Game " << _id << " find look input " << std::endl;
+		  std::cout << "[Game::loop] " << _id << " find look input " << std::endl;
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
 		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
 		{
-			std::cout << "Game " << _id << " Let's scroll da game" << std::endl;
 		  mutex->lock();
-		  std::cout << "Game " << _id << " all move " << std::endl;
 		  AllMove();
 		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket());
+		  addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
 		  timer->start();
 		}
-		std::cout << "Monster shoot" << std::endl;
 		monstersShoot();
-		std::cout << "fin Shoot " << std::endl;
 		if (isWaveEnded())
 		{
-			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
 			deleteWave();
 			nextWave();
 		}
-		std::cout << "End loop" << std::endl;
     }
   // PACKET GAME FINIE
   std::cout << "Game " << _id << " finished" << std::endl;
@@ -262,7 +255,9 @@ void		Game::handleClientConnexion(Client * c)
 
 	// PARAMETER PACKET
 	else if (c->getState() == CONNECT_OK) {
+		std::cout << "[Game::HandleClientConnexion] : state = CONNECT_OK" << std::endl;
 		if (_proto._getHeaderOpcode() == 2) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 2" << std::endl;
 			c->protocole._createIdentifiantPacket((int)_id, (int)c->getPlayer()->getId());
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(PARAMETERS_SET);
@@ -270,7 +265,9 @@ void		Game::handleClientConnexion(Client * c)
 	}
 	// ALL init
 	else if (c->getState() == PARAMETERS_SET) {
+		std::cout << "[Game::HandleClientConnexion] : state = PARAMETERS_SET" << std::endl;
 		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 0" << std::endl;
 			for (size_t i = 0; _initToClient.size() > i; i++)
 				c->addOutput(_initToClient[i]);
 			c->setState(ID_SET);
@@ -279,7 +276,9 @@ void		Game::handleClientConnexion(Client * c)
 
 	// Game OK, let's begin
 	else if (c->getState() == ID_SET) {
+		std::cout << "[Game::HandleClientConnexion] : state = ID_SET" << std::endl;
 		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 0" << std::endl;
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(_proto._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
@@ -424,7 +423,7 @@ bool			Game::isWaveEnded() const
 	for (size_t i = 0; i < _waves[_currwave]->size(); i++)
 		if (!(*_waves[_currwave])[i]->isDead())
 			return false;
-	mutex->lock();
+	//mutex->lock();
 	return true;
 }
 
@@ -442,10 +441,16 @@ void			Game::deleteWave()
 	}*/
 }
 
-void			Game::addPacketForClients(char * packet)
+void			Game::addPacketForClients(char * packet, bool t)
 {
+	std::cout << " ADD PACKET FOR CLIENT" << std::endl;
+	if (t)
+		std::cout << "NOT FOR ALL" << std::endl;
+	else
+		std::cout << "FOR ALL" << std::endl;
 	for (size_t i = 0; i < _clients.size(); i++)
-		_clients[i]->addOutput(packet);
+		if (!t || (t && _clients[i]->getState() < POSITION_PACKET_SET))
+			_clients[i]->addOutput(packet);
 }
 
 size_t			Game::getId() const
@@ -455,11 +460,11 @@ size_t			Game::getId() const
 
 void			Game::monstersShoot()
 {
-if (_objs != NULL)
-	for (size_t i = 0; i < _objs->size(); i++)
-		if ((*_objs)[i]->getType() == MONSTER)
-		{
-			Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
-			m->shoot(this);
-		}
+	if (_objs != NULL)
+		for (size_t i = 0; i < _objs->size(); i++)
+			if ((*_objs)[i]->getType() == MONSTER)
+			{
+				Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
+				m->shoot(this);
+			}
 }

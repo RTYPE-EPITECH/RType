@@ -195,12 +195,12 @@ void				Network::writeClient(unsigned int i) {
 		else
 		{
 			ISocket::tSocketAdress add;
-			for (size_t i = 0; i < _toSend.size(); i++)
+			for (size_t j = 0; j < _toSend.size(); j++)
 			{
-				_proto._setNewPacketHeader(_toSend[i]);
-				_socketGame->_sendto(_toSend[i],
-					_proto._getSizePacket(_toSend[i]),
-					&(_clients[i]->_adr));
+				_proto._setNewPacketHeader(_toSend[j]);
+				_socketGame->_sendto(_toSend[j],
+					_proto._getSizePacket(_toSend[j]),
+					&(_clients[j]->_adr));
 			}
 		}
 	}

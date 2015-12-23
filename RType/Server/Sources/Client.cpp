@@ -70,6 +70,7 @@ const char *	Client::getOutput()
 	{
 		result = _output[0];
 		_output.erase(_output.begin());
+		std::cout << "[ERRRRRRRRAAAAAAAAAAASSSSEEEE]" << std::endl;
 	}
 	_mutexOutput->unlock();
 	return result;
@@ -81,8 +82,10 @@ std::vector<const char *> Client::getAllOutput()
 	_mutexOutput->lock();
 	if (_output.size() > 0)
 	{
+		std::cout << "[[[[[ " << _output.size() << std::endl;
 		_res = _output;
-		_output.clear();
+		//_output.clear();
+		std::cout << "[CLLLLLLLLLLLLLLEEEEEEEEAAAAAAAAAAAAAARRrr] size : " << _res.size() << std::endl;
 	}
 	_mutexOutput->unlock();
 	return _res;
@@ -118,6 +121,7 @@ void	Client::addInput(const char * e)
 void	Client::addOutput(const char * e)
 {
 	_mutexInput->lock();
+	std::cout << "ADD OUTPUTT" << std::endl;
 	_output.push_back(e);
 	_mutexInput->unlock();
 }

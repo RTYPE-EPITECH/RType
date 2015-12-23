@@ -46,7 +46,7 @@ public:
 	bool isEnded(bool op = true) const;
 	size_t getSizeAvailable() const;
 
-	void addPacketForClients(char *);
+	void addPacketForClients(char *, bool t = false);
 
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
 	Protocole			_proto;

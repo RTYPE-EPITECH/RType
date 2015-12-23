@@ -81,7 +81,7 @@ Missile * Monster::shoot(Game *g)
 			"unknow"
 			);
 		_proto._putPositionPacketOnList();
-		g->addPacketForClients(_proto._getLastPacket());
+		g->addPacketForClients(_proto._getLastPacket(), true);
 		_t->start();
 		return missiles.back();
 	}

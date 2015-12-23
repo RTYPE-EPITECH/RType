@@ -211,7 +211,7 @@ char					*WSocket::_recv(const int flags) const {
 
 	if ((ret = recv(_fd, msg, 30720, flags)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
-	msg[ret] = '\0';
+	//msg[ret] = '\0';
 
 	return msg;
 }
@@ -221,9 +221,11 @@ char					*WSocket::_recv(const int size, const int flags) const {
 	int					ret;
 
 	if ((ret = recv(_fd, msg, size, flags)) == SOCKET_ERROR)
+	{
+		std::cerr << WSAGetLastError() << std::endl;
 		throw std::runtime_error(_strerror());
-	msg[ret] = '\0';
-
+	}
+	//msg[ret] = '\0';
 	return msg;
 }
 
@@ -272,7 +274,10 @@ void					WSocket::_send(const char * const msg, const int flags) const {
 
 void					WSocket::_send(const char * const msg, const int size, const int flags) const {
 	if (send(_fd, msg, size, flags) == SOCKET_ERROR)
+	{
+		std::cerr << WSAGetLastError() << std::endl;
 		throw std::runtime_error(_strerror());
+	}
 }
 
 void					WSocket::_send(const std::string &msg, const int flags) const {

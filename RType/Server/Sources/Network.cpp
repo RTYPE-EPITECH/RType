@@ -128,13 +128,13 @@ bool				Network::readClient(unsigned int i) {
 		std::cout << "Try to read Client " << i << std::endl;
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			header = _socketConnexion->_recv(_proto._getSizePacketHeader());
+			header = _socketConnexion->_recv(_proto._getSizePacketHeader(), 0);
 			if (header == NULL){
 				std::cerr << RED << "Fail to read (TCP) header" << WHITE << std::endl;
 				return false;
 			}
 			_proto._setNewPacketHeader(header);
-			body = _socketConnexion->_recv(_proto._getHeaderSize());
+			body = _socketConnexion->_recv(_proto._getHeaderSize(), 0);
 			if (body == NULL) {
 				std::cerr << RED << "Fail to read (TCP) body packet" << WHITE << std::endl;
 				return false;

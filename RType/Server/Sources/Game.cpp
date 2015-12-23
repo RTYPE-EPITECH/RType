@@ -126,7 +126,7 @@ bool Game::haveInput(unsigned long long t)
 	const char * input = NULL;
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
-		if ((input = _clients[i]->getInput()))
+		if (_clients[i]->haveInput())
 		{
 			check = true;
 			break;
@@ -134,14 +134,16 @@ bool Game::haveInput(unsigned long long t)
 	mutex->unlock();
 	if (!check)
 		_condVar->wait(t * 1000);
-	mutex->lock();
+	if (check == true)
+		std::cout << "Pas d'input ! " << std::endl;
+	/*mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
-		if ((input = _clients[i]->getInput()))
+		if (_clients[i]->haveInput())
 		{
 			check = true;
 			break;
 		}
-	mutex->unlock();
+	mutex->unlock();*/
 	return check;
 }
 
@@ -149,7 +151,7 @@ bool Game::loop()
 {
 	long long tmp = 0;
 	timer->start();
-	//std::cout << "Game " << _id << " loop begin" << std::endl;
+	std::cout << "Game " << _id << " loop begin" << std::endl;
   while (!isEnded())
     {
 		if (_clients.size() == 0)
@@ -161,8 +163,10 @@ bool Game::loop()
 		tmp = FPS * 100 - timer->getElapsedTimeInSec();
 		if (tmp < 0)
 			tmp = 0;
+		std::cout << "Loop ?" << std::endl;
 		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
+		std::cout << "Look Input Game " << _id << std::endl;
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
@@ -181,6 +185,7 @@ bool Game::loop()
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
+		  std::cout << "Game " << _id << " find look input " << std::endl;
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
@@ -188,19 +193,23 @@ bool Game::loop()
 		{
 			std::cout << "Game " << _id << " Let's scroll da game" << std::endl;
 		  mutex->lock();
+		  std::cout << "Game " << _id << " all move " << std::endl;
 		  AllMove();
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
 		  timer->start();
 		}
+		std::cout << "Monster shoot" << std::endl;
 		monstersShoot();
+		std::cout << "fin Shoot " << std::endl;
 		if (isWaveEnded())
 		{
 			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
 			deleteWave();
 			nextWave();
 		}
+		std::cout << "End loop" << std::endl;
     }
   // PACKET GAME FINIE
   std::cout << "Game " << _id << " finished" << std::endl;

@@ -58,7 +58,7 @@ bool		Game::init()
 
 void	*Game::loop(void * arg)
 {
-	std::cout << "Game is running ..." << std::endl;
+std::cout << "Game is running ..." << std::endl;
   Game *_this = reinterpret_cast<Game *>(arg);
   std::vector<char *>	_lastInput;
   std::vector<char *>	_lastOutput;

@@ -186,9 +186,9 @@ void				Network::writeClient(unsigned int i) {
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
 			std::cout << "try to write..." << std::endl;
-			for (size_t i = 0; i < _toSend.size(); i++) {
+			for (size_t j = 0; j < _toSend.size(); j++) {
 				std::cout << "writing..." << std::endl;
-				_socketConnexion->_send(_toSend[i], _proto._getSizePacket(_toSend[i]), 0);
+				_socketConnexion->_send(_toSend[j], _proto._getSizePacket(_toSend[j]), 0);
 			}
 			std::cout << "end writing..." << std::endl;
 		}
@@ -231,7 +231,7 @@ void				Network::run(void)
 		std::cout << "Set client ..." << std::endl;
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 60s)" << WHITE << std::endl;
-		_socketConnexion->_select(60, 0);
+		_socketConnexion->_select(5, 0);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		// Nouveau Client

@@ -163,10 +163,10 @@ bool Game::loop()
 		tmp = FPS * 100 - timer->getElapsedTimeInSec();
 		if (tmp < 0)
 			tmp = 0;
-		std::cout << "Loop ?" << std::endl;
+		//std::cout << "Loop ?" << std::endl;
 		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
-		std::cout << "Look Input Game " << _id << std::endl;
+		//std::cout << "Look Input Game " << _id << std::endl;
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
@@ -185,34 +185,34 @@ bool Game::loop()
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
-		  std::cout << "Game " << _id << " find look input " << std::endl;
+		  //std::cout << "Game " << _id << " find look input " << std::endl;
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
 		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
 		{
-			std::cout << "Game " << _id << " Let's scroll da game" << std::endl;
+			//std::cout << "Game " << _id << " Let's scroll da game" << std::endl;
 		  mutex->lock();
-		  std::cout << "Game " << _id << " all move " << std::endl;
+		  //std::cout << "Game " << _id << " all move " << std::endl;
 		  AllMove();
 		  _proto._putPositionPacketOnList();
 		  addPacketForClients(_proto._getLastPacket());
 		  mutex->unlock();
 		  timer->start();
 		}
-		std::cout << "Monster shoot" << std::endl;
+		//std::cout << "Monster shoot" << std::endl;
 		monstersShoot();
-		std::cout << "fin Shoot " << std::endl;
+		//std::cout << "fin Shoot " << std::endl;
 		if (isWaveEnded())
 		{
-			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
+			//std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
 			deleteWave();
 			nextWave();
 		}
-		std::cout << "End loop" << std::endl;
+		//std::cout << "End loop" << std::endl;
     }
   // PACKET GAME FINIE
-  std::cout << "Game " << _id << " finished" << std::endl;
+  //std::cout << "Game " << _id << " finished" << std::endl;
   return true;
 }
 
@@ -243,7 +243,7 @@ bool	Game::handleInputClient(Client * c)
 
 void		Game::handleClientConnexion(Client * c)
 {
-	std::cout << "Handle Client connexion" << std::endl;
+	//std::cout << "Handle Client connexion" << std::endl;
 	const char * input = c->getInput();
 	if (input == NULL)
 		return;

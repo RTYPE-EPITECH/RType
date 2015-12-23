@@ -180,17 +180,16 @@ bool				Network::readClient(unsigned int i) {
 }
 
 void				Network::writeClient(unsigned int i) {
-	std::cout << "Select debloqué en écriture..." << std::endl;
 	try {
 		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			std::cout << "try to write..." << std::endl;
+			std::cout << "[Network::writeClient] try to write..." << std::endl;
 			for (size_t j = 0; j < _toSend.size(); j++) {
-				std::cout << "writing..." << std::endl;
-				_socketConnexion->_send(_toSend[j], _proto._getSizePacket(_toSend[j]), 0);
+				std::cout << "[Network::writeClient] writing..." << std::endl;
+				_clients[i]->getSocket()->_send(_toSend[j], _proto._getSizePacket(_toSend[j]), 0);
 			}
-			std::cout << "end writing..." << std::endl;
+			std::cout << "[Network::writeClient] end writing..." << std::endl;
 		}
 		else
 		{
@@ -198,9 +197,7 @@ void				Network::writeClient(unsigned int i) {
 			for (size_t i = 0; i < _toSend.size(); i++)
 			{
 				_proto._setNewPacketHeader(_toSend[i]);
-				_socketGame->_sendto(_toSend[i],
-					_proto._getSizePacket(_toSend[i]),
-					&(_clients[i]->_adr));
+				_socketGame->_sendto(_toSend[i], _proto._getSizePacket(_toSend[i]), &(_clients[i]->_adr));
 			}
 		}
 	}

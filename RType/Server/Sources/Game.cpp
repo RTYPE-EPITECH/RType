@@ -182,7 +182,7 @@ bool Game::loop()
 			  else
 				  handleClientConnexion(_clients[i]);
 		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket());
+		  addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
 		  std::cout << "[Game::loop] " << _id << " find look input " << std::endl;
 		}
@@ -205,7 +205,7 @@ bool Game::loop()
 		}
     }
   // PACKET GAME FINIE
-  std::cout << "Game " << _id << " finished" << std::endl;
+  //std::cout << "Game " << _id << " finished" << std::endl;
   return true;
 }
 
@@ -236,7 +236,7 @@ bool	Game::handleInputClient(Client * c)
 
 void		Game::handleClientConnexion(Client * c)
 {
-	std::cout << "Handle Client connexion" << std::endl;
+	//std::cout << "Handle Client connexion" << std::endl;
 	const char * input = c->getInput();
 	if (input == NULL)
 		return;
@@ -449,7 +449,7 @@ void			Game::addPacketForClients(char * packet, bool t)
 	else
 		std::cout << "FOR ALL" << std::endl;
 	for (size_t i = 0; i < _clients.size(); i++)
-		if (!t || (t && _clients[i]->getState() < POSITION_PACKET_SET))
+		if (!t || (t && _clients[i]->getState() == POSITION_PACKET_SET))
 			_clients[i]->addOutput(packet);
 }
 

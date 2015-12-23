@@ -35,7 +35,6 @@ bool	Client::init(Game * g)
 {
 	if (!_mutexInput->initialize() || !_mutexOutput->initialize())
 		return false;
-	std::cout << " Mutex initialized " << std::endl;
 	player = new Player();
 	_game = g;
 	return true;
@@ -70,7 +69,6 @@ const char *	Client::getOutput()
 	{
 		result = _output[0];
 		_output.erase(_output.begin());
-		std::cout << "[ERRRRRRRRAAAAAAAAAAASSSSEEEE]" << std::endl;
 	}
 	_mutexOutput->unlock();
 	return result;
@@ -82,10 +80,8 @@ std::vector<const char *> Client::getAllOutput()
 	_mutexOutput->lock();
 	if (_output.size() > 0)
 	{
-		std::cout << "[[[[[ " << _output.size() << std::endl;
 		_res = _output;
-		//_output.clear();
-		std::cout << "[CLLLLLLLLLLLLLLEEEEEEEEAAAAAAAAAAAAAARRrr] size : " << _res.size() << std::endl;
+		_output.clear();
 	}
 	_mutexOutput->unlock();
 	return _res;

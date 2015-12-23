@@ -275,7 +275,7 @@ void					WSocket::_send(const char * const msg, const int flags) const {
 void					WSocket::_send(const char * const msg, const int size, const int flags) const {
 	if (send(_fd, msg, size, flags) == SOCKET_ERROR)
 	{
-		std::cerr << WSAGetLastError() << std::endl;
+		std::cerr << "[WSocket::_send] : " << WSAGetLastError() << std::endl;
 		throw std::runtime_error(_strerror());
 	}
 }

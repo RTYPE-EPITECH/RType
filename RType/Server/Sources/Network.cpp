@@ -115,8 +115,10 @@ void				Network::setClient(void) {
 			if (i > 0)
 				std::cout << "Client " << i << " is trying to connect" << std::endl;
 			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
-			if (_clients[i]->haveOutput())
+			if (_clients[i]->haveOutput()) {
+				std::cout << "There are severals output" << std::endl;
 				_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
+			}
 		}
 	}
 }
@@ -125,20 +127,24 @@ bool				Network::readClient(unsigned int i) {
 	char * header = NULL;
 	char * body = NULL;
 	try {
-		std::cout << "Try to read Client " << i << std::endl;
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			header = _socketConnexion->_recv(_proto._getSizePacketHeader(), 0);
+			std::cout << "try to read header..." << std::endl;
+			header = _clients[i]->getSocket()->_recv(_proto._getSizePacketHeader(), 0);
 			if (header == NULL){
 				std::cerr << RED << "Fail to read (TCP) header" << WHITE << std::endl;
 				return false;
 			}
 			_proto._setNewPacketHeader(header);
-			body = _socketConnexion->_recv(_proto._getHeaderSize(), 0);
-			if (body == NULL) {
-				std::cerr << RED << "Fail to read (TCP) body packet" << WHITE << std::endl;
-				return false;
+			if (_proto._getHeaderSize() != 0) {
+				std::cout << "try to read body of size " << _proto._getHeaderSize() << std::endl;
+				body = _clients[i]->getSocket()->_recv(_proto._getHeaderSize(), 0);
+				if (body == NULL) {
+					std::cerr << RED << "Fail to read (TCP) body packet" << WHITE << std::endl;
+					return false;
+				}
 			}
+			std::cout << "Packet correctly read" << std::endl;
 		}
 		else
 		{
@@ -174,12 +180,17 @@ bool				Network::readClient(unsigned int i) {
 }
 
 void				Network::writeClient(unsigned int i) {
+	std::cout << "Select debloqué en écriture..." << std::endl;
 	try {
 		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			for (size_t i = 0; i < _toSend.size(); i++)
+			std::cout << "try to write..." << std::endl;
+			for (size_t i = 0; i < _toSend.size(); i++) {
+				std::cout << "writing..." << std::endl;
 				_socketConnexion->_send(_toSend[i], _proto._getSizePacket(_toSend[i]), 0);
+			}
+			std::cout << "end writing..." << std::endl;
 		}
 		else
 		{

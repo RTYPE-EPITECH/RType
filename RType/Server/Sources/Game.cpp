@@ -149,7 +149,7 @@ bool Game::loop()
 {
 	long long tmp = 0;
 	timer->start();
-	std::cout << "Game " << _id << " loop begin" << std::endl;
+	//std::cout << "Game " << _id << " loop begin" << std::endl;
   while (!isEnded())
     {
 		if (_clients.size() == 0)
@@ -242,7 +242,9 @@ void		Game::handleClientConnexion(Client * c)
 
 	// CONNECT PACKET
 	if (c->getState() == BEGINNING) {
+		std::cout << "[Game::HandleClientConnexion] : state = BEGINNING" << std::endl;
 		if (_proto._getHeaderOpcode() == 1) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 1" << std::endl;
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(_proto._getLastPacket());
 			c->setState(CONNECT_OK);
@@ -252,7 +254,7 @@ void		Game::handleClientConnexion(Client * c)
 	// PARAMETER PACKET
 	else if (c->getState() == CONNECT_OK) {
 		if (_proto._getHeaderOpcode() == 2) {
-			c->protocole._createParametersPacket((int)_id, (int)c->getPlayer()->getId());
+			c->protocole._createIdentifiantPacket((int)_id, (int)c->getPlayer()->getId());
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(PARAMETERS_SET);
 		}

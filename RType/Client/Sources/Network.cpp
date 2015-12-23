@@ -22,19 +22,10 @@ Network::~Network(void) {
 
 void				Network::init(const char *ip, int port) {
 	_socket->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
-
-  std::cout << "New socket ok" << std::endl;
-#ifdef _WIN32
-  Sleep(1000);
-#endif
-  _socket->_connect(ISocket::IPv4, ip, port);
-  std::cout << "connext ok" << std::endl;
-#ifdef _WIN32
-  Sleep(1000);
-#endif
-  _game = new Game();
-  if (_game->init() == false)
-	  throw std::runtime_error("Failed to launch Game");
+	_socket->_connect(ISocket::IPv4, ip, port);std::cout << "connext ok" << std::endl;
+	_game = new Game();
+	if (_game->init() == false)
+		throw std::runtime_error("Failed to launch Game");
 }
 
 void				Network::setClient(void) {

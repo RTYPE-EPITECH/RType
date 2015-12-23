@@ -34,8 +34,8 @@ typedef enum {
 
 class	Game {
 private:
-  std::vector<char *>	input;
-  std::vector<char *>	output;
+  std::vector<const char *>	input;
+  std::vector<const char *>	output;
   IMutex		*_mutexGame;
   IThread		*thread_t;
   ITimer		*time;
@@ -51,14 +51,15 @@ public:
   ~Game();
   bool			init();
   static	void	*loop(void *);
-  std::vector<char *>	getInput();
-  std::vector<char *>	getOutput();
+  std::vector<const char *>	getInput();
+  std::vector<const char *>	getOutput();
 
   bool			haveInput();
   bool			haveOutput();
 
-  void			addInput(char *input);
-  void			addOutput(char *output);
+  ESTATE		getState(void);
+  void			addInput(const char *input);
+  void			addOutput(const char *output);
   bool			getStart();
   void			setStart(bool ret);
   void			setDisplaySFML(SFML *);

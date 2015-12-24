@@ -25,6 +25,7 @@ MonsterFactory * MonsterFactory::getInstance()
 
 bool MonsterFactory::addLibrary(const std::string & m)
 {
+(void)m;
 /*	IDynamicLibrary<IMonster *> * o = NULL;
 #ifdef _WIN32
 	o = new WDynamicLibrary<IMonster *>();
@@ -61,6 +62,7 @@ Monster	* MonsterFactory::getInstanceMonster(const std::string & m)
 	}
 	throw std::runtime_error("Invalid instance monster");
 	return NULL;*/
+	(void)m;
 	return new Monster();
 }
 

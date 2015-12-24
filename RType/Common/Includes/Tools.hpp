@@ -21,7 +21,7 @@ public:
     return (result);
   }
 
- /* template<typename T>
+	template<typename T>
   static std::string		NumberToString(T nb)
   {
     std::ostringstream	oss;
@@ -31,7 +31,7 @@ public:
 
     result = oss.str();
     return (result);
-  }*/
+  }
 
   static std::string getName(EObject type, size_t id);
   static std::string EObjectToString(EObject);

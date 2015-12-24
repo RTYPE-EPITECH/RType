@@ -249,11 +249,11 @@ void		Protocole::_setDeadEntityPacket(const char *packet) {
 ** Getters
 */
 
-char		*Protocole::_getLastPacket(void) const {
+const char		*Protocole::_getLastPacket(void) const {
 	return _listPacket.back();
 }
 
-std::vector<char *>		Protocole::_getListPacket(void) const {
+std::vector<const char *>		Protocole::_getListPacket(void) const {
 	return _listPacket;
 }
 

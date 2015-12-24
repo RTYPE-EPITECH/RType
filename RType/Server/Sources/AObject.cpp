@@ -145,6 +145,8 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   if (getType() == PLAYER)
   {
 	  Player * p = reinterpret_cast<Player *>(this);
+	  if (p->canMove() == false)
+	  	return false;
   }
 
   (this->*tomove[a])(fx, fy, t);

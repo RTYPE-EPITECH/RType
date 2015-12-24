@@ -52,33 +52,37 @@ bool		Game::init()
     return false;
   }
   this->_state = BEGINNING;
-  this->_display = new SFML();
+  //this->_display = new SFML();
   return true;
 }
 
 void	*Game::loop(void * arg)
 {
+std::cout << "Game is running ..." << std::endl;
   Game *_this = reinterpret_cast<Game *>(arg);
-  std::vector<char *>	_lastInput;
-  std::vector<char *>	_lastOutput;
+  std::vector<const char *>	_lastInput;
+  std::vector<const char *>	_lastOutput;
   // check si la partie est commencée
   while (_this->getStart() == false)
     {
+		// CONNECT PACKET
+		if (_this->_state == BEGINNING) {
+			_this->_protocole._createConnectPacket();
+			_this->addOutput(_this->_protocole._getLastPacket());
+			std::cout << "SEND CONNECT PACKET" << std::endl;
+			_this->_state = CONNECT_OK;
+		}
 		_lastInput = _this->getInput();
+	//	std::cout << "[Game::loop] : input.size = " << _lastInput.size() << std::endl;
 		for (unsigned int i = 0; i < _lastInput.size(); i++) {
 			_this->_protocole._setNewPacket(_lastInput.at(i));
-			
-			// CONNECT PACKET
-			if (_this->_state == BEGINNING) {
-				_this->_protocole._createConnectPacket();
-				_this->addOutput(_this->_protocole._getLastPacket());
-				_this->_state = CONNECT_OK;
-			}
-
+		
+			std::cout << "[Game::loop] : _getHeader.opcode = " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
 			// RESPONSE PACKET SEND
 			if (_this->_protocole._getHeaderOpcode() == 0 && _this->_protocole._getResponseOpcode() == 0 && _this->_state == CONNECT_OK) {
 				_this->_protocole._createParametersPacket(0, 0);
 				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "SEND PARAMETERS PACKET" << std::endl;
 				_this->_state = PARAMETERS_SET;
 			}
 
@@ -88,6 +92,7 @@ void	*Game::loop(void * arg)
 				_this->_idPlayer = _this->_protocole._getIdentifiantIdPlayer();
 				_this->_protocole._createResponsePacket(NONE);
 				_this->addOutput(_this->_protocole._getLastPacket());
+				std::cout << "RECEIVE ID PACKET" << std::endl;
 				_this->_state = ID_SET;
 			}
 
@@ -101,14 +106,18 @@ void	*Game::loop(void * arg)
 			}
 			_this->_protocole._createResponsePacket(NONE);
 			_this->addOutput(_this->_protocole._getLastPacket());
+			std::cout << "SEND POSITION PACKET" << std::endl;
 			_this->_state = POSITION_PACKET_SET;
 		}
       // Reçoit idGame idPlayer
       // Appel update (init des sprites)
       // Si reçoit Packet : OK Server a tout envoyé
       //     Client crée packet : CLIENT OK Partie commencée*
-	  if (_this->_state == POSITION_PACKET_SET)
-		  _this->setStart(true);
+		if (_this->_state == POSITION_PACKET_SET)
+		{
+			_this->setStart(true);
+			_this->setDisplaySFML(new SFML());
+		}
     }
 
   while (_this->_display->isOpen())
@@ -120,6 +129,10 @@ void	*Game::loop(void * arg)
       //display.endLoop();
     }
   return arg;
+}
+
+ESTATE		Game::getState() {
+	return _state;
 }
 
 bool		Game::getStart()
@@ -139,9 +152,9 @@ void		Game::setStart(bool ret)
   this->_mutexGame->unlock();
 }
 
-std::vector<char *>	Game::getInput()
+std::vector<const char *>	Game::getInput()
 {
-  std::vector<char *>	tmp;
+  std::vector<const char *>	tmp;
 
   this->_mutexGame->lock();
   tmp = this->input;
@@ -150,9 +163,9 @@ std::vector<char *>	Game::getInput()
   return (tmp);
 }
 
-std::vector<char*>	Game::getOutput()
+std::vector<const char*>	Game::getOutput()
 {
-  std::vector<char *>	tmp;
+  std::vector<const char *>	tmp;
 
   this->_mutexGame->lock();
   tmp = this->output;
@@ -161,16 +174,41 @@ std::vector<char*>	Game::getOutput()
   return (tmp);
 }
 
-void		Game::addInput(char *input)
+void		Game::addInput(const char *input)
 {
   this->_mutexGame->lock();
   this->input.push_back(input);
   this->_mutexGame->unlock();
 }
 
-void		Game::addOutput(char *output)
+void		Game::addOutput(const char *output)
 {
   this->_mutexGame->lock();
   this->output.push_back(output);
   this->_mutexGame->unlock();
+}
+
+void		Game::setDisplaySFML(SFML * sfml)
+{
+	_display = sfml;
+}
+
+bool			Game::haveInput()
+{
+	bool tmp = false;
+	this->_mutexGame->lock();
+	if (this->input.size() > 0)
+		tmp = true;
+	this->_mutexGame->unlock();
+	return (tmp);
+}
+
+bool			Game::haveOutput()
+{
+	bool tmp = false;
+	this->_mutexGame->lock();
+	if (this->output.size() > 0)
+		tmp = true;
+	this->_mutexGame->unlock();
+	return (tmp);
 }

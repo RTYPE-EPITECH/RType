@@ -26,6 +26,7 @@ bool HandleThread::init(Game * cl)
 
 	try {
 		cl->setIdThread(_t->initialize(functionClient, static_cast<void*>(cl)));
+		std::cout << "[Thread] Initialized OK" << std::endl;
 	}
 	catch (const std::runtime_error & msg)
 	{
@@ -48,8 +49,9 @@ bool HandleThread::destroyAll()
 void * HandleThread::functionClient(void * arg)
 {
 	Game * cl = reinterpret_cast<Game *>(arg);
-	(void)cl;
 	// Boucle du jeu
+	std::cout << "Je suis un thread !" << std::endl;
 	cl->loop();
+	std::cout << "Le thread est fini" << std::endl;
 	return arg;
 }

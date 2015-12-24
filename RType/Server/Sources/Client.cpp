@@ -22,11 +22,9 @@ Client::Client()
 	_mutexInput = new WMutex();
 #endif
 	_socket = NULL;
-	/*ip = _ip;
-	port = _port;*/
 	player = NULL;
 	_game = NULL;
-	_state = DISCONNECT;
+	_state = BEGINNING;
 }
 
 Client::~Client()
@@ -50,9 +48,9 @@ size_t	Client::getIdThreadGame()
 	return 0;
 }
 
-char *	Client::getInput()
+const char *	Client::getInput()
 {
-	char * result = NULL;
+	const char * result = NULL;
 	_mutexInput->lock();
 	if (_input.size() > 0)
 	{
@@ -63,9 +61,9 @@ char *	Client::getInput()
 	return result;
 }
 
-char *	Client::getOutput()
+const char *	Client::getOutput()
 {
-	char * result = NULL;
+	const char * result = NULL;
 	_mutexOutput->lock();
 	if (_output.size() > 0)
 	{
@@ -76,16 +74,50 @@ char *	Client::getOutput()
 	return result;
 }
 
-void	Client::addInput(char * e)
+std::vector<const char *> Client::getAllOutput()
+{
+	std::vector<const char *> _res;
+	_mutexOutput->lock();
+	if (_output.size() > 0)
+	{
+		_res = _output;
+		_output.clear();
+	}
+	_mutexOutput->unlock();
+	return _res;
+}
+
+bool			Client::haveInput()
+{
+	bool tmp = false;
+	_mutexInput->lock();
+	if (_input.size() > 0)
+		tmp = true;
+	_mutexInput->unlock();
+	return tmp;
+}
+
+bool			Client::haveOutput()
+{
+	bool tmp = false;
+	_mutexOutput->lock();
+	if (_output.size() > 0)
+		tmp = true;
+	_mutexOutput->unlock();
+	return tmp;
+}
+
+void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();
 	_input.push_back(e);
 	_mutexInput->unlock();
 }
 
-void	Client::addOutput(char * e)
+void	Client::addOutput(const char * e)
 {
 	_mutexInput->lock();
+	std::cout << "ADD OUTPUTT" << std::endl;
 	_output.push_back(e);
 	_mutexInput->unlock();
 }
@@ -100,12 +132,12 @@ void	Client::setPlayer(Player *p)
 	player = p;
 }
 
-STATE_CONNECT Client::getState() const
+ESTATE Client::getState() const
 {
 	return _state;
 }
 
-void Client::setState(STATE_CONNECT e)
+void Client::setState(ESTATE e)
 {
 	_state = e;
 }

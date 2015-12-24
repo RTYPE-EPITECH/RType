@@ -20,8 +20,9 @@
 
 std::vector<size_t>		Game::_ids;
 
-Game::Game(IConditionVariable & c) : _condVar(c)
+Game::Game(IConditionVariable * c)
 {
+_condVar = c;
 	_currwave = 0;
 	_stateScroll = 0;
 	timer = NULL;
@@ -48,29 +49,29 @@ bool Game::addClient(Client * cl)
 {
 	if (getSizeAvailable() <= 0)
 		return false;
-	if (cl->init(this))
+	if (!cl->init(this))
 		return false;
 	mutex->lock();
 	_clients.push_back(cl);
 	mutex->unlock();
-	cl->setState(CONNECT);
-	// send id Game, id Player
-	cl->protocole._createParametersPacket((int)_id, (int)cl->getPlayer()->getId());
-	cl->addOutput(cl->protocole._getLastPacket());
-	// send all init
-	for (size_t i = 0; _initToClient.size() > i; i++)
-		cl->addOutput(_initToClient[i]);
+	cl->setState(BEGINNING);
 	return true;
 }
 
 void Game::removeClient(Client * c)
 {
 	mutex->lock();
-	for (std::vector<Client *>::iterator i = _clients.begin(); 
-			i != _clients.end(); ++i)
+
+	for (std::vector<Client *>::iterator i = _clients.begin();
+	i != _clients.end(); ++i)
 		if ((*i)->getPlayer()->getId() == c->getPlayer()->getId())
+		{
+			(*i)->getPlayer()->die(this);
 			_clients.erase(i);
+			break;
+		}
 	mutex->unlock();
+	std::cout << "Client properly destroyed" << std::endl;
 }
 
 size_t Game::getSizeAvailable() const
@@ -122,77 +123,89 @@ bool Game::init(const std::vector<std::string> & _lib)
 bool Game::haveInput(unsigned long long t)
 {
 	bool check = false;
-	char * input = NULL;
+	const char * input = NULL;
 	mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
-		if ((input = _clients[i]->getInput()))
+		if (_clients[i]->haveInput())
 		{
 			check = true;
 			break;
 		}
 	mutex->unlock();
 	if (!check)
-		_condVar.wait(t);
-	mutex->lock();
+		_condVar->wait(t * 1000);
+	if (check == true)
+		std::cout << "Pas d'input ! " << std::endl;
+	/*mutex->lock();
 	for (unsigned int i = 0; i < _clients.size(); i++)
-		if ((input = _clients[i]->getInput()))
+		if (_clients[i]->haveInput())
 		{
 			check = true;
 			break;
 		}
-	mutex->unlock();
+	mutex->unlock();*/
 	return check;
 }
 
 bool Game::loop()
 {
+	long long tmp = 0;
+	timer->start();
+	std::cout << "Game " << _id << " loop begin" << std::endl;
   while (!isEnded())
     {
 		if (_clients.size() == 0)
 		{
-			std::cout << "0 client, so we wait" << std::endl;
-			_condVar.wait();
+			std::cout << "Game waiting for clients" << std::endl;
+			_condVar->wait();
+			timer->start();
 		}
-		if (haveInput(FPS * 1000 - timer->getElapsedTimeInMicroSec()))
+		tmp = FPS * 100 - timer->getElapsedTimeInSec();
+		if (tmp < 0)
+			tmp = 0;
+		if (haveInput(FPS * 100 - timer->getElapsedTimeInSec()))
 		{
+		std::cout << "[Game::loop] Look Input Game " << _id << std::endl;
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
-				if (GAME_CREATED == _clients[i]->getState())
-				{
-					char * input = NULL;
-					if (!(input = _clients[i]->getInput()))
-						continue;
-					// set input into protocole to have the get/set
-					_proto._setNewPacket(input);
-					handleInputClient(_clients[i]);
-				}
+			  if (POSITION_PACKET_SET == _clients[i]->getState())
+			  {
+				  const char * input = NULL;
+				  if (!(input = _clients[i]->getInput()))
+					  continue;
+				  // set input into protocole to have the get/set
+				  _proto._setNewPacket(input);
+				  handleInputClient(_clients[i]);
+			  }
+				// Client trying to connect
+			  else
+				  handleClientConnexion(_clients[i]);
 		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket());
+		  addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
+		  std::cout << "[Game::loop] " << _id << " find look input " << std::endl;
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
 		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
 		{
-			std::cout << "Game " << _id << "Let's scroll da game" << std::endl;
 		  mutex->lock();
 		  AllMove();
 		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket());
+		  addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
 		  timer->start();
 		}
 		monstersShoot();
 		if (isWaveEnded())
 		{
-			std::cout << "Game " << _id << " wave ended... NEXT" << std::endl;
 			deleteWave();
 			nextWave();
 		}
     }
   // PACKET GAME FINIE
-  std::cout << "Game " << _id << " finished" << std::endl;
+  //std::cout << "Game " << _id << " finished" << std::endl;
   return true;
 }
 
@@ -202,6 +215,7 @@ bool	Game::handleInputClient(Client * c)
     {
       ACTION a = (ACTION)_proto._getActionOpcode();
       Missile * m = NULL;
+	  std::cout << " Client " << c->getPlayer()->getId() << " do an action" << std::endl;
       if (a == SHOOT)
 	{
 	  if ((m = c->getPlayer()->shoot(this)) == NULL)
@@ -213,10 +227,63 @@ bool	Game::handleInputClient(Client * c)
     }
   else
     {
+		std::cout << " Client " << c->getPlayer()->getId() << " is drunk and sent wrong packet" << std::endl;
 		_proto._createResponsePacket(INVALID_ACTION);
 		c->addOutput(_proto._getLastPacket());
     }
   return true;
+}
+
+void		Game::handleClientConnexion(Client * c)
+{
+	//std::cout << "Handle Client connexion" << std::endl;
+	const char * input = c->getInput();
+	if (input == NULL)
+		return;
+	_proto._setNewPacket(input);
+
+	// CONNECT PACKET
+	if (c->getState() == BEGINNING) {
+		std::cout << "[Game::HandleClientConnexion] : state = BEGINNING" << std::endl;
+		if (_proto._getHeaderOpcode() == 1) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 1" << std::endl;
+			c->protocole._createResponsePacket(NONE);
+			c->addOutput(_proto._getLastPacket());
+			c->setState(CONNECT_OK);
+		}
+	}
+
+	// PARAMETER PACKET
+	else if (c->getState() == CONNECT_OK) {
+		std::cout << "[Game::HandleClientConnexion] : state = CONNECT_OK" << std::endl;
+		if (_proto._getHeaderOpcode() == 2) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 2" << std::endl;
+			c->protocole._createIdentifiantPacket((int)_id, (int)c->getPlayer()->getId());
+			c->addOutput(c->protocole._getLastPacket());
+			c->setState(PARAMETERS_SET);
+		}
+	}
+	// ALL init
+	else if (c->getState() == PARAMETERS_SET) {
+		std::cout << "[Game::HandleClientConnexion] : state = PARAMETERS_SET" << std::endl;
+		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 0" << std::endl;
+			for (size_t i = 0; _initToClient.size() > i; i++)
+				c->addOutput(_initToClient[i]);
+			c->setState(ID_SET);
+		}
+	}
+
+	// Game OK, let's begin
+	else if (c->getState() == ID_SET) {
+		std::cout << "[Game::HandleClientConnexion] : state = ID_SET" << std::endl;
+		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 0" << std::endl;
+			c->protocole._createResponsePacket(NONE);
+			c->addOutput(_proto._getLastPacket());
+			c->setState(POSITION_PACKET_SET);
+		}
+	}
 }
 
 unsigned int Game::getIdThread() const
@@ -356,7 +423,7 @@ bool			Game::isWaveEnded() const
 	for (size_t i = 0; i < _waves[_currwave]->size(); i++)
 		if (!(*_waves[_currwave])[i]->isDead())
 			return false;
-	mutex->lock();
+	//mutex->lock();
 	return true;
 }
 
@@ -374,10 +441,16 @@ void			Game::deleteWave()
 	}*/
 }
 
-void			Game::addPacketForClients(char * packet)
+void			Game::addPacketForClients(char * packet, bool t)
 {
+	std::cout << " ADD PACKET FOR CLIENT" << std::endl;
+	if (t)
+		std::cout << "NOT FOR ALL" << std::endl;
+	else
+		std::cout << "FOR ALL" << std::endl;
 	for (size_t i = 0; i < _clients.size(); i++)
-		_clients[i]->addOutput(packet);
+		if (!t || (t && _clients[i]->getState() == POSITION_PACKET_SET))
+			_clients[i]->addOutput(packet);
 }
 
 size_t			Game::getId() const
@@ -387,10 +460,11 @@ size_t			Game::getId() const
 
 void			Game::monstersShoot()
 {
-	for (size_t i = 0; i < _objs->size(); i++)
-		if ((*_objs)[i]->getType() == MONSTER)
-		{
-			Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
-			m->shoot(this);
-		}
+	if (_objs != NULL)
+		for (size_t i = 0; i < _objs->size(); i++)
+			if ((*_objs)[i]->getType() == MONSTER)
+			{
+				Monster * m = reinterpret_cast<Monster*>((*_objs)[i]);
+				m->shoot(this);
+			}
 }

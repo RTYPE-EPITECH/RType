@@ -22,7 +22,7 @@ unsigned int WThread::initialize(void * (*fc)(void*), void* data)
 		if (pDataArray[i] == NULL)
 			break;
 	if (i == MAX_THREAD)
-		return false;
+		throw std::runtime_error("Can't create Thread (Max reached)");
 	pDataArray[i] = data;
 
 	// Create the thread to begin execution on its own.
@@ -36,12 +36,10 @@ unsigned int WThread::initialize(void * (*fc)(void*), void* data)
 		&dwThreadIdArray[i]);   // returns the thread identifier 
 
 	if (hThreadArray[i] == NULL)
-	{
-		std::cerr << "Failed to create Thread" << std::endl;
-		return false;
-	}
+		throw std::runtime_error("Thread canno't be created");
 	if (i == nbThread)
 		maxIdThread++;
+	std::cout << "THREAD OK" << std::endl;
 	nbThread++;
 	return dwThreadIdArray[i];
 }

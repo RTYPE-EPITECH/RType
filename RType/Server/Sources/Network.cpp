@@ -3,7 +3,8 @@
 #include			"Tools.hpp"
 #include			"Client.hpp"
 #include			"Game.hpp"
-
+#include			"ISocket.hpp"
+#include			"Player.hpp"
 #ifdef _WIN32
 # include			"WConditionVariable.hpp"
 #else
@@ -48,11 +49,13 @@ void				Network::newClient(void) {
 	// Si aucune game OK : CReate a game
 	if (check)
 		createGame(newClient);
+	_clients.push_back(newClient);
 }
 
 void				Network::deleteClient(unsigned int i) {
 	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
 	_games[findGame(_clients[i])]->removeClient(_clients[i]);
+	_clients.erase(_clients.begin() + i);
 }
 
 size_t				Network::findGame(Client *c)
@@ -80,6 +83,7 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	_i = new UConditionVariable();
 #endif
 
+	_i->init();
 /* Initialisation des sockets */
 	_socketConnexion->_socket(ISocket::IPv4, ISocket::STREAM, ISocket::TCP);
 	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
@@ -91,50 +95,133 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	Client		*clientEntreStandard = new Client();
 	Client		*clientSocketGame = new Client();
 
+	//	clientEntreStandard->init(NULL);
+		clientSocketGame->init(NULL);
 	clientSocketGame->setSocket(_socketGame);
-	clientEntreStandard->setSocket(entreStandard);
+	//clientEntreStandard->setSocket(entreStandard);
 	_clients.push_back(clientSocketGame);
-	_clients.push_back(clientEntreStandard);
+	//_clients.push_back(clientEntreStandard);
 
-	std::cout << "Welcome on the RType Server (Connexion port : " << portConnexion.c_str() << ")" << std::endl;
+	std::cout << GREEN << "Welcome on the RType Server (Connexion port : " << portConnexion.c_str() << ")" << WHITE << std::endl;
 }
 
 void				Network::setClient(void) {
 	_socketConnexion->_FD_ZERO("rw");
 	_socketConnexion->_FD_SET("r");
+	std::cout << "There are " << _clients.size() << " clients (Server included)" << std::endl;
 	for (unsigned int i = 0; i < _clients.size(); i++) {
-		std::cout << "FD SET CLIENT " << i << std::endl;
-		_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
-		if (_clients[i]->getOutput() != NULL)
-			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
+		if (_clients[i]->getState() < POSITION_PACKET_SET)
+		{
+			if (i > 0)
+				std::cout << "Client " << i << " is trying to connect" << std::endl;
+			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
+			if (_clients[i]->haveOutput()) {
+				std::cout << "There are severals output" << std::endl;
+				_socketConnexion->_FD_SET(_clients[i]->getSocket(), "w");
+			}
+		}
 	}
 }
 
 bool				Network::readClient(unsigned int i) {
-(void)i;
+	char * header = NULL;
+	char * body = NULL;
 	try {
-		//_listClient[i]->_receive();
+		if (_clients[i]->getState() < POSITION_PACKET_SET)
+		{
+			std::cout << "try to read header..." << std::endl;
+			header = _clients[i]->getSocket()->_recv(_proto._getSizePacketHeader(), 0);
+			if (header == NULL){
+				std::cerr << RED << "Fail to read (TCP) header" << WHITE << std::endl;
+				return false;
+			}
+			_proto._setNewPacketHeader(header);
+			if (_proto._getHeaderSize() != 0) {
+				std::cout << "try to read body of size " << _proto._getHeaderSize() << std::endl;
+				body = _clients[i]->getSocket()->_recv(_proto._getHeaderSize(), 0);
+				if (body == NULL) {
+					std::cerr << RED << "Fail to read (TCP) body packet" << WHITE << std::endl;
+					return false;
+				}
+			}
+			std::cout << "Packet correctly read" << std::endl;
+		}
+		else
+		{
+			ISocket::tSocketAdress add;
+			header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
+				if (header == NULL) {
+				std::cerr << RED << "Fail to read (UDP) header" << WHITE << std::endl;
+				return false;
+			}
+			_proto._setNewPacketHeader(header);
+			body = _socketConnexion->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
+			if (body == NULL) {
+				std::cerr << RED << "Fail to read (UDP) body packet" << WHITE << std::endl;
+				return false;
+			}
+			short id = _proto._getHeaderId();
+			for (size_t j = 0; j < _clients.size(); j++)
+				if (_clients[j]->getPlayer()->getId() == (size_t)id)
+				{
+					i = (unsigned int)j;
+					break;
+				}
+			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
+		}
+		const char * packet = _proto._linkPacketHeaderBody(header, body);
+		_clients[i]->addInput(packet);
 	}
-	catch (const std::exception) {
+	catch (const std::runtime_error & e) {
 		deleteClient(i);
+		std::cerr << "[Read Client " << i << "]" << e.what() << std::endl;
 	}
 	return true;
 }
 
 void				Network::writeClient(unsigned int i) {
-(void)i;
-	//_listClient[i]->_send();
+	try {
+		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
+		if (_clients[i]->getState() < POSITION_PACKET_SET)
+		{
+			std::cout << "[Network::writeClient] try to write..." << std::endl;
+			for (size_t j = 0; j < _toSend.size(); j++) {
+				std::cout << "[Network::writeClient] writing..." << std::endl;
+				_clients[i]->getSocket()->_send(_toSend[j], _proto._getSizePacket(_toSend[j]), 0);
+			}
+			std::cout << "[Network::writeClient] end writing..." << std::endl;
+		}
+		else
+		{
+			ISocket::tSocketAdress add;
+			for (size_t j = 0; j < _toSend.size(); j++)
+			{
+				_proto._setNewPacketHeader(_toSend[j]);
+				_socketGame->_sendto(_toSend[j],
+					_proto._getSizePacket(_toSend[j]),
+					&(_clients[j]->_adr));
+			}
+		}
+	}
+	catch (const std::exception) {
+		std::cerr << RED << "Failed to write client (disconnect)" << WHITE << std::endl;
+		deleteClient(i);
+	}
 	return;
 }
 
 void				Network::createGame(Client * e)
 {
-	Game * g = new Game(*_i);
+	Game * g = new Game(_i);
 	g->init(_init);
-	e->init(g);
-	_handle.init(g);
-	g->addClient(e);
-	_games.push_back(g);
+	if (g->addClient(e))
+	{
+		_handle.init(g);
+		std::cout << BLUE << "Client added" << WHITE <<  std::endl;
+		_games.push_back(g);
+	}
+	else
+		std::cout << RED << "Client not added !" << WHITE << std::endl;
 }
 
 void				Network::run(void)
@@ -142,13 +229,13 @@ void				Network::run(void)
 	while (true) {
 		std::cout << "Set client ..." << std::endl;
 		setClient();
-		std::cout << "Select ..." << std::endl;
-		_socketConnexion->_select(60, 0);
-
+		std::cout << YELLOW << "Select ... (Timeout : 60s)" << WHITE << std::endl;
+		_socketConnexion->_select(5, 0);
+		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
+		_i->sendSignal();
 		// Nouveau Client
 		if (_socketConnexion->_FD_ISSET('r') == true) {
 			newClient();
-			std::cout << "New Client" << std::endl;
 		}
 		else
 		{

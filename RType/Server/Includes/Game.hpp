@@ -31,7 +31,7 @@ class IMutex;
 class Game
 {
 public:
-	Game(IConditionVariable &);
+	Game(IConditionVariable *);
 	~Game();
 	bool init(const std::vector<std::string> &);
 	bool addClient(Client *);
@@ -46,7 +46,7 @@ public:
 	bool isEnded(bool op = true) const;
 	size_t getSizeAvailable() const;
 
-	void addPacketForClients(char *);
+	void addPacketForClients(char *, bool t = false);
 
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
 	Protocole			_proto;
@@ -57,7 +57,7 @@ private:
 
 	static std::vector<size_t> _ids;
 
-	IConditionVariable & _condVar;
+	IConditionVariable * _condVar;
 	IMutex				* mutex;
 	ITimer				* timer;
 	size_t				_currwave;
@@ -78,6 +78,7 @@ private:
 
 	// factorisation 
 	bool handleInputClient(Client *);
+	void handleClientConnexion(Client *);
 	bool conditionCollision(AObject *, AObject *) const;
 
 	AObject* listPlayer(AObject *) const;

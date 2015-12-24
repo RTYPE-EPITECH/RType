@@ -14,7 +14,6 @@
 
 # include					"Game.hpp"
 
-
 # define		RED			"\x1B[31m"
 # define		GREEN		"\033[32m"
 # define		YELLOW		"\033[33m"
@@ -39,6 +38,7 @@ public:
 private:
 	ISocket					*_socket;
 	Game					*_game;
+	Protocole				_proto;
 	
 	void					setClient(void);
 	bool					readServer(void);

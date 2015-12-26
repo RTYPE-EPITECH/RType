@@ -49,7 +49,7 @@ void				Network::setClient(void) {
 		_socketConnexion->_FD_ZERO("rw");
 		_socketConnexion->_FD_SET("r");
 		if (_game->haveOutput()) {
-			std::cout << "FD SET Write (Connexion)" << std::endl;
+		//	std::cout << "FD SET Write (Connexion)" << std::endl;
 			_socketConnexion->_FD_SET("w");
 		}
 	}
@@ -58,7 +58,7 @@ void				Network::setClient(void) {
 		_socketConnexion->_FD_ZERO("rw");
 		_socketConnexion->_FD_SET(_socketGame, "r");
 		if (_game->haveOutput()) {
-			std::cout << "FD SET Write (Game)" << std::endl;
+			//std::cout << "FD SET Write (Game)" << std::endl;
 			_socketConnexion->_FD_SET(_socketGame, "w");
 		}
 	}
@@ -119,7 +119,7 @@ bool				Network::readServerUDP(void)
 void				Network::writeServerTCP(void) {
 
 	std::vector<const char *> listOutput = _game->getOutput();
-	std::cout << "Write server TCP (" << listOutput.size() << " packets)" << std::endl;
+	std::cout << "[Network::writeServerTCP] : Write server TCP (" << listOutput.size() << " packets)" << std::endl;
 	for (unsigned int i = 0; i < listOutput.size(); i++)
 		_socketConnexion->_send(listOutput[i], _proto._getSizePacket(listOutput[i]), 0);
 	return;
@@ -127,7 +127,7 @@ void				Network::writeServerTCP(void) {
 
 void				Network::writeServerUDP(void) {
 	std::vector<const char *> listOutput = _game->getOutput();
-	std::cout << "Write server UDP (" << listOutput.size() << " packets)" << std::endl;
+	std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
 	for (unsigned int i = 0; i < listOutput.size(); i++)
 		_socketConnexion->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), &add);
 	return;
@@ -137,11 +137,11 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
-		std::cout << "Select (Timeout : " << tmp << " ms) ";
+		/*std::cout << "Select (Timeout : " << tmp << " ms) ";
 		if (_game->getStart() == false)
 			std::cout << " Game not OK" << std::endl;
 		else
-			std::cout << " Game launched" << std::endl;
+			std::cout << " Game launched" << std::endl;*/
 		_socketConnexion->_select(0, tmp);
 		if (_socketConnexion->_FD_ISSET('w') == true)
 			writeServerTCP();

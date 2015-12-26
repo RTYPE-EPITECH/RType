@@ -12,8 +12,9 @@ Protocole::Protocole(unsigned int id) {
 	_generateData[6] = NULL;
 	_generateData[7] = NULL;
 	_generateData[8] = &Protocole::_setScrollingPacket;
-	_generateData[9] = &Protocole::_setIdentifiantPacket;
-	_generateData[10] = &Protocole::_setDeadEntityPacket;
+	_generateData[9] = NULL;
+	_generateData[10] = &Protocole::_setIdentifiantPacket;
+	_generateData[11] = &Protocole::_setDeadEntityPacket;
 }
 
 Protocole::~Protocole(void) {}
@@ -178,7 +179,7 @@ void		Protocole::_createIdentifiantPacket(unsigned int idPlayer, unsigned int nb
 	this->_listPacket.push_back(result);
 }
 
-void		Protocole::_createDeadEntityPacket(const std::string &type, const std::string &name) {
+void		Protocole::_createDeadEntityPacket(int type, const std::string &name) {
 	char *result = new char[sizeof(headerPacket) + sizeof(deadEntityPacket)];
 	memset(result, 0, sizeof(headerPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
@@ -188,8 +189,7 @@ void		Protocole::_createDeadEntityPacket(const std::string &type, const std::str
 	this->_header.size = sizeof(deadEntityPacket);
 	this->_deadEntity.name.lenght = static_cast<uint8_t>(name.size());
 	memcpy(&(this->_deadEntity.name.data), name.data(), name.size());
-	this->_deadEntity.type.lenght = static_cast<uint8_t>(type.size());
-	memcpy(&(this->_deadEntity.type.data), type.data(), type.size());
+	this->_deadEntity.type = static_cast<uint8_t>(type);
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	memcpy(result + sizeof(headerPacket), &(this->_identifiant), sizeof(identifantPacket));
 	this->_listPacket.push_back(result);
@@ -347,12 +347,8 @@ uint8_t			Protocole::_getDeadEntityNameLenght(void) const {
 	return this->_deadEntity.name.lenght;
 }
 
-uint8_t			*Protocole::_getDeadEntityTypeData(void) const {
-	return (uint8_t *)this->_deadEntity.type.data;
-}
-
-uint8_t			Protocole::_getDeadEntityTypeLenght(void) const {
-	return this->_deadEntity.type.lenght;
+uint8_t			Protocole::_getDeadEntityType(void) const {
+	return this->_deadEntity.type;
 }
 
 unsigned int	Protocole::_getSizePacket(const char *packet) const {

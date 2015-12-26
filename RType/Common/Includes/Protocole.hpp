@@ -44,7 +44,7 @@ typedef struct {
 }					identifantPacket;
 
 typedef struct {
-	string			type;
+	uint8_t			type;
 	string			name;
 }					deadEntityPacket;
 
@@ -127,7 +127,7 @@ public:
 	void					_createScrollingPacket(int);
 	void					_createQuitPacket(void);
 	void					_createIdentifiantPacket(unsigned int, unsigned int);
-	void					_createDeadEntityPacket(const std::string &, const std::string &);
+	void					_createDeadEntityPacket(int, const std::string &);
 	/*
 	** Functions to handle new Packets
 	*/
@@ -164,8 +164,7 @@ public:
 	uint8_t					_getIdentifiantNbGame(void) const;
 	uint8_t					_getDeadEntityNameLenght(void) const;
 	uint8_t					*_getDeadEntityNameData(void) const;
-	uint8_t					_getDeadEntityTypeLenght(void) const;
-	uint8_t					*_getDeadEntityTypeData(void) const;
+	uint8_t					_getDeadEntityType(void) const;
 	unsigned int			_getSizePacket(const char *) const;
 	unsigned int			_getSizePacketHeader(void) const;
 

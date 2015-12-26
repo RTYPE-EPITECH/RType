@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include "HandleThread.hpp"
 #include "Game.hpp"
 #ifdef _WIN32

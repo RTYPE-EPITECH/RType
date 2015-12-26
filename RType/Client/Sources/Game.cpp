@@ -5,7 +5,7 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-** Last update Tue Dec 15 17:29:23 2015 Jérémy MATHON
+** Last update Sat Dec 26 22:27:16 2015 Jérémy MATHON
 */
 
 #include	"Game.hpp"
@@ -132,53 +132,53 @@ void	Game::initConnexion(void) {
 
 void	*Game::loop(void * arg)
 {
-std::cout << "Game is running ..." << std::endl;
+  std::cout << "Game is running ..." << std::endl;
   Game *_this = reinterpret_cast<Game *>(arg);  
   try {
-	  _this->initConnexion();
+    _this->initConnexion();
   }
   catch (const std::runtime_error & e)
-  {
-	  std::cerr << "[Connexion INIT] " << e.what() << std::endl;
-	  return NULL;
-  }
+    {
+      std::cerr << "[Connexion INIT] " << e.what() << std::endl;
+      return NULL;
+    }
   std::vector<const char *> _lastInput;
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
-		if(_lastInput.size() == 0)
-			_lastInput = _this->getInput();
-		if (_lastInput.size() > 0) {
-			std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
-			_this->_protocole._setNewPacket(_lastInput[_lastInput.size()]);
+      if(_lastInput.size() == 0)
+	_lastInput = _this->getInput();
+      if (_lastInput.size() > 0) {
+	std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
+	_this->_protocole._setNewPacket(_lastInput[_lastInput.size()]);
 
-			// POSITIONPACKET
-			if (_this->_protocole._getHeaderOpcode() == 4) {
-				std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-				for (unsigned int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
-					_this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
-						(EObject)(_this->_protocole._getPositionType(i)),
-						(float)(_this->_protocole._getPositionPosX(i)),
-						(float)(_this->_protocole._getPositionPosY(i)));
-			}
+	// POSITIONPACKET
+	if (_this->_protocole._getHeaderOpcode() == 4) {
+	  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+	  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
+	    _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+				    (EObject)(_this->_protocole._getPositionType(i)),
+				    (float)(_this->_protocole._getPositionPosX(i)),
+				    (float)(_this->_protocole._getPositionPosY(i)));
+	}
 
-			// DEADENTITYPACKET
-			if (_this->_protocole._getHeaderOpcode() == 10) {
-				std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
-				_this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
-					(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
-			}
-		}
-       ACTION  a = _this->_display->getInput();
-       if (a != UNKNOW_ACTION)
-       {
-      	_this->_protocole._createActionPacket(a);
-      	_this->addOutput(_this->_protocole._getLastPacket());
-		}
-		//_this->_protocole._createPingPacket();
-		//_this->addOutput(_this->_protocole._getLastPacket());
-		_this->_display->clear();
-		_this->_display->display();
+	// DEADENTITYPACKET
+	if (_this->_protocole._getHeaderOpcode() == 10) {
+	  std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
+	  _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
+				  (EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
+	}
+      }
+      ACTION  a = _this->_display->getInput();
+      if (a != UNKNOW_ACTION)
+	{
+	  _this->_protocole._createActionPacket(a);
+	  _this->addOutput(_this->_protocole._getLastPacket());
+	}
+      //_this->_protocole._createPingPacket();
+      //_this->addOutput(_this->_protocole._getLastPacket());
+      _this->_display->clear();
+      _this->_display->display();
     }
   return arg;
 }

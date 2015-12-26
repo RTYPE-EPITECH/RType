@@ -17,13 +17,21 @@ RSprite::RSprite(EObject type, float x, float y)
 
   static bool				check = true;
   static std::map<EObject, int *>	gen;
-  int					player[4] = {100, 0, 33, 25};
-  int					missile[4] = {0, 0, 0, 0};
-  int					obstacle[4] = {0, 0, 0, 0};
-  int					monster[4] = {0, 0, 0, 0};
+  int					player[4] = { 0, 0, 0, 0 };
+  int					missile[4] = { 0, 0, 0, 0 };
+  int					obstacle[4] = { 0, 0, 0, 0 };
+  int					monster[4] = { 42, 43, 44, 45 };
+
+  // PIERRE : N'ESSAIE PAS CA, J'AI TEST, C'EST PAS CA LE PROBLEME ! <3
+ /* int					*monster = new int[4];
+  monster[0] = 0;
+  monster[1] = 0;
+  monster[2] = 0;
+  monster[3] = 0;*/
 
   if (check)
     {
+		std::cout << "[Rsprite::RSprite] : check ok" << std::endl;
       gen[PLAYER] = player;
       gen[MISSILE] = missile;
       gen[OBSTACLE] = obstacle;
@@ -32,10 +40,18 @@ RSprite::RSprite(EObject type, float x, float y)
     }
   if (gen.count(type) > 0)
     {
+		std::cout << "[RSprite::RSprite] : gen[type][0] : " << (int)gen[type][0] << std::endl;
+		std::cout << "[RSprite::RSprite] : gen[type][1] : " << (int)gen[type][1] << std::endl;
+		std::cout << "[RSprite::RSprite] : gen[type][2] : " << (int)gen[type][2] << std::endl;
+		std::cout << "[RSprite::RSprite] : gen[type][3] : " << (int)gen[type][3] << std::endl;
       this->_sprite.setTexture(this->_textureFactory->_stack[type]->_texture, false);
-      this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
+	  std::cout << "[RSprite::RSprite] : Texture set" << std::endl;
+	  this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
+	  std::cout << "[RSprite::RSprite] : TextureRect set" << std::endl;
       this->_sprite.setPosition(x, y);
+	  std::cout << "[RSprite::RSprite] : Position set" << std::endl;
       this->_sprite.setScale(2, 2);
+	  std::cout << "[RSprite::RSprite] : Scale set" << std::endl;
     }
   else
     throw std::runtime_error(std::string("Texture does not exist : " + Tools::NumberToString((int)type)) + " x : " + Tools::NumberToString((int)x) + " y " + Tools::NumberToString((int)y));

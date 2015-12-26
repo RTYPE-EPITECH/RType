@@ -50,6 +50,13 @@ bool			TextureFactory::_exist(EObject type)
   return true;
 }
 
+#ifdef _WIN32
+	#include <Windows.h>
+	#include <stdio.h>
+	#include <tchar.h>
+	#include <io.h>
+#endif
+
 bool			TextureFactory::setAssets()
 {
   /* int			nbr = 1;
@@ -63,6 +70,25 @@ bool			TextureFactory::setAssets()
      nbr++;
      }
      return true; */
+	std::cout << "[TextureFactory::setAssets] : init Assets " << std::endl;
+
+#ifdef _WIN32
+
+
+	TCHAR buffer[4096];
+	GetCurrentDirectory(4096, buffer);
+	_tprintf(TEXT("[TextureFactory::setAssets] : getCurrentDirectorty : %s\n"), buffer);
+	if (_access("C:\\Users\\dewael_a\\Documents\\RType\\RType\\Client\\Assets\\r-typesheet1.gif", 0) == -1)
+		std::cout << "NIQUE TES PUTAINS DE MORT" << std::endl;
+	if (!initialize(PLAYER, "C:\\Users\\dewael_a\\Documents\\RType\\RType\\Client\\Assets\\r-typesheet1.gif"))
+		return false;
+	if (!initialize(MISSILE, "../../Client/Assets/r-typesheet1.gif"))
+		return false;
+	if (!initialize(OBSTACLE, "../../Client/Assets/r-typesheet39.gif"))
+		return false;
+	if (!initialize(MONSTER, "../RType/Client/Assets/r-typesheet14.gif"))
+		return false;
+#else
   if (!initialize(PLAYER, "RType/Client/Assets/r-typesheet1.gif"))
     return false;
   if (!initialize(MISSILE, "RType/Client/Assets/r-typesheet1.gif"))
@@ -71,6 +97,7 @@ bool			TextureFactory::setAssets()
     return false;
   if (!initialize(MONSTER, "RType/Client/Assets/r-typesheet14.gif"))
     return false;
+#endif
 /*
   while (nbr < 45)
     {

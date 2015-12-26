@@ -275,7 +275,7 @@ void				Network::run(void)
 		std::cout << "Set client ..." << std::endl;
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
-		_socketConnexion->_select(15, 0);
+		_socketConnexion->_select(0, 0);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {

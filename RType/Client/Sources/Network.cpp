@@ -57,7 +57,7 @@ _socketConnexion->_FD_ZERO("rw");
 	{
 		_socketConnexion->_FD_SET(_socketGame, "r");
 		if (_game->haveOutput()) {
-			std::cout << "FD SET Write (Game)" << std::endl;
+			//std::cout << "FD SET Write (Game)" << std::endl;
 			_socketConnexion->_FD_SET(_socketGame, "w");
 		}
 	}
@@ -129,8 +129,8 @@ void				Network::writeServerUDP(void) {
 	if (_game->getStart() == true)
 	{
 		std::vector<const char *> listOutput = _game->getOutput();
-		if (listOutput.size() > 0)
-			std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
+		//if (listOutput.size() > 0)
+		//	std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
 		for (unsigned int i = 0; i < listOutput.size(); i++)
 			_socketGame->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), 0, &add);
 

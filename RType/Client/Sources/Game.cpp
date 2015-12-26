@@ -167,12 +167,14 @@ std::cout << "Game is running ..." << std::endl;
 					(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
 			}
 		}
-//       ACTION  a = _this->_display->getInput();
- //     _this->_protocole._createActionPacket(a);
-  //    _this->addOutput(_this->_protocole._getLastPacket());
-      //display.endLoop();
-		_this->_protocole._createPingPacket();
-		_this->addOutput(_this->_protocole._getLastPacket());
+       ACTION  a = _this->_display->getInput();
+       if (a != UNKNOW_ACTION)
+       {
+      	_this->_protocole._createActionPacket(a);
+      	_this->addOutput(_this->_protocole._getLastPacket());
+		}
+		//_this->_protocole._createPingPacket();
+		//_this->addOutput(_this->_protocole._getLastPacket());
 		_this->_display->clear();
 		_this->_display->display();
     }

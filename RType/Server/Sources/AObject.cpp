@@ -198,7 +198,7 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 void	AObject::die(Game *g)
 {
 	// create Packet die
-	_proto._createDeadEntityPacket((Tools::getName(type, id)).c_str(), "unknown");
+	_proto._createDeadEntityPacket(type, (Tools::getName(type, id)).c_str());
 	g->addPacketForClients(_proto._getLastPacket());
 	_dead = true;
 }

@@ -250,6 +250,7 @@ bool	Game::handleInputClient(Client * c)
 
 void		Game::handleClientConnexion(Client * c)
 {
+std::cout << "Game::handleClientConnexion" << std::endl;
 	const char * input = c->getInput();
 	if (input == NULL)
 		return;
@@ -259,6 +260,7 @@ void		Game::handleClientConnexion(Client * c)
 	if (c->getState() == BEGINNING) {
 		_log->addLog(std::string("[Game::handleClientConnexion] : state = BEGINNING"));
 		if (_proto._getHeaderOpcode() == 1) {
+			std::cout << "CONNECT PACKET" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 1"));
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(c->protocole._getLastPacket());
@@ -270,6 +272,7 @@ void		Game::handleClientConnexion(Client * c)
 	else if (c->getState() == CONNECT_OK) {
 		_log->addLog(std::string("[Game::HandleClientConnexion] : state = CONNECT_OK"));
 		if (_proto._getHeaderOpcode() == 2) {
+			std::cout << "ID PACKET" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 2"));
 			c->protocole._createIdentifiantPacket((int)_id, (int)c->getPlayer()->getId());
 			c->addOutput(c->protocole._getLastPacket());
@@ -280,7 +283,11 @@ void		Game::handleClientConnexion(Client * c)
 	else if (c->getState() == PARAMETERS_SET) {
 		_log->addLog(std::string("[Game::HandleClientConnexion] : state = PARAMETERS_SET"));
 		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << "INIT CLIENT" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
+			_proto._setNewPacket(_initToClient[0]);
+			std::cout << "Send : " <<  _proto._getArrayPositionLenght() << " sprites" << std::endl;
+			sleep(1);
 			for (size_t i = 0; _initToClient.size() > i; i++)
 				c->addOutput(_initToClient[i]);
 			c->setState(ID_SET);
@@ -291,11 +298,11 @@ void		Game::handleClientConnexion(Client * c)
 	else if (c->getState() == ID_SET) {
 		_log->addLog(std::string("[Game::HandleClientConnexion] : state = ID_SET"));
 		if (_proto._getHeaderOpcode() == 0) {
+			std::cout << " POSITION PACKET " << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
-			mutex->lock();
 			// faire spawn le joueur
 			size_t x = 5, y = 5, h = 0;
 			c->getPlayer()->setY(y);
@@ -312,7 +319,7 @@ void		Game::handleClientConnexion(Client * c)
 				h++;
 			}
 			_log->addLog(std::string("[Game::HandleClientConnexion] Player spawn"));
-
+			std::cout << "PLAYER SPAWN END -------------------------------------------------" << std::endl;
 			int tmp = 0;
 			// Send for the first time ALL the sprite position on the scene
 			if (_objs != NULL)
@@ -353,8 +360,10 @@ void		Game::handleClientConnexion(Client * c)
 					tmp++;
 				}
 			}
-						mutex->unlock();
 			_proto._putPositionPacketOnList();
+			_proto._setNewPacket(_proto._getLastPacket());
+
+			std::cout << "[GAME :: HANDLE CONNEXION CLIENT ]There are : " << _proto._getArrayPositionLenght() << " sprites on packet " << std::endl;
 
 			c->addOutput(_proto._getLastPacket());
 			_log->addLog(std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites"));
@@ -512,7 +521,6 @@ bool			Game::isWaveEnded() const
 	for (size_t i = 0; i < _waves[_currwave]->size(); i++)
 		if (!(*_waves[_currwave])[i]->isDead())
 			return false;
-	//mutex->lock();
 	return true;
 }
 

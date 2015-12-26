@@ -94,6 +94,7 @@ void	Game::initConnexion(void) {
 			// INIT SPRITE PACKET
 			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == ID_SET) {
 				this->setDisplaySFML(new SFML());
+				std::cout << "RECEIVE " << this->_protocole._getArrayPositionLenght() << "sprites" << std::endl;
 				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
 					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
 						(EObject)(this->_protocole._getPositionType(i)),
@@ -105,14 +106,14 @@ void	Game::initConnexion(void) {
 				this->_state = POSITION_PACKET_SET;
 			}
 
-			// LISTPOSITIONPACKET -- inutile
+			/*// LISTPOSITIONPACKET -- inutile
 			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == POSITION_PACKET_SET) {
 				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
 					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
 						(EObject)(this->_protocole._getPositionType(i)),
 						(float)(this->_protocole._getPositionPosX(i)),
 						(float)(this->_protocole._getPositionPosY(i)));
-			}
+			}*/
 		}
 		if (this->_state == POSITION_PACKET_SET && !this->haveOutput())
 		{

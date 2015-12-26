@@ -200,6 +200,8 @@ bool				Network::readClientUDP()
 		if (i != -1)
 		{
 			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
+			if (_clients[i]->getState() < POSITION_PACKET_SET)
+				throw std::runtime_error("connexion not finished yet");
 			_clients[i]->isUDPset = true;
 			const char * packet = _proto._linkPacketHeaderBody(header, body);
 			_clients[i]->addInput(packet);

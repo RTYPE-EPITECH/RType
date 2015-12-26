@@ -280,7 +280,7 @@ uint16_t		Protocole::_getHeaderSize(void) const {
 }
 
 uint32_t			Protocole::_getArrayPositionLenght(void) const {
-	return this->_arrayPositionPacket.lenght / sizeof(positionPacket);
+	return this->_arrayPositionPacket.lenght;
 }
 
 uint8_t		Protocole::_getPositionPosX(size_t pos) const {

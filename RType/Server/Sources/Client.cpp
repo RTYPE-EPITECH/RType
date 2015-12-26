@@ -30,7 +30,6 @@ Client::Client()
 
 Client::~Client()
 {
-std::cout << "CLIIIIIIIIIIIIIIIIIIEEEEEEEEEEEEEENNNNNNNNNNNNNNT DEEEEEEEEEEEELEEEEEEEEEEEEETE" << std::endl;
 }
 
 bool	Client::init(Game * g)
@@ -136,17 +135,22 @@ void	Client::setPlayer(Player *p)
 
 ESTATE Client::getState() const
 {
-_mutexInput->lock();
+if (_mutexInput != NULL)
+	_mutexInput->lock();
 ESTATE tmp = _state;
-_mutexInput->unlock();
-	return tmp;
+if (_mutexInput != NULL)
+	_mutexInput->unlock();
+return tmp;
 }
 
 void Client::setState(ESTATE e)
 {
 _mutexInput->lock();
+std::cout << "GET STATE CLIENT " << std::endl;
 	_state = e;
+	std::cout << "END GET STATE CLIENT " << std::endl;
 _mutexInput->unlock();
+
 }
 
 void			Client::setSocket(ISocket *s)

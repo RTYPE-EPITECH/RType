@@ -287,7 +287,7 @@ void		Game::handleClientConnexion(Client * c)
 		if (_proto._getHeaderOpcode() == 0) {
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
 			c->protocole._createResponsePacket(NONE);
-			c->addOutput(_proto._getLastPacket());
+			c->addOutput(c->protocole._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
 
 			// faire spawn le joueur

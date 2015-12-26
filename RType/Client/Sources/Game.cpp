@@ -83,7 +83,7 @@ void	Game::initConnexion(void) {
 			}
 
 			// IDENTIFIANT PACKET
-			if (this->_protocole._getHeaderOpcode() == 9) {
+			if (this->_protocole._getHeaderOpcode() == 10 && this->_state == PARAMETERS_SET) {
 				this->_idGame = this->_protocole._getIdentifiantNbGame();
 				this->_idPlayer = this->_protocole._getIdentifiantIdPlayer();
 				this->_protocole._createResponsePacket(NONE);
@@ -92,27 +92,32 @@ void	Game::initConnexion(void) {
 				this->_state = ID_SET;
 			}
 
-			// LISTPOSITIONPACKET
-			if (this->_protocole._getHeaderOpcode() == 4) {
+			// INIT SPRITE PACKET
+			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == ID_SET) {
+				this->setDisplaySFML(new SFML());
+				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
+					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
+						(EObject)(this->_protocole._getPositionType(i)),
+						(float)(this->_protocole._getPositionPosX(i)),
+						(float)(this->_protocole._getPositionPosY(i)));
+				this->_protocole._createResponsePacket(NONE);
+				this->addOutput(this->_protocole._getLastPacket());
+				std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
+				this->_state = POSITION_PACKET_SET;
+			}
+
+			// LISTPOSITIONPACKET -- inutile
+			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == POSITION_PACKET_SET) {
 				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
 					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
 						(EObject)(this->_protocole._getPositionType(i)),
 						(float)(this->_protocole._getPositionPosX(i)),
 						(float)(this->_protocole._getPositionPosY(i)));
 			}
-			this->_protocole._createResponsePacket(NONE);
-			this->addOutput(this->_protocole._getLastPacket());
-			std::cout << "SEND POSITION PACKET" << std::endl;
-			this->_state = POSITION_PACKET_SET;
 		}
-		// Reçoit idGame idPlayer
-		// Appel update (init des sprites)
-		// Si reçoit Packet : OK Server a tout envoyé
-		//     Client crée packet : CLIENT OK Partie commencée*
 		if (this->_state == POSITION_PACKET_SET)
 		{
 			this->setStart(true);
-			this->setDisplaySFML(new SFML());
 			std::cout << "The game is launched" << std::endl;
 			this->_protocole._createPingPacket();
 			this->addOutput(this->_protocole._getLastPacket());
@@ -123,8 +128,15 @@ void	Game::initConnexion(void) {
 void	*Game::loop(void * arg)
 {
 std::cout << "Game is running ..." << std::endl;
-  Game *_this = reinterpret_cast<Game *>(arg);
-  _this->initConnexion();
+  Game *_this = reinterpret_cast<Game *>(arg);  
+  try {
+	  _this->initConnexion();
+  }
+  catch (const std::runtime_error & e)
+  {
+	  std::cerr << "[Connexion INIT] " << e.what() << std::endl;
+	  return NULL;
+  }
   std::vector<const char *> _lastInput;
   _lastInput.clear();
   while (_this->_display->isOpen())

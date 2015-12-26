@@ -137,11 +137,11 @@ void				Network::run(void) {
 	while (true) {
 		setClient();
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
-		std::cout << "Select (Timeout : " << tmp << " ms) ";
+		/*std::cout << "Select (Timeout : " << tmp << " ms) ";
 		if (_game->getStart() == false)
 			std::cout << " Game not OK" << std::endl;
 		else
-			std::cout << " Game launched" << std::endl;
+			std::cout << " Game launched" << std::endl;*/
 		_socketConnexion->_select(0, tmp);
 		if (_socketConnexion->_FD_ISSET('w') == true)
 			writeServerTCP();

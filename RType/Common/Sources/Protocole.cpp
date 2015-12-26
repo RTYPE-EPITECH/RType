@@ -12,8 +12,9 @@ Protocole::Protocole(unsigned int id) {
 	_generateData[6] = NULL;
 	_generateData[7] = NULL;
 	_generateData[8] = &Protocole::_setScrollingPacket;
-	_generateData[9] = &Protocole::_setIdentifiantPacket;
-	_generateData[10] = &Protocole::_setDeadEntityPacket;
+	_generateData[9] = NULL;
+	_generateData[10] = &Protocole::_setIdentifiantPacket;
+	_generateData[11] = &Protocole::_setDeadEntityPacket;
 }
 
 Protocole::~Protocole(void) {}

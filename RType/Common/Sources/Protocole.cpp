@@ -213,7 +213,8 @@ const char		*Protocole::_linkPacketHeaderBody(const char *header, const char *bo
 	char *result = new char[sizeof(headerPacket) + tmp.size];
 	memset(result, 0, sizeof(headerPacket) + tmp.size);
 	memcpy(result, header, sizeof(headerPacket));
-	memcpy(result + sizeof(headerPacket), body, tmp.size);
+	if (tmp.size > 0)
+		memcpy(result + sizeof(headerPacket), body, tmp.size);
 	return result;
 }
 

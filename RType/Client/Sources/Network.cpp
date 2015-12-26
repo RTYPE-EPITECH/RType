@@ -132,7 +132,7 @@ void				Network::writeServerUDP(void) {
 		if (listOutput.size() > 0)
 			std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
 		for (unsigned int i = 0; i < listOutput.size(); i++)
-			_socketConnexion->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), &add);
+			_socketGame->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), 0, &add);
 
 	}
 	return;
@@ -152,11 +152,8 @@ void				Network::run(void) {
 			writeServerTCP();
 		if (_socketConnexion->_FD_ISSET('r') == true)
 			readServerTCP();
-		/*if (_socketConnexion->_FD_ISSET(_socketGame, 'w'))
-		{
-		std::cout << "Write to Server" << std::endl;*/
+		if (_socketConnexion->_FD_ISSET(_socketGame, 'w'))
 			writeServerUDP();
-		//}
 		if (_socketConnexion->_FD_ISSET(_socketGame, 'r'))
 			readServerUDP();
 	}

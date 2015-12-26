@@ -10,8 +10,8 @@
 
 Player::Player(void) : AObject()
 {
-	width = 100;
-	height = 100;
+	width = 35;
+	height = 18;
 	life = 10;
 	maxLife = 10;
 	maxMissile = 3;

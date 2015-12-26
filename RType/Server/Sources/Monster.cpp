@@ -12,6 +12,8 @@ Monster::Monster(void) : AObject()
 {
 	life = 1;
 	maxLife = 1;
+	width = 59;
+	height = 48;
 	monsterType = "normalMonster";
 #ifdef _WIN32
 	_t = new WTimer();

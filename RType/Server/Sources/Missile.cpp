@@ -3,6 +3,8 @@
 Missile::Missile(void) : AObject()
 {
 	type = MISSILE;
+	width = 48;
+	height = 15;
 }
 
 Missile::~Missile()

@@ -134,12 +134,15 @@ void					USocket::_FD_ZERO(const std::string &mode) {
 	else if (mode == "rw") {
 		FD_ZERO(&_readfds);
 		FD_ZERO(&_writefds);
+		_fd_max = 0;
 	}
 	else
 		throw std::runtime_error("[Error]: bad mode for _FD_ZERO()");
 }
 
 void					USocket::_FD_SET(const std::string &mode) {
+		if (_fd > _fd_max)
+		_fd_max = _fd;
 	if (mode == "r")
 		FD_SET(_fd, &_readfds);
 	else if (mode == "w")
@@ -153,6 +156,8 @@ void					USocket::_FD_SET(const std::string &mode) {
 }
 
 void					USocket::_FD_SET(const ISocket * const socket, const std::string &mode) {
+	 if (static_cast<const USocket *const >(socket)->getfd() > _fd_max)
+	  _fd_max = static_cast<const USocket *const >(socket)->getfd();
 	if (mode == "r")
 	  FD_SET(static_cast<const USocket *const >(socket)->getfd(), &_readfds);
 	else if (mode == "w")
@@ -217,7 +222,7 @@ char					*USocket::_recv(const int size, const int flags) const {
 
 	if ((ret = recv(_fd, msg, size, flags)) <= 0)
 		throw std::runtime_error(strerror(errno));
-	msg[ret] = '\0';
+
 
 	return msg;
 }
@@ -226,10 +231,11 @@ char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 	char								*msg = new char[30721];
 	ssize_t							ret;
 	struct sockaddr_in	src_addr;
+	socklen_t		size = sizeof(src_addr);
 
-	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
+bzero(&src_addr, sizeof(src_addr));
+	if ((ret = recvfrom(_fd, msg, 30720, flags, (struct sockaddr*)(&src_addr), &size)) <= 0)
 		throw std::runtime_error(strerror(errno));
-	msg[ret] = '\0';
 
 	if (src_addr.sin_family == AF_INET)
 		adress->family = IPv4;
@@ -245,10 +251,12 @@ char					*USocket::_recvfrom(const int size, const int flags, tSocketAdress *adr
 	char								*msg = new char[size + 1];
 	ssize_t							ret;
 	struct sockaddr_in	src_addr;
+	socklen_t		size2 = sizeof(src_addr);
 
-	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) <= 0)
+bzero(&src_addr, sizeof(src_addr));
+	if ((ret = recvfrom(_fd, msg, size, flags, (struct sockaddr*)(&src_addr), &size2)) <= 0)
 		throw std::runtime_error(strerror(errno));
-	msg[ret] = '\0';
+
 
 	if (src_addr.sin_family == AF_INET)
 		adress->family = IPv4;
@@ -292,7 +300,7 @@ void					USocket::_sendto(const char * const msg, const int flags, const tSocket
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg, strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+	if (sendto(_fd, msg, strlen(msg), flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
 }
 
@@ -304,11 +312,10 @@ void					USocket::_sendto(const char * const msg, const int size, const int flag
 	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	dest_addr.sin_family = adress->family;
+	dest_addr.sin_family = AF_INET; //adress->family;
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
-
-	if (sendto(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+	if (sendto(_fd, msg, size, flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
 }
 
@@ -324,7 +331,7 @@ void					USocket::_sendto(const std::string &msg, const int flags, const tSocket
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg.c_str(), msg.size(), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+	if (sendto(_fd, msg.c_str(), msg.size(), flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
 }
 
@@ -340,6 +347,6 @@ void					USocket::_sendto(const std::string &msg, const int size, const int flag
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg.c_str(), size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -1)
+	if (sendto(_fd, msg.c_str(), size, flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)
 		throw std::runtime_error(strerror(errno));
 }

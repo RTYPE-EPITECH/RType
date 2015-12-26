@@ -110,7 +110,7 @@ bool				Network::haveClientsUDPOutput() const
 	bool check = false;
 	for (size_t j = 0; j < _clients.size(); j++)
 		if (_clients[j]->getState() == POSITION_PACKET_SET)
-			if (_clients[j]->haveOutput())
+			if (_clients[j]->haveOutput() && _clients[j]->isUDPset)
 			{
 				check = true;
 				break;
@@ -183,9 +183,12 @@ bool				Network::readClientUDP()
 		if (header == NULL)
 			throw std::runtime_error("Fail to read(UDP) header packet");
 		_proto._setNewPacketHeader(header);
-		body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
-		if (body == NULL)
-			throw std::runtime_error("Fail to read(UDP) body packet");
+		if (_proto._getHeaderSize() > 0)
+		{
+			body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
+			if (body == NULL)
+				throw std::runtime_error("Fail to read(UDP) body packet");
+		}
 		short id = _proto._getHeaderId();
 		int i = -1;
 		for (size_t j = 0; j < _clients.size(); j++)
@@ -207,8 +210,6 @@ bool				Network::readClientUDP()
 	catch (const std::runtime_error & e) {
 		std::cerr << "[Read Client UDP ]" << e.what() << std::endl;
 	}
-	std::cout << "READ YEAH" << std::endl;
-	sleep(5);
 	return true;
 }
 
@@ -239,7 +240,7 @@ void				Network::writeClientUDP()
 	std::vector<const char *> _toSend;
 	for (size_t j = 0; j < _clients.size(); j++)
 	{
-		if (!_clients[j]->isUDPset)
+		if (!_clients[j]->isUDPset && j != 0)
 			std::cout << "Try to write to a client which is not ready for UDP" << std::endl;
 		if (_clients[j]->haveOutput() && _clients[j]->getState() < POSITION_PACKET_SET && _clients[j]->isUDPset)
 		{
@@ -278,25 +279,24 @@ void				Network::run(void)
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
-		_socketConnexion->_select(0, tmp);
+		_socketConnexion->_select(1, tmp);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {
 			newClient();
 		}
-		else
-		{
-			if (_socketConnexion->_FD_ISSET(_socketGame, 'r') == true)
-				readClientUDP();
-			if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true)
-				writeClientUDP();
-			for (unsigned int i = 0; i < _clients.size(); i++) {
-				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
-					writeClientTCP(i);
-				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
-					if (readClientTCP(i) == false)
-						return;
+		else {
+				if (_socketConnexion->_FD_ISSET(_socketGame, 'r') == true)
+					readClientUDP();
+				if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true)
+					writeClientUDP();
+				for (unsigned int i = 0; i < _clients.size(); i++) {
+					if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
+						writeClientTCP(i);
+					if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
+						if (readClientTCP(i) == false)
+							return;
+				}
 			}
-		}
 	}
 }

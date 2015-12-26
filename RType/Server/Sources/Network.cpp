@@ -202,7 +202,7 @@ bool				Network::readClientUDP()
 			_clients[i]->addInput(packet);
 		}
 		else
-			throw std::runtime_error(std::string("Unknwo Client " + Tools::NumberToString(id)));
+			throw std::runtime_error(std::string("Unknow Client " + Tools::NumberToString(id)));
 	}
 	catch (const std::runtime_error & e) {
 		std::cerr << "[Read Client UDP ]" << e.what() << std::endl;
@@ -215,12 +215,9 @@ void				Network::writeClientTCP(unsigned int i) {
 		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			std::cout << "[Network::writeClient] try to write..." << std::endl;
 			for (size_t j = 0; j < _toSend.size(); j++) {
-				std::cout << "[Network::writeClient] writing..." << std::endl;
 				_clients[i]->getSocket()->_send(_toSend[j], _proto._getSizePacket(_toSend[j]), 0);
 			}
-			std::cout << "[Network::writeClient] end writing..." << std::endl;
 		}
 		// packet TCP to send during Game, ignored
 		else
@@ -240,6 +237,8 @@ void				Network::writeClientUDP()
 	std::vector<const char *> _toSend;
 	for (size_t j = 0; j < _clients.size(); j++)
 	{
+		if (!_clients[j]->isUDPset)
+			std::cout << "Try to write to a client which is not ready for UDP" << std::endl;
 		if (_clients[j]->haveOutput() && _clients[j]->getState() < POSITION_PACKET_SET && _clients[j]->isUDPset)
 		{
 			_toSend = _clients[j]->getAllOutput();

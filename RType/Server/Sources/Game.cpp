@@ -305,7 +305,9 @@ void		Game::handleClientConnexion(Client * c)
 				}
 				h++;
 			}
+			_log->addLog(std::string("[Game::HandleClientConnexion] Player spawn"));
 
+			int tmp = 0;
 			// Send for the first time ALL the sprite position on the scene
 			for (size_t j = 0; j < _objs->size(); j++)
 			{
@@ -323,20 +325,25 @@ void		Game::handleClientConnexion(Client * c)
 					(EObject)(*_objs)[j]->getType(),
 					(Tools::getName((*_objs)[j]->getType(), (*_objs)[j]->getId()).c_str()),
 					tmpType.data());
+				tmp++;
 			}
 			for (size_t j = 0; _clients.size(); j++)
 			{
-				_proto._addPositionPacket(
-					(unsigned int)_clients[j]->getPlayer()->getX(),
-					(unsigned int)_clients[j]->getPlayer()->getY(),
-					(unsigned int)_clients[j]->getPlayer()->getWidth(),
-					(unsigned int)_clients[j]->getPlayer()->getHeight(),
-					PLAYER,
-					(Tools::getName(PLAYER, _clients[j]->getPlayer()->getId()).c_str()),
-					"unknow");
+				if (_clients[j]->getState() < POSITION_PACKET_SET) {
+					_proto._addPositionPacket(
+						(unsigned int)_clients[j]->getPlayer()->getX(),
+						(unsigned int)_clients[j]->getPlayer()->getY(),
+						(unsigned int)_clients[j]->getPlayer()->getWidth(),
+						(unsigned int)_clients[j]->getPlayer()->getHeight(),
+						PLAYER,
+						(Tools::getName(PLAYER, _clients[j]->getPlayer()->getId()).c_str()),
+						"unknow");
+					tmp++;
+				}
 			}
 			_proto._putPositionPacketOnList();
 			c->addOutput(_proto._getLastPacket());
+			_log->addLog(std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites"));
 		}
 	}
 }

@@ -246,8 +246,7 @@ void		Game::handleClientConnexion(Client * c)
 	if (c->getState() == BEGINNING) {
 		std::cout << "[Game::HandleClientConnexion] : state = BEGINNING" << std::endl;
 		if (_proto._getHeaderOpcode() == 1) {
-			std::cout << "[Game::HandleClientConnexion] : headerOpcode = 1" << std::endl;
-			c->protocole._createResponsePacket(NONE);
+			_proto._createResponsePacket(NONE);
 			c->addOutput(_proto._getLastPacket());
 			c->setState(CONNECT_OK);
 		}

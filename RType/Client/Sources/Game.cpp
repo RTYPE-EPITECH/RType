@@ -141,22 +141,35 @@ std::cout << "Game is running ..." << std::endl;
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
+		std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 		if(_lastInput.size() == 0)
-		_lastInput = _this->getInput();
-		_this->_protocole._setNewPacket(_lastInput.back());
+			_lastInput = _this->getInput();
+		if (_lastInput.size() > 0) {
+			_this->_protocole._setNewPacket(_lastInput[_lastInput.size()]);
 
-		// POSITIONPACKET
-		if (_this->_protocole._getHeaderOpcode() == 4) {
-			for (unsigned int i = 0; i < _this->_protocole._getArrayPositionLenght(); i++)
-				_this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
-					(EObject)(_this->_protocole._getPositionType(i)),
-					(float)(_this->_protocole._getPositionPosX(i)),
-					(float)(_this->_protocole._getPositionPosY(i)));
+			// POSITIONPACKET
+			if (_this->_protocole._getHeaderOpcode() == 4) {
+				std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+				for (unsigned int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
+					_this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+						(EObject)(_this->_protocole._getPositionType(i)),
+						(float)(_this->_protocole._getPositionPosX(i)),
+						(float)(_this->_protocole._getPositionPosY(i)));
+			}
+
+			// DEADENTITYPACKET
+			if (_this->_protocole._getHeaderOpcode() == 10) {
+				std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
+				_this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
+					(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
+			}
 		}
 //       ACTION  a = _this->_display->getInput();
  //     _this->_protocole._createActionPacket(a);
   //    _this->addOutput(_this->_protocole._getLastPacket());
       //display.endLoop();
+		_this->_protocole._createPingPacket();
+		_this->addOutput(_this->_protocole._getLastPacket());
 		_this->_display->clear();
 		_this->_display->display();
     }
@@ -223,6 +236,7 @@ void		Game::addOutput(const char *output)
 void		Game::setDisplaySFML(SFML * sfml)
 {
 	_display = sfml;
+	//_display->Intro();
 }
 
 bool			Game::haveInput()

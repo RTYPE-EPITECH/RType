@@ -57,7 +57,7 @@ _socketConnexion->_FD_ZERO("rw");
 	{
 		_socketConnexion->_FD_SET(_socketGame, "r");
 		if (_game->haveOutput()) {
-			//std::cout << "FD SET Write (Game)" << std::endl;
+			std::cout << "FD SET Write (Game)" << std::endl;
 			_socketConnexion->_FD_SET(_socketGame, "w");
 		}
 	}
@@ -118,17 +118,23 @@ bool				Network::readServerUDP(void)
 void				Network::writeServerTCP(void) {
 
 	std::vector<const char *> listOutput = _game->getOutput();
-	std::cout << "[Network::writeServerTCP] : Write server TCP (" << listOutput.size() << " packets)" << std::endl;
+	if (listOutput.size() > 0)
+		std::cout << "[Network::writeServerTCP] : Write server TCP (" << listOutput.size() << " packets)" << std::endl;
 	for (unsigned int i = 0; i < listOutput.size(); i++)
 		_socketConnexion->_send(listOutput[i], _proto._getSizePacket(listOutput[i]), 0);
 	return;
 }
 
 void				Network::writeServerUDP(void) {
-	std::vector<const char *> listOutput = _game->getOutput();
-	std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
-	for (unsigned int i = 0; i < listOutput.size(); i++)
-		_socketConnexion->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), &add);
+	if (_game->getStart() == true)
+	{
+		std::vector<const char *> listOutput = _game->getOutput();
+		if (listOutput.size() > 0)
+			std::cout << "[Network::writeServrUDP] : Write server UDP (" << listOutput.size() << " packets)" << std::endl;
+		for (unsigned int i = 0; i < listOutput.size(); i++)
+			_socketConnexion->_sendto(listOutput[i], _proto._getSizePacket(listOutput[i]), &add);
+
+	}
 	return;
 }
 
@@ -146,9 +152,12 @@ void				Network::run(void) {
 			writeServerTCP();
 		if (_socketConnexion->_FD_ISSET('r') == true)
 			readServerTCP();
-		if (_socketGame->_FD_ISSET('w'))
+		/*if (_socketConnexion->_FD_ISSET(_socketGame, 'w'))
+		{
+		std::cout << "Write to Server" << std::endl;*/
 			writeServerUDP();
-		if (_socketGame->_FD_ISSET('r'))
+		//}
+		if (_socketConnexion->_FD_ISSET(_socketGame, 'r'))
 			readServerUDP();
 	}
 }

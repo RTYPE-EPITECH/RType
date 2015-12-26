@@ -103,7 +103,6 @@ void	Game::initConnexion(void) {
 				this->addOutput(this->_protocole._getLastPacket());
 				std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
 				this->_state = POSITION_PACKET_SET;
-				return;
 			}
 
 			// LISTPOSITIONPACKET -- inutile
@@ -115,7 +114,7 @@ void	Game::initConnexion(void) {
 						(float)(this->_protocole._getPositionPosY(i)));
 			}
 		}
-		if (this->_state == POSITION_PACKET_SET)
+		if (this->_state == POSITION_PACKET_SET && !this->haveOutput())
 		{
 			this->setStart(true);
 			std::cout << "The game is launched" << std::endl;

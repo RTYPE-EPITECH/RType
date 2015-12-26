@@ -207,6 +207,8 @@ bool				Network::readClientUDP()
 	catch (const std::runtime_error & e) {
 		std::cerr << "[Read Client UDP ]" << e.what() << std::endl;
 	}
+	std::cout << "READ YEAH" << std::endl;
+	sleep(5);
 	return true;
 }
 
@@ -275,7 +277,8 @@ void				Network::run(void)
 		std::cout << "Set client ..." << std::endl;
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
-		_socketConnexion->_select(5, 0);
+		int tmp = (int)(1.0 / 30.0 * 1000.0);
+		_socketConnexion->_select(0, tmp);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {

@@ -105,10 +105,10 @@ bool Game::init(const std::vector<std::string> & _lib)
 		mf->addLibrary(_lib[i]);
 	//std::vector<std::string> _monsters = mf->getAllMonsterName();
 	//for (size_t i = 0; i < _monsters.size(); i++)*/
-	_proto._addPositionPacket(0, 0, 0, 0, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
-	_proto._addPositionPacket(0, 0, 0, 0, PLAYER, "Player", "Player");
-	_proto._addPositionPacket(0, 0, 0, 0, MISSILE, "Missile", "Missile");
-	_proto._addPositionPacket(0, 0, 0, 0, OBSTACLE, "Obstacle", "Obstacle");
+	_proto._addPositionPacket(-1, -1, 59, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
+	_proto._addPositionPacket(-1, -1, 35, 18, PLAYER, "Player", "Player");
+	_proto._addPositionPacket(-1, -1, 48, 15, MISSILE, "Missile", "Missile");
+	_proto._addPositionPacket(-1, -1, 32, 32, OBSTACLE, "Obstacle", "Obstacle");
 	_proto._putPositionPacketOnList();
 	_initToClient.push_back(_proto._getLastPacket());
 

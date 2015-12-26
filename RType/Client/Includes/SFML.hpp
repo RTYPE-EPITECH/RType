@@ -39,6 +39,7 @@ public:
   void				display();
   bool				isOpen();
   ACTION			getInput();
+  void				drawAll();
   void				update(const std::string &, EObject, float, float);
   void				Intro();
   float				getTimeElapsed();

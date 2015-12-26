@@ -64,14 +64,27 @@ ACTION				SFML::getInput()
     }
   if (win.pollEvent(Event))
     {
-      if (Event.key.code == sf::Keyboard::Escape)
-	{
-	  win.close();
-	  return UNKNOW_ACTION;
-	}
-      else
-	if (gen.count(Event.key.code) > 0)
-	  return gen[Event.key.code];
+        switch (Event.type)
+		 {
+		     // window closed
+		     case sf::Event::Closed:
+		         win.close();
+		         break;
+
+		     // key pressed
+		     case sf::Event::KeyPressed:
+		         if (Event.key.code == sf::Keyboard::Escape)
+						{
+						  win.close();
+						  return UNKNOW_ACTION;
+						}
+		      	if (gen.count(Event.key.code) > 0)
+			  			return gen[Event.key.code];
+
+		     // we don't process other types of events
+		     default:
+		         break;
+		 }
     }
   return UNKNOW_ACTION;
 }
@@ -102,15 +115,26 @@ void				SFML::Intro()
     {
       _clock.restart();
       if (win.pollEvent(event))
-	{
-	  if (event.type == sf::Event::KeyPressed)
-	    break;
-	}
-      _time += _clock.getElapsedTime();
+		{
+			  if (event.type == sf::Event::KeyPressed)
+				 break;
+			   if (event.type == sf::Event::Closed)
+            win.close();
+		}
+		win.clear();
       win.draw(sprite);
       win.display();
-      //sf::sleep(sf::milliseconds(600000 - _time.asMilliseconds()));
     }
+}
+
+
+void				SFML::drawAll()
+{
+	std::vector<RSprite *> tmp = _spritefactory->getAllSprite();
+	for (unsigned int i = 0; i < tmp.size(); i++)
+	{
+		win.draw(tmp[i]->_sprite);
+	}
 }
 
 float				SFML::getTimeElapsed()

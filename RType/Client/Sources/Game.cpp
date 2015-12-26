@@ -39,6 +39,7 @@ bool		Game::init()
   thread_t = new UThread();
   time = new UTimer();
 #endif
+	_display = NULL;
 	_start = false;
   if(!(this->_mutexGame->initialize()))
     return false;
@@ -146,6 +147,7 @@ std::cout << "Game is running ..." << std::endl;
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
+    		_this->_display->clear();
 		if(_lastInput.size() == 0)
 			_lastInput = _this->getInput();
 		if (_lastInput.size() > 0) {
@@ -177,7 +179,7 @@ std::cout << "Game is running ..." << std::endl;
 		}
 		//_this->_protocole._createPingPacket();
 		//_this->addOutput(_this->_protocole._getLastPacket());
-		_this->_display->clear();
+		_this->_display->drawAll();
 		_this->_display->display();
     }
   return arg;
@@ -190,7 +192,6 @@ ESTATE		Game::getState() {
 bool		Game::getStart()
 {
   bool		ret;
-
   this->_mutexGame->lock();
   ret = this->_start;
   this->_mutexGame->unlock();
@@ -199,6 +200,8 @@ bool		Game::getStart()
 
 void		Game::setStart(bool ret)
 {
+if (ret)
+	_display->Intro();
   this->_mutexGame->lock();
   this->_start = ret;
   this->_mutexGame->unlock();
@@ -264,4 +267,11 @@ bool			Game::haveOutput()
 		tmp = true;
 	this->_mutexGame->unlock();
 	return (tmp);
+}
+
+bool			Game::isOpen()
+{
+if (_display == NULL)
+	return true;
+	return this->_display->isOpen();
 }

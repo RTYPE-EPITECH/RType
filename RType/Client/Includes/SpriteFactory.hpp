@@ -14,6 +14,7 @@
 #include				<iostream>
 #include				<map>
 #include				"EObject.hpp"
+#include 			<vector>
 
 class					RSprite;
 
@@ -27,6 +28,7 @@ public:
 
   SpriteFactory();
   ~SpriteFactory();
+  std::vector<RSprite *> getAllSprite();
   bool					initialize(const std::string &, EObject, float x, float y);
 };
 

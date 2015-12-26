@@ -139,7 +139,7 @@ void				Network::writeServerUDP(void) {
 }
 
 void				Network::run(void) {
-	while (true) {
+	while (_game->isOpen()) {
 		setClient();
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
 		/*std::cout << "Select (Timeout : " << tmp << " ms) ";

@@ -64,6 +64,8 @@ public:
   bool			getStart();
   void			setStart(bool ret);
   void			setDisplaySFML(SFML *);
+
+  bool			isOpen();
 };
 
 #endif /* !GAME_HPP_ */

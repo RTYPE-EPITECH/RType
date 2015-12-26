@@ -11,10 +11,10 @@ std::vector<size_t> AObject::_ids;
 
 AObject::AObject(void)
 {
-	x = 0;
-	y = 0;
-	width = 0;
-	height = 0;
+	x = 5;
+	y = 5;
+	width = 1;
+	height = 1;
 	type = UNKNOWN_OBJECT;
 	_dead = false;
 	id = _ids.size();

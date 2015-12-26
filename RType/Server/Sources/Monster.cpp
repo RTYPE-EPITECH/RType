@@ -77,9 +77,8 @@ Missile * Monster::shoot(Game *g)
 			(unsigned int)missiles.back()->getWidth(),
 			(unsigned int)missiles.back()->getHeight(),
 			(EObject)missiles.back()->getType(),
-			Tools::EMissileToString(typeMissile).data(),
-			"unknow"
-			);
+			(Tools::getName(missiles.back()->getType(), missiles.back()->getId()).c_str()),
+			Tools::EMissileToString(typeMissile).data());
 		_proto._putPositionPacketOnList();
 		g->addPacketForClients(_proto._getLastPacket(), true);
 		_t->start();

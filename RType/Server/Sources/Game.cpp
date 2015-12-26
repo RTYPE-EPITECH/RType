@@ -148,14 +148,6 @@ bool Game::haveInput(unsigned long long t)
 	mutex->unlock();
 	if (!check)
 		_condVar->wait(t * 1000);
-	/*mutex->lock();
-	for (unsigned int i = 0; i < _clients.size(); i++)
-		if (_clients[i]->haveInput())
-		{
-			check = true;
-			break;
-		}
-	mutex->unlock();*/
 	return check;
 }
 
@@ -297,6 +289,54 @@ void		Game::handleClientConnexion(Client * c)
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(_proto._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
+
+			// faire spawn le joueur
+			size_t x = 5, y = 5, h = 0;
+			c->getPlayer()->setY(y);
+			c->getPlayer()->setX(x);
+			while (checkCollisionAllObject(c->getPlayer()) && h < 500)
+			{
+				if (y < HEIGHT - c->getPlayer()->getHeight())
+					c->getPlayer()->setY(y + 1);
+				else
+				{
+					_log->addLog(std::string("Can't spawn player " + Tools::NumberToString(c->getPlayer()->getId())));
+					throw std::runtime_error("Can't spawn player");
+				}
+				h++;
+			}
+
+			// Send for the first time ALL the sprite position on the scene
+			for (size_t j = 0; j < _objs->size(); j++)
+			{
+				std::string tmpType = "unknow";
+				if ((*_objs)[j]->getType() == MISSILE)
+				{
+					Missile * m = reinterpret_cast<Missile *>((*_objs)[j]);
+					tmpType = Tools::EMissileToString(m->getTypeMissile()).data();
+				}
+				_proto._addPositionPacket(
+					(unsigned int)(*_objs)[j]->getX(),
+					(unsigned int)(*_objs)[j]->getY(),
+					(unsigned int)(*_objs)[j]->getWidth(),
+					(unsigned int)(*_objs)[j]->getHeight(),
+					(EObject)(*_objs)[j]->getType(),
+					(Tools::getName((*_objs)[j]->getType(), (*_objs)[j]->getId()).c_str()),
+					tmpType.data());
+			}
+			for (size_t j = 0; _clients.size(); j++)
+			{
+				_proto._addPositionPacket(
+					(unsigned int)_clients[j]->getPlayer()->getX(),
+					(unsigned int)_clients[j]->getPlayer()->getY(),
+					(unsigned int)_clients[j]->getPlayer()->getWidth(),
+					(unsigned int)_clients[j]->getPlayer()->getHeight(),
+					PLAYER,
+					(Tools::getName(PLAYER, _clients[j]->getPlayer()->getId()).c_str()),
+					"unknow");
+			}
+			_proto._putPositionPacketOnList();
+			c->addOutput(_proto._getLastPacket());
 		}
 	}
 }
@@ -313,6 +353,8 @@ void Game::setIdThread(unsigned int i)
 
 bool Game::conditionCollision(AObject * one, AObject * two) const
 {
+	if (one->getId() == two->getId())
+		return true;
 	if (one->isDead() || two->isDead())
 		return true;
 	if ((one->getX() < two->getX() && two->getX() < one->getX() + one->getWidth())
@@ -377,6 +419,17 @@ void	Game::AllMove()
 			}
 		}
 	}
+}
+
+bool	  Game::checkCollisionAllObject(AObject * entity) const
+{
+	if (checkCollisionObject("PLAYER", entity))
+		return false;
+	if (checkCollisionObject("Objects", entity))
+		return false;
+	if (checkCollisionObject("Missile", entity))
+		return false;
+	return true;
 }
 
 AObject * Game::checkCollisionObject(const std::string & type, AObject* obj) const

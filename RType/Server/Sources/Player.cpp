@@ -10,6 +10,8 @@
 
 Player::Player(void) : AObject()
 {
+	width = 100;
+	height = 100;
 	life = 10;
 	maxLife = 10;
 	maxMissile = 3;
@@ -33,8 +35,6 @@ Player::~Player() {
 
 Missile * Player::shoot(Game *g)
 {
-	//	if (currentMissile < maxMissile)
-	//	{
 	if (_tShoot->getElapsedTimeInMicroSec() > SPEED_SHOT * 1000000)
 	{
 		currentMissile++;
@@ -46,9 +46,8 @@ Missile * Player::shoot(Game *g)
 			(unsigned int)missiles.back()->getWidth(),
 			(unsigned int)missiles.back()->getHeight(),
 			(EObject)missiles.back()->getType(),
-			Tools::EMissileToString(typeMissile).data(),
-			"unknow"
-			);
+			(Tools::getName(missiles.back()->getType(), missiles.back()->getId()).c_str()),
+			Tools::EMissileToString(typeMissile).data());
 		_proto._putPositionPacketOnList();
 		g->addPacketForClients(_proto._getLastPacket(), true);
 		_tShoot->start();

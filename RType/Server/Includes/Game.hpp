@@ -49,6 +49,7 @@ public:
 
 	void addPacketForClients(const char *, bool t = false);
 
+	bool	  checkCollisionAllObject(AObject * entity) const;
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
 	Protocole			_proto;
 

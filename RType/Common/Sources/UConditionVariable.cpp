@@ -33,6 +33,7 @@ void UConditionVariable::wait()
 	std::cout << "WAIT INFINITE" << std::endl;
 	if (pthread_mutex_lock(&_mut) != 0)
 		throw std::runtime_error("Failed to lock Mutex");
+	condition = false;
 	while (condition == false)
 		 if (pthread_cond_wait(&_cond, &_mut) != 0)
 		 	throw std::runtime_error("Failed to wait cond var");
@@ -45,17 +46,14 @@ void UConditionVariable::wait(unsigned long long t)
 	struct timespec timeToWait;
 	struct timeval now;
 
-	sleep(1);
-	std::cout << "WAIT FOR " << t << std::endl;
 	if (gettimeofday(&now, NULL) == -1)
 		throw std::runtime_error("Get Time Of Day failed");
-	std::cout << t << std::endl;
-	std::cout << now.tv_sec << std::endl;
 	timeToWait.tv_sec = now.tv_sec + t / 1000.0;
 	timeToWait.tv_nsec = now.tv_usec * 1000;
 
 	if (pthread_mutex_lock(&_mut) != 0)
 		throw std::runtime_error("Failed to lock Mutex");
+	condition = false;
 	while (condition == false)
 		if (pthread_cond_timedwait(&_cond, &_mut, &timeToWait) != 0)
 			throw std::runtime_error("Failed to wait cond var");

@@ -10,6 +10,12 @@ Log::Log(void) {
 		throw std::runtime_error("[Error]: Can't open log file");
 }
 
+Log::Log(const std::string & e) {
+	_fileLog.open(e.c_str(), std::ios::out | std::ios::trunc);
+	if (_fileLog.fail() == true)
+		throw std::runtime_error("[Error]: Can't open log file");
+}
+
 Log::~Log(void) {
 	_fileLog.close();
 }

@@ -6,6 +6,7 @@
 #include <string>
 #include "IConditionVariable.hpp"
 #include "Protocole.hpp"
+#include "Log.hpp"
 
 #define END				0
 #define ZONE			100
@@ -46,7 +47,7 @@ public:
 	bool isEnded(bool op = true) const;
 	size_t getSizeAvailable() const;
 
-	void addPacketForClients(char *, bool t = false);
+	void addPacketForClients(const char *, bool t = false);
 
 	AObject * checkCollisionObject(const std::string & obj, AObject * entity) const;
 	Protocole			_proto;
@@ -56,7 +57,7 @@ private:
 	size_t _id;
 
 	static std::vector<size_t> _ids;
-
+	Log 					* _log;
 	IConditionVariable * _condVar;
 	IMutex				* mutex;
 	ITimer				* timer;
@@ -68,7 +69,7 @@ private:
 	std::vector<AObject *> * _objs;
 
 	// All packet to send for client to be OK
-	std::vector<char *> _initToClient;
+	std::vector<const char *> _initToClient;
 
 	// All the waves to launch
 	std::vector< std::vector<AObject *> * > _waves;

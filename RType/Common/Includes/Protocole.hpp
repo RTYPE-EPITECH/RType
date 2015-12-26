@@ -92,7 +92,7 @@ private:
 	identifantPacket		_identifiant;
 	deadEntityPacket		_deadEntity;
 	int						_posInArray;
-	std::vector<char *>		_listPacket;
+	std::vector<const char *>		_listPacket;
 	unsigned int			_id;
 
 	/*
@@ -140,8 +140,8 @@ public:
 	** Getters
 	*/
 	
-	char					*_getLastPacket(void) const;
-	std::vector<char *>		_getListPacket(void) const;
+	const char					*_getLastPacket(void) const;
+	std::vector<const char *>		_getListPacket(void) const;
 	uint8_t					_getHeaderOpcode(void) const;
 	uint8_t					_getHeaderId(void) const;
 	uint16_t				_getHeaderSize(void) const;

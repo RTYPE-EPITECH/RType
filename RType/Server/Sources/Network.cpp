@@ -53,7 +53,7 @@ void				Network::newClient(void) {
 }
 
 void				Network::deleteClient(unsigned int i) {
-	std::cout << CYAN << HIGHLIGHT << "Client disconnect" << std::endl;
+	std::cout << CYAN << "Client disconnect" << WHITE << std::endl;
 	_games[findGame(_clients[i])]->removeClient(_clients[i]);
 	_clients.erase(_clients.begin() + i);
 }
@@ -71,15 +71,14 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 
 /* Création des sockets en fonction de l'OS */
 #ifdef _WIN32
-	WSocket *entreStandard = new WSocket(0);
+	//WSocket *entreStandard = new WSocket(0);
 	_socketConnexion = new WSocket();
 	_socketGame = new WSocket();
 	_i = new WConditionVariable();
 #else
-	USocket *entreStandard = new USocket(0);
+	//USocket *entreStandard = new USocket(0);
 	_socketConnexion = new USocket();
 	_socketGame = new USocket();
-	entreStandard = new USocket(0);
 	_i = new UConditionVariable();
 #endif
 
@@ -89,10 +88,11 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
 	_socketConnexion->_listen(2147483647);
 
+	(void)portGame;
 	_socketGame->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
 
 /* Ajout de l'entré standard et de _socketGame dans _clients */
-	Client		*clientEntreStandard = new Client();
+	//Client		*clientEntreStandard = new Client();
 	Client		*clientSocketGame = new Client();
 
 	//	clientEntreStandard->init(NULL);

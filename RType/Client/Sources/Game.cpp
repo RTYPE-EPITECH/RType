@@ -147,25 +147,26 @@ void	*Game::loop(void * arg)
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
-    		_this->_display->clear();
 		if(_lastInput.size() == 0)
 			_lastInput = _this->getInput();
-		if (_lastInput.size() > 0) {
-			std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
-			_this->_protocole._setNewPacket(_lastInput[_lastInput.size()]);
-
-	// POSITIONPACKET
-	if (_this->_protocole._getHeaderOpcode() == 4) {
-	  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-	  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
-	    _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
-				    (EObject)(_this->_protocole._getPositionType(i)),
-				    (float)(_this->_protocole._getPositionPosX(i)),
-				    (float)(_this->_protocole._getPositionPosY(i)));
-	}
+		else
+		std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
+		for (size_t h = 0; h < _lastInput.size(); h++)
+		{
+			_this->_protocole._setNewPacket(_lastInput[h]);
+			std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
+			// POSITIONPACKET
+			if (_this->_protocole._getHeaderOpcode() == 4) {
+			  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
+				 _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+							 (EObject)(_this->_protocole._getPositionType(i)),
+							 (float)(_this->_protocole._getPositionPosX(i)),
+							 (float)(_this->_protocole._getPositionPosY(i)));
+			}
 
 			// DEADENTITYPACKET
-			if (_this->_protocole._getHeaderOpcode() == 10) {
+			else if (_this->_protocole._getHeaderOpcode() == 10) {
 				std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
 				_this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
 					(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
@@ -179,6 +180,7 @@ void	*Game::loop(void * arg)
 		}
 		//_this->_protocole._createPingPacket();
 		//_this->addOutput(_this->_protocole._getLastPacket());
+		_this->_display->clear();
 		_this->_display->drawAll();
 		_this->_display->display();
     }

@@ -201,7 +201,9 @@ bool				Network::readClientUDP()
 		}
 		if (i != -1)
 		{
-			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
+			_clients[i]->_adr.ip = add.ip;
+			_clients[i]->_adr.port = add.port;
+			_clients[i]->_adr.family = add.family;
 			if (_clients[i]->getState() < POSITION_PACKET_SET)
 				throw std::runtime_error("connexion not finished yet");
 			_clients[i]->isUDPset = true;
@@ -251,16 +253,20 @@ void				Network::writeClientUDP()
 		if (_clients[j]->haveOutput() && _clients[j]->getState() == POSITION_PACKET_SET && _clients[j]->isUDPset)
 		{
 			_toSend = _clients[j]->getAllOutput();
-			std::cout << _toSend.size() << " TO WRITE UDP UDP " << std::endl;
 			for (size_t i = 0; i < _toSend.size(); i++)
 			{
 				_proto._setNewPacketHeader(_toSend[i]);
-				std::cout << "WRRRRRRRRRRRRRRRRRRRRRRRITE UDP :D" << std::endl;
+				std::cout << "Envoie Packet UDP : OpCode : " << (int)_proto._getHeaderOpcode() << std::endl;
+				if (_proto._getHeaderOpcode() == 4)
+				{
+					std::cout << "There are : " << (int)_proto._getArrayPositionLenght() << std::endl;
+				}
 				_socketGame->_sendto(_toSend[i],
 					_proto._getSizePacket(_toSend[i]),
 					0,
 					&(_clients[j]->_adr));
 			}
+			sleep(5);
 		}
 	}
 

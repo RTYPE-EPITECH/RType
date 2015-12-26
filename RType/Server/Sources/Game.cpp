@@ -181,12 +181,12 @@ bool Game::loop()
 				  // set input into protocole to have the get/set
 				  _proto._setNewPacket(input);
 				  handleInputClient(_clients[i]);
+				  _proto._putPositionPacketOnList();
+		  		addPacketForClients(_proto._getLastPacket(), true);
 			  }
 				// Client trying to connect
 			  else
 				  handleClientConnexion(_clients[i]);
-		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
 		  _log->addLog("[Game::loop] End of handle input");
 		}
@@ -364,7 +364,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			_proto._setNewPacket(_proto._getLastPacket());
 
 			std::cout << "[GAME :: HANDLE CONNEXION CLIENT ]There are : " << _proto._getArrayPositionLenght() << " sprites on packet " << std::endl;
-
+			std::cout << std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites") << std::endl;
 			c->addOutput(_proto._getLastPacket());
 			_log->addLog(std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites"));
 		}

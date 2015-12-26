@@ -233,7 +233,7 @@ char					*USocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 	struct sockaddr_in	src_addr;
 	socklen_t		size = sizeof(src_addr);
 
-bzero(&src_addr, sizeof(src_addr));
+	bzero(&src_addr, sizeof(src_addr));
 	if ((ret = recvfrom(_fd, msg, 30720, flags, (struct sockaddr*)(&src_addr), &size)) <= 0)
 		throw std::runtime_error(strerror(errno));
 
@@ -253,7 +253,7 @@ char					*USocket::_recvfrom(const int size, const int flags, tSocketAdress *adr
 	struct sockaddr_in	src_addr;
 	socklen_t		size2 = sizeof(src_addr);
 
-bzero(&src_addr, sizeof(src_addr));
+	bzero(&src_addr, sizeof(src_addr));
 	if ((ret = recvfrom(_fd, msg, size, flags, (struct sockaddr*)(&src_addr), &size2)) <= 0)
 		throw std::runtime_error(strerror(errno));
 
@@ -316,7 +316,7 @@ void					USocket::_sendto(const char * const msg, const int size, const int flag
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 	if (sendto(_fd, msg, size, flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)
-		throw std::runtime_error(strerror(errno));
+			throw std::runtime_error(strerror(errno));
 }
 
 void					USocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {

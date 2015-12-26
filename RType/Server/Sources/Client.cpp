@@ -24,6 +24,7 @@ Client::Client()
 	_socket = NULL;
 	player = NULL;
 	_game = NULL;
+	isUDPset = false;
 	_state = BEGINNING;
 	isUDPset = false;
 }

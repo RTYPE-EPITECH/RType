@@ -312,7 +312,7 @@ void					USocket::_sendto(const char * const msg, const int size, const int flag
 	if ((h = gethostbyname(adress->ip.c_str())) == NULL)
 		throw std::runtime_error(strerror(errno));
 	memcpy(&addr, h->h_addr, sizeof(addr));
-	dest_addr.sin_family = AF_INET; //adress->family;
+	dest_addr.sin_family = adress->family;
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 	if (sendto(_fd, msg, size, flags, (struct sockaddr*) &dest_addr, sizeof(dest_addr)) == -1)

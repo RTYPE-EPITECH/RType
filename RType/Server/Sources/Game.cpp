@@ -105,10 +105,10 @@ bool Game::init(const std::vector<std::string> & _lib)
 		mf->addLibrary(_lib[i]);
 	//std::vector<std::string> _monsters = mf->getAllMonsterName();
 	//for (size_t i = 0; i < _monsters.size(); i++)*/
-	_proto._addPositionPacket(-1, -1, 59, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
-	_proto._addPositionPacket(-1, -1, 35, 18, PLAYER, "Player", "Player");
-	_proto._addPositionPacket(-1, -1, 48, 15, MISSILE, "Missile", "Missile");
-	_proto._addPositionPacket(-1, -1, 32, 32, OBSTACLE, "Obstacle", "Obstacle");
+	_proto._addPositionPacket(SPAWN, 0, 59, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
+	_proto._addPositionPacket(SPAWN, 0, 35, 18, PLAYER, "Player", "Player");
+	_proto._addPositionPacket(SPAWN, 0, 48, 15, MISSILE, "Missile", "Missile");
+	_proto._addPositionPacket(SPAWN, 0, 32, 32, OBSTACLE, "Obstacle", "Obstacle");
 	_proto._putPositionPacketOnList();
 	_initToClient.push_back(_proto._getLastPacket());
 
@@ -304,13 +304,13 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
 			// faire spawn le joueur
-			size_t x = 5, y = 5, h = 0;
+			size_t x = ZONE + 5, y = 5, h = 0;
 			c->getPlayer()->setY(y);
 			c->getPlayer()->setX(x);
 			while (checkCollisionAllObject(c->getPlayer()) && h < 500)
 			{
 				if (y < HEIGHT - c->getPlayer()->getHeight())
-					c->getPlayer()->setY(y + 1);
+					c->getPlayer()->setY(y + 5);
 				else
 				{
 					_log->addLog(std::string("Can't spawn player " + Tools::NumberToString(c->getPlayer()->getId())));

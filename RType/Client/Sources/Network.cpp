@@ -153,8 +153,13 @@ void				Network::run(void) {
 		if (_socketConnexion->_FD_ISSET('r') == true)
 			readServerTCP();
 		if (_socketConnexion->_FD_ISSET(_socketGame, 'w'))
+		{
 			writeServerUDP();
+		}
 		if (_socketConnexion->_FD_ISSET(_socketGame, 'r'))
+		{
+			std::cout << "Read UDP" << std::endl;
 			readServerUDP();
+		}
 	}
 }

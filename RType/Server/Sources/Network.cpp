@@ -108,10 +108,11 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 bool				Network::haveClientsUDPOutput() const
 {
 	bool check = false;
-	for (size_t j = 0; j < _clients.size(); j++)
+	for (size_t j = 1; j < _clients.size(); j++)
 		if (_clients[j]->getState() == POSITION_PACKET_SET)
 			if (_clients[j]->haveOutput() && _clients[j]->isUDPset)
 			{
+				std::cout << "OK THEN SOMETHING TO WRITE IN UDP" << std::endl;
 				check = true;
 				break;
 			}
@@ -241,19 +242,23 @@ void				Network::writeClientTCP(unsigned int i) {
 void				Network::writeClientUDP()
 {
 	std::vector<const char *> _toSend;
-	for (size_t j = 0; j < _clients.size(); j++)
+	for (size_t j = 1; j < _clients.size(); j++)
 	{
 		if (!_clients[j]->isUDPset && j != 0)
 			std::cout << "Try to write to a client which is not ready for UDP" << std::endl;
-		if (_clients[j]->haveOutput() && _clients[j]->getState() < POSITION_PACKET_SET && _clients[j]->isUDPset)
+		if (!_clients[j]->haveOutput() && j != 0)
+			std::cout << "NOTHING TO SEND" << std::endl;
+		if (_clients[j]->haveOutput() && _clients[j]->getState() == POSITION_PACKET_SET && _clients[j]->isUDPset)
 		{
 			_toSend = _clients[j]->getAllOutput();
-			ISocket::tSocketAdress add;
+			std::cout << _toSend.size() << " TO WRITE UDP UDP " << std::endl;
 			for (size_t i = 0; i < _toSend.size(); i++)
 			{
 				_proto._setNewPacketHeader(_toSend[i]);
+				std::cout << "WRRRRRRRRRRRRRRRRRRRRRRRITE UDP :D" << std::endl;
 				_socketGame->_sendto(_toSend[i],
 					_proto._getSizePacket(_toSend[i]),
+					0,
 					&(_clients[j]->_adr));
 			}
 		}
@@ -291,8 +296,10 @@ void				Network::run(void)
 		else {
 				if (_socketConnexion->_FD_ISSET(_socketGame, 'r') == true)
 					readClientUDP();
-				if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true)
+				if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true) {
+					std::cout << "Can write UDP" << std::endl;
 					writeClientUDP();
+				}
 				for (unsigned int i = 1; i < _clients.size(); i++) {
 					if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
 						writeClientTCP(i);

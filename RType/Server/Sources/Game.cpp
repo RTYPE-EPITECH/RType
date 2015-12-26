@@ -219,7 +219,7 @@ bool Game::loop()
 
 bool	Game::handleInputClient(Client * c)
 {
-  if (_proto._getHeaderOpcode() != 3)
+  if (_proto._getHeaderOpcode() == 3)
     {
       ACTION a = (ACTION)_proto._getActionOpcode();
       Missile * m = NULL;
@@ -233,6 +233,12 @@ bool	Game::handleInputClient(Client * c)
 	if (c->getPlayer()->move(this, a, 1) == false)
 	  _log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " die"));
     }
+  else if (_proto._getHeaderOpcode() == 5)
+  {
+	  _log->addLog("-----> PING PACKET RECEIVED");
+		// Ping packet.
+	  // ignore for now
+  }
   else
     {
     	_log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " sent an invalid packet"));
@@ -432,7 +438,7 @@ void	Game::AllMove()
 
 bool	  Game::checkCollisionAllObject(AObject * entity) const
 {
-	if (checkCollisionObject("PLAYER", entity))
+	if (checkCollisionObject("Player", entity))
 		return false;
 	if (checkCollisionObject("Objects", entity))
 		return false;
@@ -454,7 +460,7 @@ AObject * Game::checkCollisionObject(const std::string & type, AObject* obj) con
 	}
 	if (Tolist.count(type) > 0)
 		return (this->*Tolist[type])(obj);
-	std::cerr << RED << "Collision with " << type << " not implemented yet" << WHITE << std::endl;
+	_log->addLog("Collision with " + Tools::NumberToString(type) + " not implemented yet");
 	return NULL;
 }
 

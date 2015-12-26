@@ -44,7 +44,7 @@ RSprite::RSprite(EObject type, float x, float y)
 		std::cout << "[RSprite::RSprite] : gen[type][1] : " << (int)gen[type][1] << std::endl;
 		std::cout << "[RSprite::RSprite] : gen[type][2] : " << (int)gen[type][2] << std::endl;
 		std::cout << "[RSprite::RSprite] : gen[type][3] : " << (int)gen[type][3] << std::endl;
-      this->_sprite.setTexture(this->_textureFactory->_stack[type]->_texture, false);
+      this->_sprite.setTexture(this->_textureFactory->_stack.at(type)->_texture, false);
 	  std::cout << "[RSprite::RSprite] : Texture set" << std::endl;
 	  this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
 	  std::cout << "[RSprite::RSprite] : TextureRect set" << std::endl;

@@ -141,10 +141,10 @@ std::cout << "Game is running ..." << std::endl;
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
-		std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 		if(_lastInput.size() == 0)
 			_lastInput = _this->getInput();
 		if (_lastInput.size() > 0) {
+			std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 			_this->_protocole._setNewPacket(_lastInput[_lastInput.size()]);
 
 			// POSITIONPACKET

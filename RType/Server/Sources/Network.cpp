@@ -145,18 +145,18 @@ bool				Network::readClientTCP(unsigned int i) {
 	try {
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			std::cout << "try to read header..." << std::endl;
+			std::cout << "try to read TCP header..." << i << std::endl;
 			header = _clients[i]->getSocket()->_recv(_proto._getSizePacketHeader(), 0);
 			if (header == NULL)
 				throw std::runtime_error("Fail to read(TCP) body packet");
 			_proto._setNewPacketHeader(header);
 			if (_proto._getHeaderSize() != 0) {
-				std::cout << "try to read body of size " << _proto._getHeaderSize() << std::endl;
+				std::cout << "try to read TCP body of size " << _proto._getHeaderSize() << std::endl;
 				body = _clients[i]->getSocket()->_recv(_proto._getHeaderSize(), 0);
 				if (body == NULL)
 					throw std::runtime_error("Fail to read(TCP) body packet");
 			}
-			std::cout << "Packet correctly read" << std::endl;
+			std::cout << "Packet correctly TCP read" << std::endl;
 			const char * packet = _proto._linkPacketHeaderBody(header, body);
 			_clients[i]->addInput(packet);
 		}
@@ -178,7 +178,7 @@ bool				Network::readClientUDP()
 	try {
 		char * header = NULL, * body = NULL;
 		ISocket::tSocketAdress add;
-
+		std::cout << "Read UDP" << std::endl;
 		header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
 		if (header == NULL)
 			throw std::runtime_error("Fail to read(UDP) header packet");
@@ -290,7 +290,7 @@ void				Network::run(void)
 					readClientUDP();
 				if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true)
 					writeClientUDP();
-				for (unsigned int i = 0; i < _clients.size(); i++) {
+				for (unsigned int i = 1; i < _clients.size(); i++) {
 					if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
 						writeClientTCP(i);
 					if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)

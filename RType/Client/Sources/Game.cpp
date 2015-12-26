@@ -85,6 +85,7 @@ void	Game::initConnexion(void) {
 			if (this->_protocole._getHeaderOpcode() == 10 && this->_state == PARAMETERS_SET) {
 				this->_idGame = this->_protocole._getIdentifiantNbGame();
 				this->_idPlayer = this->_protocole._getIdentifiantIdPlayer();
+				this->_protocole._setId(this->_idPlayer);
 				this->_protocole._createResponsePacket(NONE);
 				this->addOutput(this->_protocole._getLastPacket());
 				std::cout << "RECEIVE ID PACKET" << std::endl;

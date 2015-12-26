@@ -274,7 +274,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 		if (_proto._getHeaderOpcode() == 2) {
 			std::cout << "ID PACKET" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 2"));
-			c->protocole._createIdentifiantPacket((int)_id, (int)c->getPlayer()->getId());
+			c->protocole._createIdentifiantPacket((int)c->getPlayer()->getId(), (int)_id);
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(PARAMETERS_SET);
 		}
@@ -346,7 +346,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 				}
 			}
 			std::cout << "There are " << _clients.size() << " client(s)" << std::endl;
-			for (size_t j = 0; _clients.size(); j++)
+			for (size_t j = 0; j < _clients.size(); j++)
 			{
 				if (_clients[j]->getState() < POSITION_PACKET_SET) {
 					_proto._addPositionPacket(

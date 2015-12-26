@@ -191,12 +191,13 @@ bool				Network::readClientUDP()
 		}
 		short id = _proto._getHeaderId();
 		int i = -1;
-		for (size_t j = 0; j < _clients.size(); j++)
+		for (size_t j = 1; j < _clients.size(); j++) {
 			if (_clients[j]->getPlayer()->getId() == (size_t)id)
 			{
 				i = (int)j;
 				break;
 			}
+		}
 		if (i != -1)
 		{
 			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
@@ -281,7 +282,7 @@ void				Network::run(void)
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
-		_socketConnexion->_select(1, tmp);
+		_socketConnexion->_select(0, tmp);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {

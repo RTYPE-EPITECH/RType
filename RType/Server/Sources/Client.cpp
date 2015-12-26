@@ -118,7 +118,6 @@ void	Client::addInput(const char * e)
 void	Client::addOutput(const char * e)
 {
 	_mutexInput->lock();
-	std::cout << "ADD OUTPUTT" << std::endl;
 	_output.push_back(e);
 	_mutexInput->unlock();
 }
@@ -135,10 +134,8 @@ void	Client::setPlayer(Player *p)
 
 ESTATE Client::getState() const
 {
-if (_mutexInput != NULL)
 	_mutexInput->lock();
 ESTATE tmp = _state;
-if (_mutexInput != NULL)
 	_mutexInput->unlock();
 return tmp;
 }
@@ -146,9 +143,7 @@ return tmp;
 void Client::setState(ESTATE e)
 {
 _mutexInput->lock();
-std::cout << "GET STATE CLIENT " << std::endl;
 	_state = e;
-	std::cout << "END GET STATE CLIENT " << std::endl;
 _mutexInput->unlock();
 
 }

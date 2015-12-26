@@ -317,6 +317,8 @@ void		Game::handleClientConnexion(Client * c)
 					Missile * m = reinterpret_cast<Missile *>((*_objs)[j]);
 					tmpType = Tools::EMissileToString(m->getTypeMissile()).data();
 				}
+				if ((*_objs)[j]->getType() == UNKNOWN_OBJECT)
+					std::cout << "Obj " << j << "is bad" << std::endl;
 				_proto._addPositionPacket(
 					(unsigned int)(*_objs)[j]->getX(),
 					(unsigned int)(*_objs)[j]->getY(),

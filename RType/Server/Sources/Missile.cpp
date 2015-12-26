@@ -2,7 +2,7 @@
 
 Missile::Missile(void) : AObject()
 {
-
+	type = MISSILE;
 }
 
 Missile::~Missile()

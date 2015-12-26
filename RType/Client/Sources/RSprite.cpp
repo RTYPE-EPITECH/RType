@@ -38,7 +38,7 @@ RSprite::RSprite(EObject type, float x, float y)
       this->_sprite.setScale(2, 2);
     }
   else
-    throw std::runtime_error("Texture does not exist.");
+    throw std::runtime_error(std::string("Texture does not exist : " + Tools::NumberToString((int)type)) + " x : " + Tools::NumberToString((int)x) + " y " + Tools::NumberToString((int)y));
 }
 
 RSprite::~RSprite() {}

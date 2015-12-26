@@ -17,6 +17,7 @@ Player::Player(void) : AObject()
 	maxMissile = 3;
 	currentMissile = 0;
 	typeMissile = NORMAL;
+	type = PLAYER;
 #ifdef _WIN32
 	_tShoot = new WTimer();
 	_tMove = new WTimer();

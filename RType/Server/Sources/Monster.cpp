@@ -19,6 +19,7 @@ Monster::Monster(void) : AObject()
 	_t = new UTimer();
 #endif
 	_t->start();
+	type = MONSTER;
 }
 
 Monster::~Monster()

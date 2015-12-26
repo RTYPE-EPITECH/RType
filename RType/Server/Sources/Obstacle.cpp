@@ -2,6 +2,7 @@
 
 Obstacle::Obstacle(void) : AObject()
 {
+	type = OBSTACLE;
 }
 
 Obstacle::~Obstacle()

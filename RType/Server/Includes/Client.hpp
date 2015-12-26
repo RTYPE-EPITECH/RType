@@ -45,6 +45,8 @@ public:
 
 	Protocole protocole;
 	ISocket::tSocketAdress _adr;
+
+	bool			isUDPset;
 private:
 	ISocket * _socket;
 

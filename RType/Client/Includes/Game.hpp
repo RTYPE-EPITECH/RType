@@ -60,6 +60,7 @@ public:
   ESTATE		getState(void);
   void			addInput(const char *input);
   void			addOutput(const char *output);
+  void			initConnexion(void);
   bool			getStart();
   void			setStart(bool ret);
   void			setDisplaySFML(SFML *);

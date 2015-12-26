@@ -22,6 +22,8 @@ Protocole::~Protocole(void) {}
 ** Functions to create Packets
 */
 
+#include <iostream>
+
 void		Protocole::_createResponsePacket(ERROR_PROTO err) {
 	char	*result = new char[sizeof(headerPacket) + sizeof(responsePacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(responsePacket));

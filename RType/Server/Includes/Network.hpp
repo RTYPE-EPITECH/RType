@@ -64,8 +64,13 @@ private:
 	void					newClient(void);
 	void					deleteClient(unsigned int);
 	void					setClient(void);
-	bool					readClient(unsigned int);
-	void					writeClient(unsigned int);
+	bool					readClientTCP(unsigned int);
+	void					writeClientTCP(unsigned int);
+
+	bool					readClientUDP();
+	void					writeClientUDP();
+
+	bool					haveClientsUDPOutput() const;
 
 	void					createGame(Client *);
 	size_t					findGame(Client *);

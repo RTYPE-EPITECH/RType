@@ -52,7 +52,6 @@ bool		Game::init()
     return false;
   }
   this->_state = BEGINNING;
-  //this->_display = new SFML();
   return true;
 }
 
@@ -117,6 +116,9 @@ std::cout << "Game is running ..." << std::endl;
 		{
 			_this->setStart(true);
 			_this->setDisplaySFML(new SFML());
+			std::cout << "The game is launched" << std::endl;
+			_this->_protocole._createPingPacket();
+			_this->addOutput(_this->_protocole._getLastPacket());
 		}
     }
 

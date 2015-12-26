@@ -166,6 +166,7 @@
     <ClInclude Include="Includes\Game.hpp" />
     <ClInclude Include="Includes\HandleThread.hpp" />
     <ClInclude Include="Includes\IMonster.hpp" />
+    <ClInclude Include="Includes\Log.hpp" />
     <ClInclude Include="Includes\Missile.hpp" />
     <ClInclude Include="Includes\Monster.hpp" />
     <ClInclude Include="Includes\MonsterFactory.hpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Sources\Client.cpp" />
     <ClCompile Include="Sources\Game.cpp" />
     <ClCompile Include="Sources\HandleThread.cpp" />
+    <ClCompile Include="Sources\Log.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\Missile.cpp" />
     <ClCompile Include="Sources\Monster.cpp" />

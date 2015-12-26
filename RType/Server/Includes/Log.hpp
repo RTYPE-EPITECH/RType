@@ -15,6 +15,7 @@ public:
 	void addLog(const std::string & str);
 private:
 	std::ofstream	_fileLog;
+	std::string name;
 };
 
 #endif				/* !__LOG_HPP__ */

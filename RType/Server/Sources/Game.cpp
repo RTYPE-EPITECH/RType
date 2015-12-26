@@ -99,13 +99,13 @@ size_t Game::getSizeAvailable() const
 bool Game::init(const std::vector<std::string> & _lib)
 {
 	_log->addLog("[Game::init] Initialisation ...");
-	// init Monsters Library AND create Init packet Cmd
+	/*// init Monsters Library AND create Init packet Cmd
 	MonsterFactory * mf = MonsterFactory::getInstance();
 	for (size_t i = 0; i < _lib.size(); i++)
 		mf->addLibrary(_lib[i]);
-	std::vector<std::string> _monsters = mf->getAllMonsterName();
-	for (size_t i = 0; i < _monsters.size(); i++)
-		_proto._addPositionPacket(0, 0, 0, 0, MONSTER, _monsters[i].c_str(), _monsters[i].c_str());
+	//std::vector<std::string> _monsters = mf->getAllMonsterName();
+	//for (size_t i = 0; i < _monsters.size(); i++)*/
+	_proto._addPositionPacket(0, 0, 0, 0, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
 	_proto._addPositionPacket(0, 0, 0, 0, PLAYER, "Player", "Player");
 	_proto._addPositionPacket(0, 0, 0, 0, MISSILE, "Missile", "Missile");
 	_proto._addPositionPacket(0, 0, 0, 0, OBSTACLE, "Obstacle", "Obstacle");
@@ -295,7 +295,7 @@ void		Game::handleClientConnexion(Client * c)
 			c->protocole._createResponsePacket(NONE);
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
-
+			mutex->lock();
 			// faire spawn le joueur
 			size_t x = 5, y = 5, h = 0;
 			c->getPlayer()->setY(y);
@@ -315,26 +315,30 @@ void		Game::handleClientConnexion(Client * c)
 
 			int tmp = 0;
 			// Send for the first time ALL the sprite position on the scene
-			for (size_t j = 0; j < _objs->size(); j++)
+			if (_objs != NULL)
 			{
-				std::string tmpType = "unknow";
-				if ((*_objs)[j]->getType() == MISSILE)
+				for (size_t j = 0; j < _objs->size(); j++)
 				{
-					Missile * m = reinterpret_cast<Missile *>((*_objs)[j]);
-					tmpType = Tools::EMissileToString(m->getTypeMissile()).data();
+					std::string tmpType = "unknow";
+					if ((*_objs)[j]->getType() == MISSILE)
+					{
+						Missile * m = reinterpret_cast<Missile *>((*_objs)[j]);
+						tmpType = Tools::EMissileToString(m->getTypeMissile()).data();
+					}
+					if ((*_objs)[j]->getType() == UNKNOWN_OBJECT)
+						std::cout << "Obj " << j << "is bad" << std::endl;
+					_proto._addPositionPacket(
+						(unsigned int)(*_objs)[j]->getX(),
+						(unsigned int)(*_objs)[j]->getY(),
+						(unsigned int)(*_objs)[j]->getWidth(),
+						(unsigned int)(*_objs)[j]->getHeight(),
+						(EObject)(*_objs)[j]->getType(),
+						(Tools::getName((*_objs)[j]->getType(), (*_objs)[j]->getId()).c_str()),
+						tmpType.data());
+					tmp++;
 				}
-				if ((*_objs)[j]->getType() == UNKNOWN_OBJECT)
-					std::cout << "Obj " << j << "is bad" << std::endl;
-				_proto._addPositionPacket(
-					(unsigned int)(*_objs)[j]->getX(),
-					(unsigned int)(*_objs)[j]->getY(),
-					(unsigned int)(*_objs)[j]->getWidth(),
-					(unsigned int)(*_objs)[j]->getHeight(),
-					(EObject)(*_objs)[j]->getType(),
-					(Tools::getName((*_objs)[j]->getType(), (*_objs)[j]->getId()).c_str()),
-					tmpType.data());
-				tmp++;
 			}
+			std::cout << "There are " << _clients.size() << " client(s)" << std::endl;
 			for (size_t j = 0; _clients.size(); j++)
 			{
 				if (_clients[j]->getState() < POSITION_PACKET_SET) {
@@ -349,7 +353,9 @@ void		Game::handleClientConnexion(Client * c)
 					tmp++;
 				}
 			}
+						mutex->unlock();
 			_proto._putPositionPacketOnList();
+
 			c->addOutput(_proto._getLastPacket());
 			_log->addLog(std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites"));
 		}

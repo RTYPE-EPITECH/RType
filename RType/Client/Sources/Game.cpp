@@ -39,11 +39,11 @@ bool		Game::init()
   thread_t = new UThread();
   time = new UTimer();
 #endif
-
-  this->setStart(false);
+	_start = false;
   if(!(this->_mutexGame->initialize()))
     return false;
   this->time->start();
+	this->_state = BEGINNING;
   try {
     thread_t->initialize(&loop, this);
   }
@@ -51,7 +51,6 @@ bool		Game::init()
     std::cerr << error.what() << std::endl;
     return false;
   }
-  this->_state = BEGINNING;
   return true;
 }
 
@@ -104,6 +103,7 @@ void	Game::initConnexion(void) {
 				this->addOutput(this->_protocole._getLastPacket());
 				std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
 				this->_state = POSITION_PACKET_SET;
+				return;
 			}
 
 			// LISTPOSITIONPACKET -- inutile
@@ -120,6 +120,10 @@ void	Game::initConnexion(void) {
 			this->setStart(true);
 			std::cout << "The game is launched" << std::endl;
 			this->_protocole._createPingPacket();
+			this->addOutput(this->_protocole._getLastPacket());
+			this->addOutput(this->_protocole._getLastPacket());
+			this->addOutput(this->_protocole._getLastPacket());
+			this->addOutput(this->_protocole._getLastPacket());
 			this->addOutput(this->_protocole._getLastPacket());
 		}
 	}

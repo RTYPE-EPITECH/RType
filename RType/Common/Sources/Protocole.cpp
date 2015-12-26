@@ -15,6 +15,7 @@ Protocole::Protocole(unsigned int id) {
 	_generateData[9] = NULL;
 	_generateData[10] = &Protocole::_setIdentifiantPacket;
 	_generateData[11] = &Protocole::_setDeadEntityPacket;
+	memset(&(this->_arrayPositionPacket), 0, sizeof(arrayPositionPacket));
 }
 
 Protocole::~Protocole(void) {}
@@ -80,16 +81,18 @@ void		Protocole::_createActionPacket(ACTION act) {
 }
 
 void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, unsigned int sprite, const char * path, const char * type) {
-	this->_arrayPositionPacket.lenght = static_cast<uint32_t>((this->_posInArray + 1) * sizeof(positionPacket));
+	this->_arrayPositionPacket.lenght = static_cast<uint32_t>(this->_posInArray + 1);//static_cast<uint32_t>((this->_posInArray + 1) * sizeof(positionPacket));
 	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint8_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
 	this->_arrayPositionPacket.data[this->_posInArray].size_x = (uint16_t)sizeX;
 	this->_arrayPositionPacket.data[this->_posInArray].size_y = (uint16_t)sizeY;
-	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].path.data), path, sizeof(path));
-	memset(&(this->_arrayPositionPacket.data[this->_posInArray].path.data) + sizeof(path), 0, (255 * sizeof(uint8_t)) - sizeof(path));
-	this->_arrayPositionPacket.data[this->_posInArray].path.lenght = (uint8_t)(sizeof(path));
-	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), type, sizeof(type));
-	memset(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data) + strlen(type), 0, (255 * sizeof(uint8_t)) - sizeof(type));
+	memset(&(this->_arrayPositionPacket.data[this->_posInArray].path.data), 0, sizeof(this->_arrayPositionPacket.data[this->_posInArray].path.data));
+	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].path.data), path, strlen(path));
+	//memset(&(this->_arrayPositionPacket.data[this->_posInArray].path.data) + sizeof(path), 0, (255 * sizeof(uint8_t)) - strlen(path));
+	this->_arrayPositionPacket.data[this->_posInArray].path.lenght = (uint8_t)(strlen(path));
+	memset(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), 0, sizeof(this->_arrayPositionPacket.data[this->_posInArray].sprite.data));
+	memcpy(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data), type, strlen(type));
+	//memset(&(this->_arrayPositionPacket.data[this->_posInArray].sprite.data) + strlen(type), 0, (255 * sizeof(uint8_t)) - strlen(type));
 	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)(strlen(type));
 	this->_arrayPositionPacket.data[this->_posInArray].type = sprite;
 	this->_posInArray = this->_posInArray + 1;
@@ -107,6 +110,7 @@ void		Protocole::_putPositionPacketOnList(void) {
 	this->_setNewPacket(result);
 	this->_posInArray = 0;
 	this->_listPacket.push_back(result);
+	//memset(&(this->_arrayPositionPacket), 0, sizeof(arrayPositionPacket));
 }
 
 void		Protocole::_createPingPacket(void) {

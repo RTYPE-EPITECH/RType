@@ -22,7 +22,7 @@ Network::~Network(void) {
 }
 
 /*
-** Méthodes
+** MÃ©thodes
 */
 
 void				Network::init(const char *ip, int portConnexion, int portGame) {
@@ -44,9 +44,9 @@ void				Network::init(const char *ip, int portConnexion, int portGame) {
 }
 
 void				Network::setClient(void) {
+_socketConnexion->_FD_ZERO("rw");
 	if (_game->getStart() == false)
 	{
-		_socketConnexion->_FD_ZERO("rw");
 		_socketConnexion->_FD_SET("r");
 		if (_game->haveOutput()) {
 		//	std::cout << "FD SET Write (Connexion)" << std::endl;
@@ -55,7 +55,6 @@ void				Network::setClient(void) {
 	}
 	else
 	{
-		_socketConnexion->_FD_ZERO("rw");
 		_socketConnexion->_FD_SET(_socketGame, "r");
 		if (_game->haveOutput()) {
 			//std::cout << "FD SET Write (Game)" << std::endl;

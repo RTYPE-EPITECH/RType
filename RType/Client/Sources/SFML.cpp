@@ -22,6 +22,8 @@ SFML::SFML()
 	std::cout << "Windows SFML Laucnhed " << std::endl;
   _spritefactory = new SpriteFactory();
   _soundfactory = new SoundFactory();
+  TextureFactory	*texturefactory = TextureFactory::getInstance();
+  (void)texturefactory;
   win.create(sf::VideoMode(800, 600), "RType");
   win.setFramerateLimit(60);
 }

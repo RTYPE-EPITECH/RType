@@ -33,16 +33,21 @@ public:
 	~Network(void);
 
 	void					run(void);
-	void					init(const char *, int);
+	void					init(const char *, int, int);
 
 private:
-	ISocket					*_socket;
+	ISocket					*_socketConnexion;
+	ISocket					*_socketGame;
 	Game					*_game;
 	Protocole				_proto;
-	
+	ISocket::tSocketAdress  add;
+
 	void					setClient(void);
-	bool					readServer(void);
-	void					writeServer(void);
+	bool					readServerTCP(void);
+	void					writeServerTCP(void);
+
+	bool					readServerUDP(void);
+	void					writeServerUDP(void);
 };
 
 #endif                 /* !__NETWORK_HPP__ */

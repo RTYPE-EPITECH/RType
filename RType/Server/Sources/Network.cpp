@@ -88,21 +88,34 @@ void				Network::init(const std::string & portConnexion, const std::string &port
 	_socketConnexion->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portConnexion));
 	_socketConnexion->_listen(2147483647);
 
-	(void)portGame;
 	_socketGame->_socket(ISocket::IPv4, ISocket::DGRAM, ISocket::UDP);
+	_socketGame->_bind(ISocket::IPv4, Tools::charToNumber<unsigned short>(portGame));
 
 /* Ajout de l'entré standard et de _socketGame dans _clients */
 	//Client		*clientEntreStandard = new Client();
 	Client		*clientSocketGame = new Client();
 
 	//	clientEntreStandard->init(NULL);
-		clientSocketGame->init(NULL);
+	clientSocketGame->init(NULL);
 	clientSocketGame->setSocket(_socketGame);
 	//clientEntreStandard->setSocket(entreStandard);
 	_clients.push_back(clientSocketGame);
 	//_clients.push_back(clientEntreStandard);
 
 	std::cout << GREEN << "Welcome on the RType Server (Connexion port : " << portConnexion.c_str() << ")" << WHITE << std::endl;
+}
+
+bool				Network::haveClientsUDPOutput() const
+{
+	bool check = false;
+	for (size_t j = 0; j < _clients.size(); j++)
+		if (_clients[j]->getState() == POSITION_PACKET_SET)
+			if (_clients[j]->haveOutput())
+			{
+				check = true;
+				break;
+			}
+	return check;
 }
 
 void				Network::setClient(void) {
@@ -121,9 +134,12 @@ void				Network::setClient(void) {
 			}
 		}
 	}
+	_socketConnexion->_FD_SET(_socketGame, "r");
+	if (haveClientsUDPOutput())
+		_socketConnexion->_FD_SET(_socketGame, "w");
 }
 
-bool				Network::readClient(unsigned int i) {
+bool				Network::readClientTCP(unsigned int i) {
 	char * header = NULL;
 	char * body = NULL;
 	try {
@@ -131,55 +147,64 @@ bool				Network::readClient(unsigned int i) {
 		{
 			std::cout << "try to read header..." << std::endl;
 			header = _clients[i]->getSocket()->_recv(_proto._getSizePacketHeader(), 0);
-			if (header == NULL){
-				std::cerr << RED << "Fail to read (TCP) header" << WHITE << std::endl;
-				return false;
-			}
+			if (header == NULL)
+				throw std::runtime_error("Fail to read(TCP) body packet");
 			_proto._setNewPacketHeader(header);
 			if (_proto._getHeaderSize() != 0) {
 				std::cout << "try to read body of size " << _proto._getHeaderSize() << std::endl;
 				body = _clients[i]->getSocket()->_recv(_proto._getHeaderSize(), 0);
-				if (body == NULL) {
-					std::cerr << RED << "Fail to read (TCP) body packet" << WHITE << std::endl;
-					return false;
-				}
+				if (body == NULL)
+					throw std::runtime_error("Fail to read(TCP) body packet");
 			}
 			std::cout << "Packet correctly read" << std::endl;
+			const char * packet = _proto._linkPacketHeaderBody(header, body);
+			_clients[i]->addInput(packet);
 		}
+		// packet TCP during the game : ignored
 		else
 		{
-			ISocket::tSocketAdress add;
-			header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
-				if (header == NULL) {
-				std::cerr << RED << "Fail to read (UDP) header" << WHITE << std::endl;
-				return false;
-			}
-			_proto._setNewPacketHeader(header);
-			body = _socketConnexion->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
-			if (body == NULL) {
-				std::cerr << RED << "Fail to read (UDP) body packet" << WHITE << std::endl;
-				return false;
-			}
-			short id = _proto._getHeaderId();
-			for (size_t j = 0; j < _clients.size(); j++)
-				if (_clients[j]->getPlayer()->getId() == (size_t)id)
-				{
-					i = (unsigned int)j;
-					break;
-				}
-			memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
+			header = _clients[i]->getSocket()->_recv(4096, 0);
 		}
-		const char * packet = _proto._linkPacketHeaderBody(header, body);
-		_clients[i]->addInput(packet);
 	}
 	catch (const std::runtime_error & e) {
 		deleteClient(i);
-		std::cerr << "[Read Client " << i << "]" << e.what() << std::endl;
+		std::cerr << "[Read Client TCP " << i << "]" << e.what() << std::endl;
 	}
 	return true;
 }
 
-void				Network::writeClient(unsigned int i) {
+bool				Network::readClientUDP()
+{
+	try {
+		char * header = NULL, * body = NULL;
+		ISocket::tSocketAdress add;
+
+		header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
+		if (header == NULL)
+			throw std::runtime_error("Fail to read(UDP) header packet");
+		_proto._setNewPacketHeader(header);
+		body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
+		if (body == NULL)
+			throw std::runtime_error("Fail to read(UDP) body packet");
+		short id = _proto._getHeaderId();
+		unsigned int i = 0;
+		for (size_t j = 0; j < _clients.size(); j++)
+			if (_clients[j]->getPlayer()->getId() == (size_t)id)
+			{
+				i = (unsigned int)j;
+				break;
+			}
+		memcpy(&(_clients[i]->_adr), &add, sizeof(ISocket::tSocketAdress));
+		const char * packet = _proto._linkPacketHeaderBody(header, body);
+		_clients[i]->addInput(packet);
+	}
+	catch (const std::runtime_error & e) {
+		std::cerr << "[Read Client UDP ]" << e.what() << std::endl;
+	}
+	return true;
+}
+
+void				Network::writeClientTCP(unsigned int i) {
 	try {
 		std::vector<const char *> _toSend = _clients[i]->getAllOutput();
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
@@ -191,16 +216,10 @@ void				Network::writeClient(unsigned int i) {
 			}
 			std::cout << "[Network::writeClient] end writing..." << std::endl;
 		}
+		// packet TCP to send during Game, ignored
 		else
 		{
-			ISocket::tSocketAdress add;
-			for (size_t j = 0; j < _toSend.size(); j++)
-			{
-				_proto._setNewPacketHeader(_toSend[j]);
-				_socketGame->_sendto(_toSend[j],
-					_proto._getSizePacket(_toSend[j]),
-					&(_clients[j]->_adr));
-			}
+			// do nothing
 		}
 	}
 	catch (const std::exception) {
@@ -208,6 +227,27 @@ void				Network::writeClient(unsigned int i) {
 		deleteClient(i);
 	}
 	return;
+}
+
+void				Network::writeClientUDP()
+{
+	std::vector<const char *> _toSend;
+	for (size_t j = 0; j < _clients.size(); j++)
+	{
+		if (_clients[j]->haveOutput() && _clients[j]->getState() < POSITION_PACKET_SET)
+		{
+			_toSend = _clients[j]->getAllOutput();
+			ISocket::tSocketAdress add;
+			for (size_t i = 0; i < _toSend.size(); i++)
+			{
+				_proto._setNewPacketHeader(_toSend[i]);
+				_socketGame->_sendto(_toSend[i],
+					_proto._getSizePacket(_toSend[i]),
+					&(_clients[j]->_adr));
+			}
+		}
+	}
+
 }
 
 void				Network::createGame(Client * e)
@@ -229,21 +269,24 @@ void				Network::run(void)
 	while (true) {
 		std::cout << "Set client ..." << std::endl;
 		setClient();
-		std::cout << YELLOW << "Select ... (Timeout : 60s)" << WHITE << std::endl;
+		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
 		_socketConnexion->_select(5, 0);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
-		// Nouveau Client
 		if (_socketConnexion->_FD_ISSET('r') == true) {
 			newClient();
 		}
 		else
 		{
+			if (_socketConnexion->_FD_ISSET(_socketGame, 'r') == true)
+				readClientUDP();
+			if (_socketConnexion->_FD_ISSET(_socketGame, 'w') == true)
+				writeClientUDP();
 			for (unsigned int i = 0; i < _clients.size(); i++) {
 				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'w') == true)
-					writeClient(i);
+					writeClientTCP(i);
 				if (_socketConnexion->_FD_ISSET(_clients[i]->getSocket(), 'r') == true)
-					if (readClient(i) == false)
+					if (readClientTCP(i) == false)
 						return;
 			}
 		}

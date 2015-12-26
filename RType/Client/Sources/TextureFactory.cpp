@@ -75,6 +75,8 @@ bool			TextureFactory::setAssets()
 #ifdef _WIN32
 
 
+	// OK LE FICHIER EXISTE (LE _ACCESS PLANTE PAS) mais il veux pas load on sait pas pq..., enjoy <3
+
 	TCHAR buffer[4096];
 	GetCurrentDirectory(4096, buffer);
 	_tprintf(TEXT("[TextureFactory::setAssets] : getCurrentDirectorty : %s\n"), buffer);

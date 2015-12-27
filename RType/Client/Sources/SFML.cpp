@@ -15,7 +15,7 @@
 #ifndef _WIN32
 #include			<unistd.h>
 #endif
-
+#include <algorithm>
 
 SFML::SFML()
 {
@@ -90,20 +90,26 @@ ACTION				SFML::getInput()
 
 void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
+
   	if (x < 0 || y < 0)
   	{
+  		std::cout << name << std::endl;
   		std::map<std::string, RSprite *>::iterator it = this->_spritefactory->_stack.find(name);
   		if (it != this->_spritefactory->_stack.end())
   		{
   			this->_spritefactory->_stack.erase(it);
+			list.push_back(name);
  		}
   		return;
   	}
 
-  if (this->_spritefactory->initialize(name, type, x, y) == true) {
-   	 this->_spritefactory->_stack[name]->_sprite.setPosition(x, y);
-  }
-  win.draw(this->_spritefactory->_stack[name]->_sprite);
+	if (std::find(list.begin(), list.end(), name) == list.end()) {
+
+		  if (this->_spritefactory->initialize(name, type, x, y) == true) {
+				 this->_spritefactory->_stack[name]->_sprite.setPosition(x, y);
+		  }
+	}
+  //win.draw(this->_spritefactory->_stack[name]->_sprite);
 }
 
 void				SFML::Intro()

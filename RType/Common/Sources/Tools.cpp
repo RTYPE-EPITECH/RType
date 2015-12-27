@@ -6,7 +6,7 @@ std::string Tools::getName(EObject type, size_t id)
 	std::stringstream oss;
 
 	oss << EObjectToString(type);
-	oss << "-" << id;
+	oss << "-[" << id << "]";
 	return std::string(oss.str());
 }
 

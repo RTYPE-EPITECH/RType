@@ -256,6 +256,7 @@ void		Protocole::_setIdentifiantPacket(const char *packet) {
 }
 
 void		Protocole::_setDeadEntityPacket(const char *packet) {
+	memset(&(this->_deadEntity), 0, sizeof(deadEntityPacket));
 	memcpy(&(this->_deadEntity), packet , sizeof(deadEntityPacket));
 }
 

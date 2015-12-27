@@ -20,6 +20,7 @@
 #include			"SFML/Window.hpp"
 #include			"Protocole.hpp"
 #include			"EObject.hpp"
+#include			<vector>
 
 class				SpriteFactory;
 class				SoundFactory;
@@ -32,6 +33,7 @@ class				SFML
   sf::Clock			_clock;
   sf::Time			_time;
   float				back_x = 0;
+	std::vector<std::string> list;
 
 public:
   sf::Sprite			background;

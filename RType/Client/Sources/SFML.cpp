@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Sun Dec 27 17:51:52 2015 Probola
+// Last update Sun Dec 27 17:55:03 2015 Probola
 //
 
 #include			"SFML.hpp"
@@ -93,7 +93,7 @@ void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
   if (this->_spritefactory->initialize(name, type, x, y) == true) {
     //std::cout << "[SFML::update] : initialize" << std::endl;
-    this->_spritefactory->_stack[name]->_sprite->setPosition(x, y);
+    this->_spritefactory->_stack[name]->_sprite.setPosition(x, y);
   }
   win.draw(this->_spritefactory->_stack[name]->_sprite);
 }

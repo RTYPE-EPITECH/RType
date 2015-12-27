@@ -91,14 +91,11 @@ ACTION				SFML::getInput()
 
 void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
-	std::cout << "[SFML::update] : name : " << name << ", x : " << x << ", y : " << y << std::endl;
 	if (this->_spritefactory->initialize(name, type, x, y) == true) {
-		std::cout << "[SFML::update] : initialize" << std::endl;
+		//std::cout << "[SFML::update] : initialize" << std::endl;
 		this->_spritefactory->_stack[name]->setPosition(x, y);
 	}
-	std::cout << "[SFML::update] : draw begin" << std::endl;
   win.draw(this->_spritefactory->_stack[name]->_sprite);
-  std::cout << "[SFML::update] : draw finished" << std::endl;
 }
 
 void				SFML::Intro()

@@ -233,8 +233,9 @@ char					*WSocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 	char									*msg = new char[30721];
 	int										ret;
 	struct sockaddr_in		src_addr;
+	socklen_t		size = sizeof(src_addr);
 
-	if ((ret = recvfrom(_fd, msg, 30720, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) == SOCKET_ERROR)
+	if ((ret = recvfrom(_fd, msg, 30720, flags, (struct sockaddr *)(&src_addr), &size)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
 	msg[ret] = '\0';
 
@@ -250,11 +251,15 @@ char					*WSocket::_recvfrom(const int flags, tSocketAdress *adress) const {
 
 char					*WSocket::_recvfrom(const int size, const int flags, tSocketAdress *adress) const {
 	char										*msg = new char[size + 1];
-	int											ret;
-	struct sockaddr_in			src_addr;
+	int										ret;
+	struct sockaddr_in		src_addr;
+	socklen_t		ssize = sizeof(src_addr);
 
-	if ((ret = recvfrom(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&src_addr), reinterpret_cast<socklen_t *>(sizeof(src_addr)))) == SOCKET_ERROR)
+	memset(&src_addr, 0, sizeof(src_addr));
+	if ((ret = recvfrom(_fd, msg, size, flags, (struct sockaddr *)(&src_addr), &ssize)) == SOCKET_ERROR) {
+		std::cout << "[WSOCKET::_revcfrom] : error : " << WSAGetLastError() << ", size : " << size << std::endl;
 		throw std::runtime_error(_strerror());
+	}
 	msg[ret] = '\0';
 
 	if (src_addr.sin_family == AF_INET)
@@ -302,8 +307,10 @@ void					WSocket::_sendto(const char * const msg, const int flags, const tSocket
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg, (int)strlen(msg), flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == -SOCKET_ERROR)
+	std::cout << "[WSocket::_sendTo] size : " << (int)strlen(msg) << std::endl;
+	if (sendto(_fd, msg, (int)strlen(msg), flags, (struct sockaddr *)(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
+	Sleep(10000000);
 }
 
 void					WSocket::_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const {
@@ -318,8 +325,10 @@ void					WSocket::_sendto(const char * const msg, const int size, const int flag
 	dest_addr.sin_port = htons(adress->port);
 	dest_addr.sin_addr.s_addr = inet_addr(inet_ntoa(addr));
 
-	if (sendto(_fd, msg, size, flags, reinterpret_cast<struct sockaddr *>(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
+	std::cout << "[WSocket::_sendTo] size : " << size << std::endl;
+	if (sendto(_fd, msg, size, flags, (struct sockaddr *)(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
+	Sleep(1000000);
 }
 
 void					WSocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {

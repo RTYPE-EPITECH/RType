@@ -147,9 +147,7 @@ void	*Game::loop(void * arg)
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
-		if(_lastInput.size() == 0)
-			_lastInput = _this->getInput();
-		else
+		_lastInput = _this->getInput();
 		std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 		for (size_t h = 0; h < _lastInput.size(); h++)
 		{
@@ -158,11 +156,16 @@ void	*Game::loop(void * arg)
 			// POSITIONPACKET
 			if (_this->_protocole._getHeaderOpcode() == 4) {
 			  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++)
-				 _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
-							 (EObject)(_this->_protocole._getPositionType(i)),
-							 (float)(_this->_protocole._getPositionPosX(i)),
-							 (float)(_this->_protocole._getPositionPosY(i)));
+			  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++) {
+				  _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+					  (EObject)(_this->_protocole._getPositionType(i)),
+					  (float)(_this->_protocole._getPositionPosX(i)),
+					  (float)(_this->_protocole._getPositionPosY(i)));
+				  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionSpriteData(i) << std::endl;
+				  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
+				  std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
+			  }
 			}
 
 			// DEADENTITYPACKET

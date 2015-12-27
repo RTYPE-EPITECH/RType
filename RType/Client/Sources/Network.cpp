@@ -98,16 +98,18 @@ bool				Network::readServerUDP(void)
 		ISocket::tSocketAdress tmp;
 		char * header = NULL;
 		char * body = NULL;
-		header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &tmp);
-		if (header == NULL)
+		char *test = new char[4096];
+		test = _socketGame->_recvfrom(4096, 0, &tmp);
+		if (test == NULL)
 			throw std::runtime_error("Fail to read(UDP) header packet");
-		_proto._setNewPacketHeader(header);
-		body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &tmp);
+		_proto._setNewPacket(test);
+/*		body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &tmp);
 		if (body == NULL)
 			throw std::runtime_error("Fail to read(UDP) body packet");
 
-		const char * packet = _proto._linkPacketHeaderBody(header, body);
-		_game->addInput(packet);
+		const char * packet = _proto._linkPacketHeaderBody(header, body);*/
+		std::cout << "[Network::readServerUDP] : opcode : " << (int)_proto._getHeaderOpcode() << std::endl;
+		_game->addInput(test);
 	}
 	catch (const std::runtime_error & e) {
 		std::cerr << "[Read Server]" << e.what() << std::endl;

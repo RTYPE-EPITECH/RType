@@ -107,7 +107,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 		mf->addLibrary(_lib[i]);
 	//std::vector<std::string> _monsters = mf->getAllMonsterName();
 	//for (size_t i = 0; i < _monsters.size(); i++)*/
-	_proto._addPositionPacket(SPAWN, 0, 59, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
+	_proto._addPositionPacket(SPAWN, 0, 600, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
 	_proto._addPositionPacket(SPAWN, 0, 35, 18, PLAYER, "Player", "Player");
 	_proto._addPositionPacket(SPAWN, 0, 48, 15, MISSILE, "Missile", "Missile");
 	_proto._addPositionPacket(SPAWN, 0, 32, 32, OBSTACLE, "Obstacle", "Obstacle");

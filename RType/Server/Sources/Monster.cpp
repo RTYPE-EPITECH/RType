@@ -73,7 +73,7 @@ Missile * Monster::shoot(Game *g)
 	if (_t->getElapsedTimeInMicroSec() > SPEED_SHOT_ENEMY * 1000000)
 	{
 		currentMissile++;
-		missiles.push_back(Missile::newInstance(typeMissile, x + width + 1, y + width / 2));
+		missiles.push_back(Missile::newInstance(typeMissile, x - width - 48, y));
 		_proto._addPositionPacket(
 			(unsigned int)missiles.back()->getX(),
 			(unsigned int)missiles.back()->getY(),

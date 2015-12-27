@@ -147,7 +147,6 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 	  Player * p = reinterpret_cast<Player *>(this);
 	  if (p->canMove() == false)
 	  {
-	  std::cout << "PLAYER CAN'T move (have to wait)" << std::endl;
 	  	return false;
 	  	}
   }
@@ -160,24 +159,19 @@ if (getType() == PLAYER)
 	  	fx = ZONE - width + 1;
 	}
 
-	std::cout << " X : " << fx << " Y : " << fy << std::endl;
-	std::cout << "Collision with other player" << std::endl;
   // Check collision with Player/ScreenEdge. If true, then do nothing
   if (g->checkCollisionObject("Player", this) != NULL)
     return true;
 
-	std::cout << "Collision with objects" << std::endl;
+
   // check collision with enemies/obstacle/missile . If true, then player dies
   AObject * e;
   if ((e = g->checkCollisionObject("Objects", this))!= NULL)
     {
-    	std::cout << "Collision with : " << e->getType() << std::endl;
-    	std::cout << "X : " << e->getX() << " y :" << e->getY() << std::endl;
       die(g);
       return false;
     }
   // Collision with Missile : Takin Dmg
-  std::cout << "Collision with missile" << std::endl;
   AObject * o = g->checkCollisionObject("Missile", this);
   if (o != NULL)
     {
@@ -199,13 +193,11 @@ if (getType() == PLAYER)
 	}
       o->die(g);
     }
-   std::cout << "Check out of zone" << std::endl;
   if (fx < ZONE - width)
 	  die(g);
-	std::cout << "Zone ok" << std::endl;
+
   if (isDead())
     return false;
-   std::cout << "MOVE" << std::endl;
   // no collision, apply position
   x = fx;
   y = fy;

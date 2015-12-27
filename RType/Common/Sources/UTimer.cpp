@@ -18,7 +18,6 @@ unsigned long long UTimer::getElapsedTimeInSec()
 {
 	unsigned long long now = std::time(0);
 	now -= _start;
-	_start = std::time(0);
 	return now;
 }
 

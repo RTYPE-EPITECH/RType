@@ -125,7 +125,6 @@ bool			Client::haveOutput()
 void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();
-	std::cout << " AAaaaaddd input" << std::endl;
 	_input.push_back(e);
 	_mutexInput->unlock();
 }

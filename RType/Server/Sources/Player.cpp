@@ -39,7 +39,7 @@ Missile * Player::shoot(Game *g)
 	if (_tShoot->getElapsedTimeInMicroSec() > SPEED_SHOT * 1000000)
 	{
 		currentMissile++;
-		missiles.push_back(Missile::newInstance(typeMissile, x + width + 1, y + width / 2));
+		missiles.push_back(Missile::newInstance(typeMissile, x + width + 48 + 1, y));
 		// CREATE PACKET NEW SPRITE
 		_proto._addPositionPacket(
 			(unsigned int)missiles.back()->getX(),

@@ -18,10 +18,11 @@
 #define MAX_WAVES		2
 #define SPEED			1
 #define SPEED_PLAYER 	SPEED * 4
+#define SPEED_OTHER		SPEED * 4
 #define SPEED_MISSILE	SPEED * 8
 #define SPEED_SHOT		SPEED * 0.5
 #define SPEED_MOVE		SPEED * 0.001
-#define SPEED_SHOT_ENEMY SPEED * 2
+#define SPEED_SHOT_ENEMY SPEED * 10
 class AObject;
 class Client;
 class Player;

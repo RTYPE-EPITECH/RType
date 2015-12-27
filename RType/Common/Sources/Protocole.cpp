@@ -198,10 +198,11 @@ void		Protocole::_createDeadEntityPacket(int type, const std::string &name) {
 	this->_header.id = this->_id;
 	this->_header.size = sizeof(deadEntityPacket);
 	this->_deadEntity.name.lenght = static_cast<uint8_t>(name.size());
-	memcpy(&(this->_deadEntity.name.data), name.data(), name.size());
+	memset(&(this->_deadEntity.name.data), 0, sizeof(this->_deadEntity.name.data));
+	memcpy(&(this->_deadEntity.name.data), name.c_str(), name.size());
 	this->_deadEntity.type = static_cast<uint8_t>(type);
 	memcpy(result, &(this->_header), sizeof(headerPacket));
-	memcpy(result + sizeof(headerPacket), &(this->_identifiant), sizeof(identifantPacket));
+	memcpy(result + sizeof(headerPacket), &(this->_deadEntity), sizeof(deadEntityPacket));
 	this->_listPacket.push_back(result);
 }
 

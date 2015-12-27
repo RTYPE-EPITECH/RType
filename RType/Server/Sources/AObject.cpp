@@ -202,7 +202,7 @@ if (getType() == PLAYER)
     }
   if (fx < ZONE - width)
 	  die(g);
-	if (fx + width >= WIDTH)
+	if (fx + width >= WIDTH - 5)
 		die(g);
   if (isDead())
     return false;
@@ -216,8 +216,9 @@ if (getType() == PLAYER)
 
 void	AObject::die(Game *g)
 {
-	std::cout << "[DIE] create Packet die" << std::endl;
+	std::cout << "[DIE] create Packet die " << (Tools::getName(type, id)).c_str() << std::endl;
 	_proto._createDeadEntityPacket(type, (Tools::getName(type, id)).c_str());
 	g->addPacketForClients(_proto._getLastPacket(), true);
+	//g->addPacketForClients(_proto._getLastPacket(), true);
 	_dead = true;
 }

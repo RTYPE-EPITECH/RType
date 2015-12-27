@@ -135,7 +135,7 @@ void	Game::initConnexion(void) {
 void	*Game::loop(void * arg)
 {
   std::cout << "Game is running ..." << std::endl;
-  Game *_this = reinterpret_cast<Game *>(arg); 
+  Game *_this = reinterpret_cast<Game *>(arg);
   try {
     _this->initConnexion();
   }
@@ -174,7 +174,7 @@ void	*Game::loop(void * arg)
 	  else if (_this->_protocole._getHeaderOpcode() == 11) {
 	    std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
 	    _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
-				    (EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
+				    (EObject)(_this->_protocole._getDeadEntityType()), (float)-1.0, (float)-1.0);
 	  }
 	}
       ACTION  a = _this->_display->getInput();

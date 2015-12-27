@@ -107,7 +107,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 		mf->addLibrary(_lib[i]);
 	//std::vector<std::string> _monsters = mf->getAllMonsterName();
 	//for (size_t i = 0; i < _monsters.size(); i++)*/
-	_proto._addPositionPacket(SPAWN, 0, 59, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
+	_proto._addPositionPacket(SPAWN, 0, 600, 48, MONSTER, "Monster", "Monster");//_monsters[i].c_str(), _monsters[i].c_str());
 	_proto._addPositionPacket(SPAWN, 0, 35, 18, PLAYER, "Player", "Player");
 	_proto._addPositionPacket(SPAWN, 0, 48, 15, MISSILE, "Missile", "Missile");
 	_proto._addPositionPacket(SPAWN, 0, 32, 32, OBSTACLE, "Obstacle", "Obstacle");
@@ -176,10 +176,10 @@ bool Game::loop()
 		  mutex->lock();
 		  // For each client, get the oldest Input
 		  for (size_t i = 0; i < _clients.size(); i++)
-			  if (POSITION_PACKET_SET == _clients[i]->getState())
+			  if (POSITION_PACKET_SET == _clients[i]->getState() &&
+			  	_clients[i]->haveInput() && !_clients[i]->getPlayer()->isDead())
 			  {
 			  		std::vector<const char *> input = _clients[i]->getAllInput();
-			  		if (input.size() > 0)
 			  		std::cout << "There are " << input.size() << "input" << std::endl;
 			  		for (size_t h = 0; h < input.size(); h++)
 			  		{
@@ -241,7 +241,7 @@ bool	Game::handleInputClient(Client * c)
 		  _log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " cannot shoot"));
 		}
       else
-			if (c->getPlayer()->move(this, a, SPEED) == false) {
+			if (c->getPlayer()->move(this, a, SPEED_PLAYER) == false) {
 	  			_log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " die"));
 	  			std::cout << "Player can't move" << std::endl;
 	  }
@@ -408,8 +408,20 @@ bool Game::conditionCollision(AObject * one, AObject * two) const
 		return true;
 	if (one->isDead() || two->isDead())
 		return true;
-	if ((one->getX() < two->getX() && two->getX() < one->getX() + one->getWidth())
-		|| (one->getY() < two->getY() && two->getY() < one->getY() + one->getHeight()))
+	std::cout << " one x:" << one->getX() << " one y : " << one->getY() << " one width :" << one->getWidth() << " one height " << one->getHeight() << std::endl;
+	std::cout << " one x:" << two->getX() << " one y : " << two->getY() << " one width :" << two->getWidth() << " one height " << two->getHeight() << std::endl;
+	std::cout << std::endl;
+	if (
+			((one->getX() + one->getWidth() > two->getX() && one->getX() + one->getWidth() < two->getX() + two->getWidth())
+				||
+				(one->getX() > two->getX() && one->getX() < two->getX() + two->getWidth())
+			)
+			&&
+			( (one->getY() + one->getHeight() > two->getY() && one->getY() + one->getHeight() < two->getY() + two->getHeight())
+			||
+			(one->getY() > two->getY() && one->getY() < two->getY() + two->getHeight())
+			)
+	    )
 		return false;
 	return true;
 }

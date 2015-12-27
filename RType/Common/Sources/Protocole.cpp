@@ -77,6 +77,7 @@ void		Protocole::_createActionPacket(ACTION act) {
 	this->_action.action = (uint8_t)act;
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	memcpy(result + sizeof(headerPacket), &(this->_action), sizeof(actionPacket));
+	this->_setNewPacket(result);
 	this->_listPacket.push_back(result);
 }
 

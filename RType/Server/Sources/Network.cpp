@@ -181,18 +181,19 @@ bool				Network::readClientUDP()
 {
 	try {
 		char * header = NULL, * body = NULL;
+		char *test = new char[32000];
 		ISocket::tSocketAdress add;
 		std::cout << "Read UDP" << std::endl;
-		header = _socketGame->_recvfrom((unsigned int)_proto._getSizePacketHeader(), 0, &add);
-		if (header == NULL)
-			throw std::runtime_error("Fail to read(UDP) header packet");
-		_proto._setNewPacketHeader(header);
-		if (_proto._getHeaderSize() > 0)
+		test = _socketGame->_recvfrom(32000, 0, &add);
+		/*if (header == NULL)
+			throw std::runtime_error("Fail to read(UDP) header packet");*/
+		_proto._setNewPacket(test);
+		/*if (_proto._getHeaderSize() > 0)
 		{
 			body = _socketGame->_recvfrom((unsigned int)_proto._getHeaderSize(), 0, &add);
 			if (body == NULL)
 				throw std::runtime_error("Fail to read(UDP) body packet");
-		}
+		}*/
 		short id = _proto._getHeaderId();
 		int i = -1;
 		for (size_t j = 1; j < _clients.size(); j++) {
@@ -210,9 +211,8 @@ bool				Network::readClientUDP()
 			if (_clients[i]->getState() < POSITION_PACKET_SET)
 				throw std::runtime_error("connexion not finished yet");
 			_clients[i]->isUDPset = true;
-			const char * packet = _proto._linkPacketHeaderBody(header, body);
-			_clients[i]->addInput(packet);
-			std::cout << "READ UDP OK" << std::endl;
+			std::cout << "ADD INPUT" << std::endl;
+			_clients[i]->addInput(test);
 		}
 		else
 			throw std::runtime_error(std::string("Unknow Client " + Tools::NumberToString(id)));

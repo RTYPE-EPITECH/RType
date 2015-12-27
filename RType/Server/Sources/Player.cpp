@@ -107,5 +107,5 @@ bool Player::canMove()
 		_tMove->start();
 		return true;
 	}
-	return false;
+	return true;
 }

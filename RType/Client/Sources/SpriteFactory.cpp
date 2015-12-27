@@ -20,14 +20,13 @@ bool		SpriteFactory::initialize(const std::string &name, EObject type, float x, 
 {
   if (!_exist(name))
     {
-		std::cout << "[SpriteFactory::initialize] sprite " << name << "doesn't exist" << std::endl;
+
       RSprite			*sprite = new RSprite(type, x, y);
       if (sprite != 0)
 	_stack[name] = sprite;
       else
 	return false;
     }
-  std::cout << "[SpriteFactory::initialize] sprite " << name << " exists" << std::endl;
   return true;
 }
 

@@ -150,21 +150,21 @@ void	*Game::loop(void * arg)
 		_lastInput = _this->getInput();
 		for (size_t h = 0; h < _lastInput.size(); h++)
 		{
-			std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
+			//std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 			_this->_protocole._setNewPacket(_lastInput[h]);
-			std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
+			//std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
 			// POSITIONPACKET
 			if (_this->_protocole._getHeaderOpcode() == 4) {
-			  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-			  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+			//  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+			//  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
 			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++) {
 				  _this->_display->update(std::string((char *)(_this->_protocole._getPositionPathData(i))),
 					  (EObject)(_this->_protocole._getPositionType(i)),
 					  (float)(_this->_protocole._getPositionPosX(i)),
 					  (float)(_this->_protocole._getPositionPosY(i)));
-				  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionPathData(i) << std::endl;
-				  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
-				  std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
+				//  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionPathData(i) << std::endl;
+				//  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
+				// std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
 			  }
 			}
 
@@ -181,6 +181,12 @@ void	*Game::loop(void * arg)
        if (a != UNKNOW_ACTION)
        {
       	_this->_protocole._createActionPacket(a);
+		actionPacket tmp;
+
+		memcpy(&tmp, _this->_protocole._getLastPacket() + sizeof(headerPacket), sizeof(actionPacket));
+		std::cout << "[Game::loop] : action : " << (int)tmp.action << std::endl;
+		_this->_protocole._setNewPacket(_this->_protocole._getLastPacket());
+		std::cout << "[Game::loop] : action : " << (int)_this->_protocole._getActionOpcode() << std::endl;
       	_this->addOutput(_this->_protocole._getLastPacket());
 		}
 		//_this->_protocole._createPingPacket();

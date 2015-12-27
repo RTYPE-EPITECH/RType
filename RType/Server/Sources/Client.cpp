@@ -93,7 +93,7 @@ std::vector<const char *> Client::getAllInput()
 {
 	std::vector<const char *> _res;
 	_mutexInput->lock();
-	if (_output.size() > 0)
+	if (_input.size() > 0)
 	{
 		_res = _input;
 		_input.clear();
@@ -125,6 +125,7 @@ bool			Client::haveOutput()
 void	Client::addInput(const char * e)
 {
 	_mutexInput->lock();
+	std::cout << " AAaaaaddd input" << std::endl;
 	_input.push_back(e);
 	_mutexInput->unlock();
 }

@@ -154,6 +154,13 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 
   (this->*tomove[a])(fx, fy, t);
 
+if (getType() == PLAYER)
+  {
+	  if (fx < ZONE - width)
+	  	fx = ZONE - width + 1;
+	}
+
+	std::cout << " X : " << fx << " Y : " << fy << std::endl;
 	std::cout << "Collision with other player" << std::endl;
   // Check collision with Player/ScreenEdge. If true, then do nothing
   if (g->checkCollisionObject("Player", this) != NULL)
@@ -161,8 +168,11 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 
 	std::cout << "Collision with objects" << std::endl;
   // check collision with enemies/obstacle/missile . If true, then player dies
-  if (g->checkCollisionObject("Objects", this) != NULL)
+  AObject * e;
+  if ((e = g->checkCollisionObject("Objects", this))!= NULL)
     {
+    	std::cout << "Collision with : " << e->getType() << std::endl;
+    	std::cout << "X : " << e->getX() << " y :" << e->getY() << std::endl;
       die(g);
       return false;
     }
@@ -192,6 +202,7 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
    std::cout << "Check out of zone" << std::endl;
   if (fx < ZONE - width)
 	  die(g);
+	std::cout << "Zone ok" << std::endl;
   if (isDead())
     return false;
    std::cout << "MOVE" << std::endl;
@@ -207,6 +218,6 @@ void	AObject::die(Game *g)
 {
 	std::cout << "[DIE] create Packet die" << std::endl;
 	_proto._createDeadEntityPacket(type, (Tools::getName(type, id)).c_str());
-	g->addPacketForClients(_proto._getLastPacket());
+	g->addPacketForClients(_proto._getLastPacket(), true);
 	_dead = true;
 }

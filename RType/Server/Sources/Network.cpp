@@ -33,22 +33,29 @@ Network::~Network(void) {
 */
 
 void				Network::newClient(void) {
-	std::cout <<  "A new client try to connect to the server..." << std::endl;
+	std::cout <<  BLUE << "A new client try to connect to the server..." << WHITE << std::endl;
 	Client * newClient = new Client();
 	newClient->setSocket(_socketConnexion->_accept());
 
 	// Trouver une game pour lui
 	bool check = true;
+	std::cout << "There are " << _games.size() << std::endl;
 	for (size_t i = 0; i < _games.size() && check; i++)
-		if (_games[i]->getSizeAvailable() != 0)
+	{
+		std::cout << YELLOW << "The game " << i << " have " << _games[i]->getSizeAvailable() << " available" << WHITE << std::endl;
+		if (_games[i]->getSizeAvailable() > 0)
 		{
 			newClient->init(_games[i]);
 			_games[i]->addClient(newClient);
 			check = false;
+			std::cout << YELLOW  << "Client added to this game" << WHITE <<  std::endl;
 		}
+	}
 	// Si aucune game OK : CReate a game
-	if (check)
+	if (check) {
+		std::cout << YELLOW << "No game available : Create a new game ! " << WHITE << std::endl;
 		createGame(newClient);
+	}
 	_clients.push_back(newClient);
 }
 
@@ -122,12 +129,12 @@ bool				Network::haveClientsUDPOutput() const
 void				Network::setClient(void) {
 	_socketConnexion->_FD_ZERO("rw");
 	_socketConnexion->_FD_SET("r");
-	std::cout << "There are " << _clients.size() << " clients (Server included)" << std::endl;
+	//std::cout << "There are " << _clients.size() << " clients (Server included)" << std::endl;
 	for (unsigned int i = 0; i < _clients.size(); i++) {
 		if (_clients[i]->getState() < POSITION_PACKET_SET)
 		{
-			if (i > 0)
-				std::cout << "Client " << i << " is trying to connect" << std::endl;
+			//if (i > 0)
+				//std::cout << "Client " << i << " is trying to connect" << std::endl;
 			_socketConnexion->_FD_SET(_clients[i]->getSocket(), "r");
 			if (_clients[i]->haveOutput()) {
 				std::cout << "There are severals output" << std::endl;
@@ -266,7 +273,6 @@ void				Network::writeClientUDP()
 					0,
 					&(_clients[j]->_adr));
 			}
-			sleep(5);
 		}
 	}
 
@@ -289,12 +295,12 @@ void				Network::createGame(Client * e)
 void				Network::run(void)
 {
 	while (true) {
-		std::cout << "Set client ..." << std::endl;
+		//std::cout << "Set client ..." << std::endl;
 		setClient();
-		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
+		//std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
 		_socketConnexion->_select(0, tmp);
-		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
+		//std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {
 			newClient();

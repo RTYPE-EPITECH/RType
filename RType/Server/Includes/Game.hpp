@@ -13,7 +13,7 @@
 #define SPAWN			500
 #define WIDTH			800
 #define HEIGHT			600
-#define MAX_PLAYER_GAME	4
+#define MAX_PLAYER_GAME	2
 #define FPS				30
 #define MAX_WAVES		2
 #define SPEED			1

@@ -91,9 +91,11 @@ void Game::removeClient(Client * c)
 size_t Game::getSizeAvailable() const
 {
 	mutex->lock();
-	size_t size = MAX_PLAYER_GAME - _clients.size();
+	int size = MAX_PLAYER_GAME - _clients.size();
 	mutex->unlock();
-	return size;
+	if (size < 0)
+		size = 0;
+	return (size_t)size;
 }
 
 bool Game::init(const std::vector<std::string> & _lib)
@@ -131,6 +133,7 @@ bool Game::init(const std::vector<std::string> & _lib)
 #endif
 	if (!mutex->initialize())
 		return false;
+	_objs = _waves[_currwave];
 	_log->addLog("[Game::init] initialized");
 	return true;
 }
@@ -287,7 +290,6 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
 			_proto._setNewPacket(_initToClient[0]);
 			std::cout << "Send : " <<  _proto._getArrayPositionLenght() << " sprites" << std::endl;
-			sleep(1);
 			for (size_t i = 0; _initToClient.size() > i; i++)
 				c->addOutput(_initToClient[i]);
 			c->setState(ID_SET);
@@ -326,6 +328,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			{
 				for (size_t j = 0; j < _objs->size(); j++)
 				{
+					std::cout << RED << "Add OBJ" << WHITE << std::endl;
 					std::string tmpType = "unknow";
 					if ((*_objs)[j]->getType() == MISSILE)
 					{
@@ -348,7 +351,8 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			std::cout << "There are " << _clients.size() << " client(s)" << std::endl;
 			for (size_t j = 0; j < _clients.size(); j++)
 			{
-				if (_clients[j]->getState() < POSITION_PACKET_SET) {
+				if (_clients[j]->getState() == POSITION_PACKET_SET) {
+				std::cout << RED << "Add Player" << WHITE << std::endl;
 					_proto._addPositionPacket(
 						(unsigned int)_clients[j]->getPlayer()->getX(),
 						(unsigned int)_clients[j]->getPlayer()->getY(),
@@ -360,12 +364,15 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 					tmp++;
 				}
 			}
-			_proto._putPositionPacketOnList();
-			_proto._setNewPacket(_proto._getLastPacket());
-
+			if (tmp > 0)
+			{
+				_log->addLog(std::string("[Game::HandleClientConnexion] ERROR " + Tools::NumberToString(tmp) + " sprites"));
+				_proto._putPositionPacketOnList();
+				_proto._setNewPacket(_proto._getLastPacket());
+				c->addOutput(_proto._getLastPacket());
+			}
 			std::cout << "[GAME :: HANDLE CONNEXION CLIENT ]There are : " << _proto._getArrayPositionLenght() << " sprites on packet " << std::endl;
 			std::cout << std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites") << std::endl;
-			c->addOutput(_proto._getLastPacket());
 			_log->addLog(std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites"));
 		}
 	}

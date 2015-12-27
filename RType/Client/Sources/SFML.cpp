@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Sun Dec 27 17:55:03 2015 Probola
+// Last update Sun Dec 27 20:59:29 2015 Probola
 //
 
 #include			"SFML.hpp"
@@ -92,7 +92,6 @@ ACTION				SFML::getInput()
 void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
   if (this->_spritefactory->initialize(name, type, x, y) == true) {
-    //std::cout << "[SFML::update] : initialize" << std::endl;
     this->_spritefactory->_stack[name]->_sprite.setPosition(x, y);
   }
   win.draw(this->_spritefactory->_stack[name]->_sprite);
@@ -141,4 +140,23 @@ void				SFML::drawAll()
 float				SFML::getTimeElapsed()
 {
   return (this->_time.asSeconds());
+}
+
+void				SFML::scroll()
+{
+  if (this->back_x == 0)
+    {
+#ifndef _WIN32
+      this->backText.loadFromFile("RType/Client/Assets/background.gif");
+#else
+      this->backText.loadFromFile("Assets/background.gif");
+#endif
+      this->background.setTexture(this->backText);
+    }
+  if (this->back_x + 800 >= 1900)
+    this->back_x = 20;
+  this->background.setTextureRect(sf::IntRect(this->back_x, 500, 800, 800));
+  this->back_x += 2;
+  this->background.setPosition(0, 0);
+  this->win.draw(this->background);
 }

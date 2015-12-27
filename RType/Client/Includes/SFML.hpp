@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Mon Dec 21 17:15:35 2015 Probola
+// Last update Sun Dec 27 20:54:10 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -26,13 +26,17 @@ class				SoundFactory;
 
 class				SFML
 {
- sf::RenderWindow		win;
+  sf::RenderWindow		win;
   SpriteFactory			*_spritefactory;
   SoundFactory			*_soundfactory;
   sf::Clock			_clock;
   sf::Time			_time;
+  float				back_x = 0;
 
 public:
+  sf::Sprite			background;
+  sf::Texture			backText;
+
   SFML();
   ~SFML();
   void				clear();
@@ -43,6 +47,7 @@ public:
   void				update(const std::string &, EObject, float, float);
   void				Intro();
   float				getTimeElapsed();
+  void				scroll();
 };
 
 #endif

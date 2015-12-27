@@ -173,8 +173,8 @@ void	*Game::loop(void * arg)
 	  // DEADENTITYPACKET
 	  else if (_this->_protocole._getHeaderOpcode() == 11) {
 	    std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
-	    _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
-				    (EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
+	   // _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
+				    //(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
 	  }
 	}
       ACTION  a = _this->_display->getInput();

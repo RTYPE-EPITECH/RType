@@ -202,7 +202,7 @@ if (getType() == PLAYER)
     }
   if (fx <= 5)
 	  die(g);
-	if (fx + width >= WIDTH - 5)
+	if (fx + width  >= WIDTH - 15)
 		die(g);
   if (isDead())
     return false;

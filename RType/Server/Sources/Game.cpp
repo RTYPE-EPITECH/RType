@@ -119,8 +119,12 @@ bool Game::init(const std::vector<std::string> & _lib)
 	WaveFactory  wf;
 	for (size_t i = 0; i < MAX_WAVES; i++)
 	{
+		if (i % 2 == 0)
+			wf.addObstacle();
 		wf.addObstacle();
 		wf.addMonster();
+		if (i %3 == 0)
+			wf.addMonster();
 		_waves.push_back(wf.getWaves());
 	}
 

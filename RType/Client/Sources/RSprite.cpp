@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Dec  1 16:09:36 2015 Probola
-// Last update Sun Dec 27 17:32:28 2015 Probola
+// Last update Sun Dec 27 18:17:41 2015 Probola
 //
 
 #include			<string>
@@ -39,9 +39,9 @@ RSprite::RSprite(EObject type, float x, float y)
     }
   if (gen.count(type) > 0)
     {
-	
       this->_sprite.setTexture(this->_textureFactory->_stack.at(type)->_texture, false);
-	  this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
+      this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
+      std::cout << "CONSTRUCTOR : " <<  x << " " << y << std::endl;
       this->_sprite.setPosition(x, y);
       this->_sprite.setScale(2, 2);
     }
@@ -53,5 +53,6 @@ RSprite::~RSprite() {}
 
 void				RSprite::setPosition(float x, float y)
 {
+  std::cout << "SET POSITION : X: " << x << " Y: " << y << std::endl;
   this->_sprite.setPosition(x, y);
 }

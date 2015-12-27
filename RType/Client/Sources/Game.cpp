@@ -5,7 +5,7 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-** Last update Sat Dec 26 22:27:16 2015 Jérémy MATHON
+// Last update Sun Dec 27 20:43:08 2015 Probola
 */
 
 #include	"Game.hpp"
@@ -56,79 +56,79 @@ bool		Game::init()
 }
 
 void	Game::initConnexion(void) {
-	std::vector<const char *>	_lastInput;
-	std::vector<const char *>	_lastOutput;
-	// check si la partie est commencée
-	while (getStart() == false)
-	{
-		// CONNECT PACKET
-		if (_state == BEGINNING) {
-			this->_protocole._createConnectPacket();
-			this->addOutput(this->_protocole._getLastPacket());
-			std::cout << "SEND CONNECT PACKET" << std::endl;
-			this->_state = CONNECT_OK;
-		}
-		_lastInput = this->getInput();
-		//	std::cout << "[Game::loop] : input.size = " << _lastInput.size() << std::endl;
-		for (unsigned int i = 0; i < _lastInput.size(); i++) {
-			this->_protocole._setNewPacket(_lastInput.at(i));
+  std::vector<const char *>	_lastInput;
+  std::vector<const char *>	_lastOutput;
+  // check si la partie est commencée
+  while (getStart() == false)
+    {
+      // CONNECT PACKET
+      if (_state == BEGINNING) {
+	this->_protocole._createConnectPacket();
+	this->addOutput(this->_protocole._getLastPacket());
+	std::cout << "SEND CONNECT PACKET" << std::endl;
+	this->_state = CONNECT_OK;
+      }
+      _lastInput = this->getInput();
+      //	std::cout << "[Game::loop] : input.size = " << _lastInput.size() << std::endl;
+      for (unsigned int i = 0; i < _lastInput.size(); i++) {
+	this->_protocole._setNewPacket(_lastInput.at(i));
 
-			std::cout << "[Game::loop] : _getHeader.opcode = " << (int)this->_protocole._getHeaderOpcode() << std::endl;
-			// RESPONSE PACKET SEND
-			if (this->_protocole._getHeaderOpcode() == 0 && this->_protocole._getResponseOpcode() == 0 && this->_state == CONNECT_OK) {
-				this->_protocole._createParametersPacket(0, 0);
-				this->addOutput(this->_protocole._getLastPacket());
-				std::cout << "SEND PARAMETERS PACKET" << std::endl;
-				this->_state = PARAMETERS_SET;
-			}
-
-			// IDENTIFIANT PACKET
-			if (this->_protocole._getHeaderOpcode() == 10 && this->_state == PARAMETERS_SET) {
-				this->_idGame = this->_protocole._getIdentifiantNbGame();
-				this->_idPlayer = this->_protocole._getIdentifiantIdPlayer();
-				this->_protocole._setId(this->_idPlayer);
-				this->_protocole._createResponsePacket(NONE);
-				this->addOutput(this->_protocole._getLastPacket());
-				std::cout << "RECEIVE ID PACKET" << std::endl;
-				this->_state = ID_SET;
-			}
-
-			// INIT SPRITE PACKET
-			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == ID_SET) {
-				this->setDisplaySFML(new SFML());
-				std::cout << "RECEIVE " << this->_protocole._getArrayPositionLenght() << "sprites" << std::endl;
-				/*for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
-					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
-						(EObject)(this->_protocole._getPositionType(i)),
-						(float)(this->_protocole._getPositionPosX(i)),
-						(float)(this->_protocole._getPositionPosY(i)));*/
-				this->_protocole._createResponsePacket(NONE);
-				this->addOutput(this->_protocole._getLastPacket());
-				std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
-				this->_state = POSITION_PACKET_SET;
-			}
-
-			/*// LISTPOSITIONPACKET -- inutile
-			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == POSITION_PACKET_SET) {
-				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
-					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
-						(EObject)(this->_protocole._getPositionType(i)),
-						(float)(this->_protocole._getPositionPosX(i)),
-						(float)(this->_protocole._getPositionPosY(i)));
-			}*/
-		}
-		if (this->_state == POSITION_PACKET_SET && !this->haveOutput())
-		{
-			this->setStart(true);
-			std::cout << "The game is launched" << std::endl;
-			this->_protocole._createPingPacket();
-			this->addOutput(this->_protocole._getLastPacket());
-			this->addOutput(this->_protocole._getLastPacket());
-			this->addOutput(this->_protocole._getLastPacket());
-			this->addOutput(this->_protocole._getLastPacket());
-			this->addOutput(this->_protocole._getLastPacket());
-		}
+	std::cout << "[Game::loop] : _getHeader.opcode = " << (int)this->_protocole._getHeaderOpcode() << std::endl;
+	// RESPONSE PACKET SEND
+	if (this->_protocole._getHeaderOpcode() == 0 && this->_protocole._getResponseOpcode() == 0 && this->_state == CONNECT_OK) {
+	  this->_protocole._createParametersPacket(0, 0);
+	  this->addOutput(this->_protocole._getLastPacket());
+	  std::cout << "SEND PARAMETERS PACKET" << std::endl;
+	  this->_state = PARAMETERS_SET;
 	}
+
+	// IDENTIFIANT PACKET
+	if (this->_protocole._getHeaderOpcode() == 10 && this->_state == PARAMETERS_SET) {
+	  this->_idGame = this->_protocole._getIdentifiantNbGame();
+	  this->_idPlayer = this->_protocole._getIdentifiantIdPlayer();
+	  this->_protocole._setId(this->_idPlayer);
+	  this->_protocole._createResponsePacket(NONE);
+	  this->addOutput(this->_protocole._getLastPacket());
+	  std::cout << "RECEIVE ID PACKET" << std::endl;
+	  this->_state = ID_SET;
+	}
+
+	// INIT SPRITE PACKET
+	if (this->_protocole._getHeaderOpcode() == 4 && this->_state == ID_SET) {
+	  this->setDisplaySFML(new SFML());
+	  std::cout << "RECEIVE " << this->_protocole._getArrayPositionLenght() << "sprites" << std::endl;
+	  /*for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
+	    this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
+	    (EObject)(this->_protocole._getPositionType(i)),
+	    (float)(this->_protocole._getPositionPosX(i)),
+	    (float)(this->_protocole._getPositionPosY(i)));*/
+	  this->_protocole._createResponsePacket(NONE);
+	  this->addOutput(this->_protocole._getLastPacket());
+	  std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
+	  this->_state = POSITION_PACKET_SET;
+	}
+
+	/*// LISTPOSITIONPACKET -- inutile
+	  if (this->_protocole._getHeaderOpcode() == 4 && this->_state == POSITION_PACKET_SET) {
+	  for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
+	  this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
+	  (EObject)(this->_protocole._getPositionType(i)),
+	  (float)(this->_protocole._getPositionPosX(i)),
+	  (float)(this->_protocole._getPositionPosY(i)));
+	  }*/
+      }
+      if (this->_state == POSITION_PACKET_SET && !this->haveOutput())
+	{
+	  this->setStart(true);
+	  std::cout << "The game is launched" << std::endl;
+	  this->_protocole._createPingPacket();
+	  this->addOutput(this->_protocole._getLastPacket());
+	  this->addOutput(this->_protocole._getLastPacket());
+	  this->addOutput(this->_protocole._getLastPacket());
+	  this->addOutput(this->_protocole._getLastPacket());
+	  this->addOutput(this->_protocole._getLastPacket());
+	}
+    }
 }
 
 void	*Game::loop(void * arg)
@@ -147,53 +147,54 @@ void	*Game::loop(void * arg)
   _lastInput.clear();
   while (_this->_display->isOpen())
     {
-		_lastInput = _this->getInput();
-		for (size_t h = 0; h < _lastInput.size(); h++)
-		{
-			//std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
-			_this->_protocole._setNewPacket(_lastInput[h]);
-			//std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
-			// POSITIONPACKET
-			if (_this->_protocole._getHeaderOpcode() == 4) {
-			//  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-			//  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
-			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++) {
-				  _this->_display->update(std::string((char *)(_this->_protocole._getPositionPathData(i))),
-					  (EObject)(_this->_protocole._getPositionType(i)),
-					  (float)(_this->_protocole._getPositionPosX(i)),
-					  (float)(_this->_protocole._getPositionPosY(i)));
-				//  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionPathData(i) << std::endl;
-				//  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
-				// std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
-			  }
-			}
+      _lastInput = _this->getInput();
+      for (size_t h = 0; h < _lastInput.size(); h++)
+	{
+	  //std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
+	  _this->_protocole._setNewPacket(_lastInput[h]);
+	  //std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
+	  // POSITIONPACKET
+	  if (_this->_protocole._getHeaderOpcode() == 4) {
+	    //  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+	    //  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
+	    for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++) {
+	      _this->_display->update(std::string((char *)(_this->_protocole._getPositionPathData(i))),
+				      (EObject)(_this->_protocole._getPositionType(i)),
+				      (float)(_this->_protocole._getPositionPosX(i)),
+				      (float)(_this->_protocole._getPositionPosY(i)));
+	      //  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionPathData(i) << std::endl;
+	      //  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
+	      // std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
+	    }
+	  }
 
-			// DEADENTITYPACKET
-			else if (_this->_protocole._getHeaderOpcode() == 10) {
-				std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
-				_this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
-					(EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
-			}
-		}
-       ACTION  a = _this->_display->getInput();
-       if (a != 5)
+	  // DEADENTITYPACKET
+	  else if (_this->_protocole._getHeaderOpcode() == 10) {
+	    std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
+	    _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
+				    (EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
+	  }
+	}
+      ACTION  a = _this->_display->getInput();
+      if (a != 5)
        	std::cout << "ACTION ::: " << a << std::endl;
-       if (a != UNKNOW_ACTION)
-       {
-      	_this->_protocole._createActionPacket(a);
-		actionPacket tmp;
+      if (a != UNKNOW_ACTION)
+	{
+	  _this->_protocole._createActionPacket(a);
+	  actionPacket tmp;
 
-		memcpy(&tmp, _this->_protocole._getLastPacket() + sizeof(headerPacket), sizeof(actionPacket));
-		std::cout << "[Game::loop] : action : " << (int)tmp.action << std::endl;
-		_this->_protocole._setNewPacket(_this->_protocole._getLastPacket());
-		std::cout << "[Game::loop] : action : " << (int)_this->_protocole._getActionOpcode() << std::endl;
-      	_this->addOutput(_this->_protocole._getLastPacket());
-		}
-		//_this->_protocole._createPingPacket();
-		//_this->addOutput(_this->_protocole._getLastPacket());
-		_this->_display->clear();
-		_this->_display->drawAll();
-		_this->_display->display();
+	  memcpy(&tmp, _this->_protocole._getLastPacket() + sizeof(headerPacket), sizeof(actionPacket));
+	  std::cout << "[Game::loop] : action : " << (int)tmp.action << std::endl;
+	  _this->_protocole._setNewPacket(_this->_protocole._getLastPacket());
+	  std::cout << "[Game::loop] : action : " << (int)_this->_protocole._getActionOpcode() << std::endl;
+	  _this->addOutput(_this->_protocole._getLastPacket());
+	}
+      //_this->_protocole._createPingPacket();
+      //_this->addOutput(_this->_protocole._getLastPacket());
+      _this->_display->clear();
+      _this->_display->scroll();
+      _this->_display->drawAll();
+      _this->_display->display();
     }
   return arg;
 }

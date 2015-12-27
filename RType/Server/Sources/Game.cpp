@@ -310,7 +310,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			c->addOutput(c->protocole._getLastPacket());
 			c->setState(POSITION_PACKET_SET);
 			// faire spawn le joueur
-			size_t x = ZONE + 5, y = 5, h = 0;
+			size_t x = ZONE + 5, y = 100, h = 0;
 			c->getPlayer()->setY(y);
 			c->getPlayer()->setX(x);
 			while (checkCollisionAllObject(c->getPlayer()) && h < 500)

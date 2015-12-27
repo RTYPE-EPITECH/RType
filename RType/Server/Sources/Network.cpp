@@ -262,7 +262,7 @@ void				Network::writeClientUDP()
 			_toSend = _clients[j]->getAllOutput();
 			for (size_t i = 0; i < _toSend.size(); i++)
 			{
-				_proto._setNewPacketHeader(_toSend[i]);
+				_proto._setNewPacket(_toSend[i]);
 				std::cout << "Envoie Packet UDP : OpCode : " << (int)_proto._getHeaderOpcode() << std::endl;
 				if (_proto._getHeaderOpcode() == 4)
 				{

@@ -38,9 +38,9 @@ void WaveFactory::addItemNoPos(AObject * obj)
 	if ((prev = getLastItem()) != NULL)
 		addItem(obj, SPAWN,
 			prev->getY() + prev->getHeight() + 50,
-			150, 150);
+			obj->getWidth(), obj->getHeight());
 	else
-		addItem(obj, SPAWN, 50, 150, 150);
+		addItem(obj, SPAWN, 50, obj->getWidth(), obj->getHeight());
 }
 
 void WaveFactory::addObstacle()

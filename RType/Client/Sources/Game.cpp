@@ -158,11 +158,11 @@ void	*Game::loop(void * arg)
 			  std::cout << "[Game::Loop::positionPacket] : taille tableau sprite : " << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
 			  std::cout << "[Game::Loop::positionPacket] : array.lenght :" << (int)_this->_protocole._getArrayPositionLenght() << std::endl;
 			  for (int i = 0; i < (int)_this->_protocole._getArrayPositionLenght(); i++) {
-				  _this->_display->update(std::string((char *)(_this->_protocole._getPositionSpriteData(i))),
+				  _this->_display->update(std::string((char *)(_this->_protocole._getPositionPathData(i))),
 					  (EObject)(_this->_protocole._getPositionType(i)),
 					  (float)(_this->_protocole._getPositionPosX(i)),
 					  (float)(_this->_protocole._getPositionPosY(i)));
-				  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionSpriteData(i) << std::endl;
+				  std::cout << "[Game::loop::positionPacket] : name :" << (char *)_this->_protocole._getPositionPathData(i) << std::endl;
 				  std::cout << "[Game::loop::positionPacket] : posX :" << (int)_this->_protocole._getPositionPosX(i) << std::endl;
 				  std::cout << "[Game::loop::positionPacket] : posY :" << (int)_this->_protocole._getPositionPosY(i) << std::endl;
 			  }

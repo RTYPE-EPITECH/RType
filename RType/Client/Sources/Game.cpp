@@ -148,9 +148,9 @@ void	*Game::loop(void * arg)
   while (_this->_display->isOpen())
     {
 		_lastInput = _this->getInput();
-		std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 		for (size_t h = 0; h < _lastInput.size(); h++)
 		{
+			std::cout << "[Game::loop] vector::size = " << _lastInput.size() << std::endl;
 			_this->_protocole._setNewPacket(_lastInput[h]);
 			std::cout << "Packet OpCode " << (int)_this->_protocole._getHeaderOpcode() << std::endl;
 			// POSITIONPACKET

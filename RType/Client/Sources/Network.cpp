@@ -98,8 +98,8 @@ bool				Network::readServerUDP(void)
 		ISocket::tSocketAdress tmp;
 		char * header = NULL;
 		char * body = NULL;
-		char *test = new char[4096];
-		test = _socketGame->_recvfrom(4096, 0, &tmp);
+		char *test = new char[32000];
+		test = _socketGame->_recvfrom(32000, 0, &tmp);
 		if (test == NULL)
 			throw std::runtime_error("Fail to read(UDP) header packet");
 		_proto._setNewPacket(test);

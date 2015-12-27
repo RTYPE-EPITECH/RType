@@ -310,7 +310,6 @@ void					WSocket::_sendto(const char * const msg, const int flags, const tSocket
 	std::cout << "[WSocket::_sendTo] size : " << (int)strlen(msg) << std::endl;
 	if (sendto(_fd, msg, (int)strlen(msg), flags, (struct sockaddr *)(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
-	Sleep(10000000);
 }
 
 void					WSocket::_sendto(const char * const msg, const int size, const int flags, const tSocketAdress * const adress) const {
@@ -328,7 +327,6 @@ void					WSocket::_sendto(const char * const msg, const int size, const int flag
 	std::cout << "[WSocket::_sendTo] size : " << size << std::endl;
 	if (sendto(_fd, msg, size, flags, (struct sockaddr *)(&dest_addr), sizeof(dest_addr)) == SOCKET_ERROR)
 		throw std::runtime_error(_strerror());
-	Sleep(1000000);
 }
 
 void					WSocket::_sendto(const std::string &msg, const int flags, const tSocketAdress * const adress) const {

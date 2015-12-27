@@ -107,7 +107,11 @@ void				SFML::Intro()
   sf::Sprite			sprite;
   sf::Event			event;
 
+#ifndef _WIN32
   text.loadFromFile("RType/Client/Assets/intro.gif");
+#else
+  text.loadFromFile("Assets/intro.gif");
+#endif
   sprite.setTexture(text);
   sprite.setPosition(0, 0);
   win.draw(sprite);

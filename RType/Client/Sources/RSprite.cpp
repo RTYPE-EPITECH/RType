@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Dec  1 16:09:36 2015 Probola
-// Last update Mon Dec 21 16:43:22 2015 Probola
+// Last update Sun Dec 27 17:32:28 2015 Probola
 //
 
 #include			<string>
@@ -17,10 +17,10 @@ RSprite::RSprite(EObject type, float x, float y)
 
   static bool				check = true;
   static std::map<EObject, int *>	gen;
-  int					player[4] = { 0, 0, 0, 0 };
-  int					missile[4] = { 0, 0, 0, 0 };
-  int					obstacle[4] = { 0, 0, 0, 0 };
-  int					monster[4] = { 42, 43, 44, 45 };
+  int					player[4] = { 100, 0, 35, 18 };
+  int					missile[4] = { 167, 138, 48, 15 };
+  int					obstacle[4] = { 0, 71, 32, 32 };
+  int					monster[4] = { 76, 52, 59, 48 };
 
   // PIERRE : N'ESSAIE PAS CA, J'AI TEST, C'EST PAS CA LE PROBLEME ! <3
  /* int					*monster = new int[4];

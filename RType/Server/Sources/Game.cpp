@@ -185,7 +185,9 @@ bool Game::loop()
 				  _proto._setNewPacket(input);
 				  handleInputClient(_clients[i]);
 				  _proto._putPositionPacketOnList();
-		  		addPacketForClients(_proto._getLastPacket(), true);
+				  _proto._setNewPacket(_proto._getLastPacket());
+				  if (_proto._getArrayPositionLenght() > 0)
+		  			addPacketForClients(_proto._getLastPacket(), true);
 			  }
 				// Client trying to connect
 			  else
@@ -200,8 +202,10 @@ bool Game::loop()
 			_log->addLog("[Game::loop] Timer OK for scrolling");
 		  mutex->lock();
 		  AllMove();
-		  _proto._putPositionPacketOnList();
-		  addPacketForClients(_proto._getLastPacket(), true);
+			_proto._putPositionPacketOnList();
+		  _proto._setNewPacket(_proto._getLastPacket());
+		if (_proto._getArrayPositionLenght() > 0)
+		  		addPacketForClients(_proto._getLastPacket(), true);
 		  mutex->unlock();
 		  timer->start();
 		  _log->addLog("[Game::loop] End of Scrolling");
@@ -289,7 +293,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			std::cout << "INIT CLIENT" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
 			_proto._setNewPacket(_initToClient[0]);
-			std::cout << "Send : " <<  _proto._getArrayPositionLenght() << " sprites" << std::endl;
+			std::cout << "Send [INIT CLIENT] : " <<  _proto._getArrayPositionLenght() << " sprites" << std::endl;
 			for (size_t i = 0; _initToClient.size() > i; i++)
 				c->addOutput(_initToClient[i]);
 			c->setState(ID_SET);
@@ -368,8 +372,9 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			{
 				_log->addLog(std::string("[Game::HandleClientConnexion] ERROR " + Tools::NumberToString(tmp) + " sprites"));
 				_proto._putPositionPacketOnList();
-				_proto._setNewPacket(_proto._getLastPacket());
 				c->addOutput(_proto._getLastPacket());
+				_proto._setNewPacket(_proto._getLastPacket());
+
 			}
 			std::cout << "[GAME :: HANDLE CONNEXION CLIENT ]There are : " << _proto._getArrayPositionLenght() << " sprites on packet " << std::endl;
 			std::cout << std::string("[Game::HandleClientConnexion] Send " + Tools::NumberToString(tmp) + " sprites") << std::endl;
@@ -517,7 +522,9 @@ bool			Game::nextWave()
 			(Tools::getName(tmp->getType(), tmp->getId())).c_str(), "unknown");
 	}
 	_proto._putPositionPacketOnList();
-	addPacketForClients(_proto._getLastPacket());
+	_proto._setNewPacket(_proto._getLastPacket());
+	if (_proto._getArrayPositionLenght() > 0)
+		addPacketForClients(_proto._getLastPacket(), true);
 	mutex->unlock();
 	_log->addLog(std::string("[Game::nextWave] next waves " + Tools::NumberToString(_currwave)));
 	return false;
@@ -561,7 +568,6 @@ void			Game::monstersShoot()
 {
 	if (_objs != NULL)
 	{
-		_log->addLog("[Game::monstersShoot] Try to make the monsters shoot");
 		for (size_t i = 0; i < _objs->size(); i++)
 			if ((*_objs)[i]->getType() == MONSTER)
 			{

@@ -30,7 +30,6 @@ bool UConditionVariable::init()
 
 void UConditionVariable::wait()
 {
-	std::cout << "WAIT INFINITE" << std::endl;
 	if (pthread_mutex_lock(&_mut) != 0)
 		throw std::runtime_error("Failed to lock Mutex");
 	condition = false;

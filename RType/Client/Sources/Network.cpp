@@ -110,7 +110,7 @@ bool				Network::readServerUDP(void)
 			throw std::runtime_error("Fail to read(UDP) body packet");
 
 		const char * packet = _proto._linkPacketHeaderBody(header, body);*/
-		std::cout << "[Network::readServerUDP] : opcode : " << (int)_proto._getHeaderOpcode() << std::endl;
+		//std::cout << "[Network::readServerUDP] : opcode : " << (int)_proto._getHeaderOpcode() << std::endl;
 		_game->addInput(test);
 	}
 	catch (const std::runtime_error & e) {
@@ -162,7 +162,7 @@ void				Network::run(void) {
 		}
 		if (_socketConnexion->_FD_ISSET(_socketGame, 'r'))
 		{
-			std::cout << "Read UDP" << std::endl;
+			//std::cout << "Read UDP" << std::endl;
 			readServerUDP();
 		}
 	}

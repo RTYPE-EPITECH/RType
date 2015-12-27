@@ -169,7 +169,7 @@ void	*Game::loop(void * arg)
 	  }
 
 	  // DEADENTITYPACKET
-	  else if (_this->_protocole._getHeaderOpcode() == 10) {
+	  else if (_this->_protocole._getHeaderOpcode() == 11) {
 	    std::cout << "[Game::Loop::DeadEntityPacket]" << std::endl;
 	    _this->_display->update(std::string((char *)(_this->_protocole._getDeadEntityNameData())),
 				    (EObject)(_this->_protocole._getDeadEntityType()), (float)-1, (float)-1);
@@ -177,16 +177,16 @@ void	*Game::loop(void * arg)
 	}
       ACTION  a = _this->_display->getInput();
       if (a != 5)
-       	std::cout << "ACTION ::: " << a << std::endl;
+       	//std::cout << "ACTION ::: " << a << std::endl;
       if (a != UNKNOW_ACTION)
 	{
 	  _this->_protocole._createActionPacket(a);
 	  actionPacket tmp;
 
 	  memcpy(&tmp, _this->_protocole._getLastPacket() + sizeof(headerPacket), sizeof(actionPacket));
-	  std::cout << "[Game::loop] : action : " << (int)tmp.action << std::endl;
+	//  std::cout << "[Game::loop] : action : " << (int)tmp.action << std::endl;
 	  _this->_protocole._setNewPacket(_this->_protocole._getLastPacket());
-	  std::cout << "[Game::loop] : action : " << (int)_this->_protocole._getActionOpcode() << std::endl;
+	  //std::cout << "[Game::loop] : action : " << (int)_this->_protocole._getActionOpcode() << std::endl;
 	  _this->addOutput(_this->_protocole._getLastPacket());
 	}
       //_this->_protocole._createPingPacket();

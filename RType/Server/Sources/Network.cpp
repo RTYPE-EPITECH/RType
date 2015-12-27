@@ -169,10 +169,6 @@ bool				Network::readClientTCP(unsigned int i) {
 			_clients[i]->addInput(packet);
 		}
 		// packet TCP during the game : ignored
-		else
-		{
-			header = _clients[i]->getSocket()->_recv(4096, 0);
-		}
 	}
 	catch (const std::runtime_error & e) {
 		deleteClient(i);

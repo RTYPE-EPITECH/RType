@@ -19,7 +19,7 @@
 #define SPEED			1
 #define SPEED_MISSILE	SPEED * 4
 #define SPEED_SHOT		SPEED * 0.5
-#define SPEED_MOVE		SPEED * 0.01
+#define SPEED_MOVE		SPEED * 0.001
 #define SPEED_SHOT_ENEMY SPEED * 2
 class AObject;
 class Client;

@@ -16,13 +16,13 @@ void   UTimer::start()
 
 unsigned long long UTimer::getElapsedTimeInSec()
 {
-	return getElapsedTimeInMicroSec() / 1000.0;
-}
-
-unsigned long long UTimer::getElapsedTimeInMicroSec()
-{
 	unsigned long long now = std::time(0);
 	now -= _start;
 	_start = std::time(0);
 	return now;
+}
+
+unsigned long long UTimer::getElapsedTimeInMicroSec()
+{
+	return getElapsedTimeInSec() * 1000000.0;
 }

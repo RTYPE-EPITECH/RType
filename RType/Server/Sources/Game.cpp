@@ -100,6 +100,7 @@ size_t Game::getSizeAvailable() const
 
 bool Game::init(const std::vector<std::string> & _lib)
 {
+	(void)_lib;
 	_log->addLog("[Game::init] Initialisation ...");
 	/*// init Monsters Library AND create Init packet Cmd
 	MonsterFactory * mf = MonsterFactory::getInstance();

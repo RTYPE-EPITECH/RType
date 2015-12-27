@@ -176,31 +176,31 @@ if (getType() == PLAYER)
       	e->die(g);
       return false;
     }
-  // Collision with Missile : Takin Dmg
-  AObject * o = g->checkCollisionObject("Missile", this);
-  if (o != NULL)
-    {
-      Missile * m = reinterpret_cast<Missile *>(o);
-      //descrease life
-      if (type == PLAYER)
-	{
-	  Player * p = reinterpret_cast<Player *>(this);
-	  p->setLife(p->getLife() - m->getDamage());
-	  if (p->getLife() == 0)
-	    die(g);
-	}
-      else if (type == MONSTER)
-	{
-	  Monster * p = reinterpret_cast<Monster *>(this);
-	  p->setLife(p->getLife() - m->getDamage());
-	  if (p->getLife() == 0)
-	    die(g);
-	}
-	else
-		die(g);
+	  // Collision with Missile : Takin Dmg
+	  AObject * o = g->checkCollisionObject("Missile", this);
+	  if (o != NULL)
+		 {
+		   Missile * m = reinterpret_cast<Missile *>(o);
+		   //descrease life
+		   if (type == PLAYER)
+			{
+			  Player * p = reinterpret_cast<Player *>(this);
+			  p->setLife(p->getLife() - m->getDamage());
+			  if (p->getLife() == 0)
+				 die(g);
+			}
+		   else if (type == MONSTER)
+			{
+			  Monster * p = reinterpret_cast<Monster *>(this);
+			  p->setLife(p->getLife() - m->getDamage());
+			  if (p->getLife() == 0)
+				 die(g);
+			}
+			else
+				die(g);
       o->die(g);
     }
-  if (fx < ZONE - width)
+  if (fx <= 5)
 	  die(g);
 	if (fx + width >= WIDTH - 5)
 		die(g);
@@ -219,6 +219,6 @@ void	AObject::die(Game *g)
 	std::cout << "[DIE] create Packet die " << (Tools::getName(type, id)).c_str() << std::endl;
 	_proto._createDeadEntityPacket(type, (Tools::getName(type, id)).c_str());
 	g->addPacketForClients(_proto._getLastPacket(), true);
-	//g->addPacketForClients(_proto._getLastPacket(), true);
+	g->addPacketForClients(_proto._getLastPacket(), true);
 	_dead = true;
 }

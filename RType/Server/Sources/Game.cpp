@@ -366,7 +366,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			std::cout << "There are " << _clients.size() << " client(s)" << std::endl;
 			for (size_t j = 0; j < _clients.size(); j++)
 			{
-				if (_clients[j]->getState() == POSITION_PACKET_SET) {
+				if (_clients[j]->getState() == POSITION_PACKET_SET && !_clients[j]->getPlayer()->isDead()) {
 				std::cout << RED << "Add Player" << WHITE << std::endl;
 					_proto._addPositionPacket(
 						(unsigned int)_clients[j]->getPlayer()->getX(),

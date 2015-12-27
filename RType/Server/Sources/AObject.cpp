@@ -141,7 +141,8 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
     tomove[RIGHT] = &AObject::moveRight;
     check = false;
   }
-
+	if (isDead())
+		return false;
   if (getType() == PLAYER)
   {
 	  Player * p = reinterpret_cast<Player *>(this);
@@ -157,6 +158,8 @@ if (getType() == PLAYER)
   {
 	  if (fx < ZONE - width)
 	  	fx = ZONE - width + 1;
+		if (fx + width > SPAWN)
+		fx = SPAWN - width - 1;
 	}
 
   // Check collision with Player/ScreenEdge. If true, then do nothing
@@ -168,7 +171,9 @@ if (getType() == PLAYER)
   AObject * e;
   if ((e = g->checkCollisionObject("Objects", this))!= NULL)
     {
-      die(g);
+    	die(g);
+    	if (type == MISSILE)
+      	e->die(g);
       return false;
     }
   // Collision with Missile : Takin Dmg
@@ -191,11 +196,14 @@ if (getType() == PLAYER)
 	  if (p->getLife() == 0)
 	    die(g);
 	}
+	else
+		die(g);
       o->die(g);
     }
   if (fx < ZONE - width)
 	  die(g);
-
+	if (fx + width >= WIDTH)
+		die(g);
   if (isDead())
     return false;
   // no collision, apply position

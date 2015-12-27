@@ -3,10 +3,13 @@
 
 #include "ITimer.hpp"
 
+#include <sys/time.h>
+
 class UTimer : public ITimer
 {
 private:
 	unsigned long long _start;
+	struct timeval _start_tv;
 public:
 	UTimer();
 	virtual ~UTimer();

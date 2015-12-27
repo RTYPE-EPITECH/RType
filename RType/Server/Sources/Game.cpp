@@ -200,8 +200,8 @@ bool Game::loop()
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
-		double tmp = timer->getElapsedTimeInSec();
-		if (tmp >= 1 && getSizeAvailable() < MAX_PLAYER_GAME)
+		double tmp = timer->getElapsedTimeInMicroSec();
+		if (tmp >= (1.0 / FPS) * 1000000  && getSizeAvailable() < MAX_PLAYER_GAME)
 		{
 			_log->addLog("[Game::loop] Timer OK for scrolling");
 		  mutex->lock();
@@ -448,10 +448,6 @@ AObject * Game::listObjects(AObject *obj) const
 
 AObject* Game::listMissiles(AObject * obj) const
 {
-	for (size_t i = 0; i < _clients.size(); i++)
-		for (size_t j = 0; j < _clients[i]->getPlayer()->missiles.size(); j++)
-		if (conditionCollision(obj, _clients[i]->getPlayer()->missiles[j]) == false)
-			return _clients[i]->getPlayer()->missiles[j];
 	if (_objs != NULL)
 	{
 		for (size_t i = 0; i < _objs->size(); i++)
@@ -463,6 +459,10 @@ AObject* Game::listMissiles(AObject * obj) const
 						return m->missiles[j];
 			}
 	}
+	for (size_t i = 0; i < _clients.size(); i++)
+		for (size_t j = 0; j < _clients[i]->getPlayer()->missiles.size(); j++)
+			if (conditionCollision(obj, _clients[i]->getPlayer()->missiles[j]) == false)
+				return _clients[i]->getPlayer()->missiles[j];
 	return NULL;
 }
 

@@ -10,12 +10,12 @@
 
 #define END				0
 #define ZONE			100
-#define SPAWN			500
+#define SPAWN			700
 #define WIDTH			800
 #define HEIGHT			600
 #define MAX_PLAYER_GAME	2
 #define FPS				30
-#define MAX_WAVES		2
+#define MAX_WAVES		50
 #define SPEED			1
 #define SPEED_PLAYER 	SPEED * 4
 #define SPEED_OTHER		SPEED * 4

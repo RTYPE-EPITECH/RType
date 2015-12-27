@@ -36,6 +36,7 @@ public:
 	const char *	getOutput();
 
 	std::vector<const char *> getAllOutput();
+	std::vector<const char *> getAllInput();
 	
 	void	addInput(const char *);
 	void	addOutput(const char *);

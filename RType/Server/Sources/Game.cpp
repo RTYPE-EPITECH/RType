@@ -178,16 +178,18 @@ bool Game::loop()
 		  for (size_t i = 0; i < _clients.size(); i++)
 			  if (POSITION_PACKET_SET == _clients[i]->getState())
 			  {
-				  const char * input = NULL;
-				  if (!(input = _clients[i]->getInput()))
-					  continue;
-				  // set input into protocole to have the get/set
-				  _proto._setNewPacket(input);
-				  handleInputClient(_clients[i]);
-				  _proto._putPositionPacketOnList();
-				  _proto._setNewPacket(_proto._getLastPacket());
-				  if (_proto._getArrayPositionLenght() > 0)
-		  			addPacketForClients(_proto._getLastPacket(), true);
+			  		std::vector<const char *> input = _clients[i]->getAllInput();
+			  		if (input.size() > 0)
+			  		std::cout << "There are " << input.size() << "input" << std::endl;
+			  		for (size_t h = 0; h < input.size(); h++)
+			  		{
+					  _proto._setNewPacket(input[h]);
+					  handleInputClient(_clients[i]);
+					  _proto._putPositionPacketOnList();
+					  _proto._setNewPacket(_proto._getLastPacket());
+					  if (_proto._getArrayPositionLenght() > 0)
+			  			addPacketForClients(_proto._getLastPacket(), true);
+		  			}
 			  }
 				// Client trying to connect
 			  else

@@ -212,6 +212,7 @@ bool				Network::readClientUDP()
 			_clients[i]->isUDPset = true;
 			const char * packet = _proto._linkPacketHeaderBody(header, body);
 			_clients[i]->addInput(packet);
+			std::cout << "READ UDP OK" << std::endl;
 		}
 		else
 			throw std::runtime_error(std::string("Unknow Client " + Tools::NumberToString(id)));

@@ -46,8 +46,8 @@ std::vector<RSprite *> SpriteFactory::getAllSprite()
 	++i)
 	{
 		tmp.push_back(i->second);
-		sf::Vector2f pos = i->second->_sprite.getPosition();
-		std::cout << "[Sprite : ]" << i->first << " " << pos.x << "," << pos.y << std::endl;
+		//sf::Vector2f pos = i->second->_sprite.getPosition();
+		//std::cout << "[Sprite : ]" << i->first << " " << pos.x << "," << pos.y << std::endl;
 	}
 	return tmp;
 }

@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Dec  1 16:09:36 2015 Probola
-// Last update Sun Dec 27 18:17:41 2015 Probola
+// Last update Sun Dec 27 21:47:39 2015 Probola
 //
 
 #include			<string>
@@ -21,7 +21,9 @@ RSprite::RSprite(EObject type, float x, float y)
   int					missile[4] = { 167, 138, 48, 15 };
   int					obstacle[4] = { 0, 71, 32, 32 };
   int					monster[4] = { 76, 52, 59, 48 };
-
+  int					little_monster[4] = { 33, 33, 34, 33 };
+  int					monster_ship[4] = { 0, 0, 34, 30 };
+  
   // PIERRE : N'ESSAIE PAS CA, J'AI TEST, C'EST PAS CA LE PROBLEME ! <3
  /* int					*monster = new int[4];
   monster[0] = 0;
@@ -35,13 +37,14 @@ RSprite::RSprite(EObject type, float x, float y)
       gen[MISSILE] = missile;
       gen[OBSTACLE] = obstacle;
       gen[MONSTER] = monster;
+      gen[LITTLE_MONSTER] = little_monster;
+      gen[MONSTER_SHIP] = monster_ship;
       check = false;
     }
   if (gen.count(type) > 0)
     {
       this->_sprite.setTexture(this->_textureFactory->_stack.at(type)->_texture, false);
       this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
-      std::cout << "CONSTRUCTOR : " <<  x << " " << y << std::endl;
       this->_sprite.setPosition(x, y);
       this->_sprite.setScale(2, 2);
     }

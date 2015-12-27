@@ -1,11 +1,11 @@
 /*
-** Game.hpp for Game in /home/mathon_j/rendu/RType/client/Includes
+1;2802;0c** Game.hpp for Game in /home/mathon_j/rendu/RType/client/Includes
 ** 
 ** Made by Jérémy MATHON
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:47:59 2015 Jérémy MATHON
-** Last update Tue Dec 15 17:30:33 2015 Jérémy MATHON
+// Last update Sun Dec 27 21:46:22 2015 Probola
 */
 
 #ifndef GAME_HPP_
@@ -45,7 +45,7 @@ private:
   int			_idPlayer;
   Protocole		_protocole;
   ESTATE		_state;
-
+  
 public:
   Game();
   ~Game();

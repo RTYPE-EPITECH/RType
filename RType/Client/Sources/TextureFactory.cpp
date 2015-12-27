@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:34:58 2015 Probola
-// Last update Mon Dec 21 16:31:13 2015 Probola
+// Last update Sun Dec 27 21:26:41 2015 Probola
 //
 
 #include			"TextureFactory.hpp"
@@ -52,25 +52,29 @@ bool			TextureFactory::_exist(EObject type)
 
 bool			TextureFactory::setAssets()
 {
-	std::cout << "[TextureFactory::setAssets] : init Assets " << std::endl;
+  std::cout << "[TextureFactory::setAssets] : init Assets " << std::endl;
 
 #ifdef _WIN32
 
-	// OK LE FICHIER EXISTE (LE _ACCESS PLANTE PAS) mais il veux pas load on sait pas pq..., enjoy <3
-/*
-	TCHAR buffer[4096];
-	GetCurrentDirectory(4096, buffer);
-	_tprintf(TEXT("[TextureFactory::setAssets] : getCurrentDirectorty : %s\n"), buffer);*/
-	/*if (_access("C:\\Users\\dewael_a\\Documents\\RType\\RType\\Client\\Assets\\r-typesheet1.gif", 0) == -1)
-		std::cout << "NIQUE TES PUTAINS DE MORT" << std::endl;*/
-	if (!initialize(PLAYER, "Assets/r-typesheet1.gif"))
-		return false;
-	if (!initialize(MISSILE, "Assets/r-typesheet1.gif"))
-		return false;
-	if (!initialize(OBSTACLE, "Assets/r-typesheet39.gif"))
-		return false;
-	if (!initialize(MONSTER, "Assets/r-typesheet14.gif"))
-		return false;
+  // OK LE FICHIER EXISTE (LE _ACCESS PLANTE PAS) mais il veux pas load on sait pas pq..., enjoy <3
+  /*
+    TCHAR buffer[4096];
+    GetCurrentDirectory(4096, buffer);
+    _tprintf(TEXT("[TextureFactory::setAssets] : getCurrentDirectorty : %s\n"), buffer);*/
+  /*if (_access("C:\\Users\\dewael_a\\Documents\\RType\\RType\\Client\\Assets\\r-typesheet1.gif", 0) == -1)
+    std::cout << "NIQUE TES PUTAINS DE MORT" << std::endl;*/
+  if (!initialize(PLAYER, "Assets/r-typesheet1.gif"))
+    return false;
+  if (!initialize(MISSILE, "Assets/r-typesheet1.gif"))
+    return false;
+  if (!initialize(OBSTACLE, "Assets/r-typesheet39.gif"))
+    return false;
+  if (!initialize(MONSTER, "Assets/r-typesheet14.gif"))
+    return false;
+  if (!initialize(MONSTER_SHIP, "Assets/r-typesheet27.gif"))
+    return false;
+  if (!initialize(LITTLE_MONSTER, "Assets/r-typesheet7.gif"))
+    return false;
 #else
   if (!initialize(PLAYER, "RType/Client/Assets/r-typesheet1.gif"))
     return false;
@@ -79,6 +83,10 @@ bool			TextureFactory::setAssets()
   if (!initialize(OBSTACLE, "RType/Client/Assets/r-typesheet39.gif"))
     return false;
   if (!initialize(MONSTER, "RType/Client/Assets/r-typesheet14.gif"))
+    return false;
+  if (!initialize(MONSTER_SHIP, "RType/Client/Assets/r-typesheet27.gif"))
+    return false;
+  if (!initialize(LITTLE_MONSTER, "RType/Client/Assets/r-typesheet7.gif"))
     return false;
 #endif
   return true;

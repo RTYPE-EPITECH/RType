@@ -172,11 +172,19 @@ void				SFML::scroll()
 
 void				SFML::playMusic()
 {
-  if (!music.openFromFile("RType/Client/Assets/music.wav"))
-    {
-      std::string e = "Cannot load sound";
-      throw std::runtime_error(e);
-    }
+#ifdef _WIN32
+	if (!music.openFromFile("Assets/music.wav"))
+	{
+		std::string e = "Cannot load sound";
+		throw std::runtime_error(e);
+	}
+#else
+	if (!music.openFromFile("RType/Client/Assets/music.wav"))
+	{
+		std::string e = "Cannot load sound";
+		throw std::runtime_error(e);
+	}
+#endif
   music.setLoop(true);
   music.play();
 }

@@ -99,7 +99,10 @@ void Player::setTypeMissile(EMissile t)
 
 bool Player::canMove()
 {
-	if (_tMove->getElapsedTimeInMicroSec() > SPEED_MOVE * 1000000)
+	long long t = _tMove->getElapsedTimeInMicroSec();
+	std::cout << "Time : " << t << std::endl;
+	std::cout << "Speed move " << SPEED_MOVE << std::endl;
+	if (t > SPEED_MOVE * 1000000)
 	{
 		_tMove->start();
 		return true;

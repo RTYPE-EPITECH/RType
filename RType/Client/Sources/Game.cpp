@@ -97,11 +97,11 @@ void	Game::initConnexion(void) {
 			if (this->_protocole._getHeaderOpcode() == 4 && this->_state == ID_SET) {
 				this->setDisplaySFML(new SFML());
 				std::cout << "RECEIVE " << this->_protocole._getArrayPositionLenght() << "sprites" << std::endl;
-				for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
+				/*for (unsigned int i = 0; i < this->_protocole._getArrayPositionLenght(); i++)
 					this->_display->update(std::string((char *)(this->_protocole._getPositionSpriteData(i))),
 						(EObject)(this->_protocole._getPositionType(i)),
 						(float)(this->_protocole._getPositionPosX(i)),
-						(float)(this->_protocole._getPositionPosY(i)));
+						(float)(this->_protocole._getPositionPosY(i)));*/
 				this->_protocole._createResponsePacket(NONE);
 				this->addOutput(this->_protocole._getLastPacket());
 				std::cout << "RECEIVE INIT SPRITE PACKET" << std::endl;
@@ -176,6 +176,8 @@ void	*Game::loop(void * arg)
 			}
 		}
        ACTION  a = _this->_display->getInput();
+       if (a != 5)
+       	std::cout << "ACTION ::: " << a << std::endl;
        if (a != UNKNOW_ACTION)
        {
       	_this->_protocole._createActionPacket(a);

@@ -226,10 +226,12 @@ bool Game::loop()
 
 bool	Game::handleInputClient(Client * c)
 {
+	std::cout << "[INPUT] opcode " << (int)_proto._getHeaderOpcode() << std::endl;
   if (_proto._getHeaderOpcode() == 3)
     {
       ACTION a = (ACTION)_proto._getActionOpcode();
       Missile * m = NULL;
+      std::cout << "ACTION : " << (int)a << std::endl;
       _log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " do an action "));
       if (a == SHOOT)
 		{
@@ -237,8 +239,11 @@ bool	Game::handleInputClient(Client * c)
 		  _log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " cannot shoot"));
 		}
       else
-	if (c->getPlayer()->move(this, a, 1) == false)
-	  _log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " die"));
+			if (c->getPlayer()->move(this, a, SPEED) == false) {
+	  			_log->addLog(std::string("[Game::handleInputClient] Player " + Tools::NumberToString(c->getPlayer()->getId()) + " die"));
+	  			std::cout << "Player can't move" << std::endl;
+	  }
+	  std::cout << "OK end of action" << std::endl;
     }
   else if (_proto._getHeaderOpcode() == 5)
   {

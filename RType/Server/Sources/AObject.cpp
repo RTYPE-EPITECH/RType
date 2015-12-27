@@ -146,15 +146,20 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
   {
 	  Player * p = reinterpret_cast<Player *>(this);
 	  if (p->canMove() == false)
+	  {
+	  std::cout << "PLAYER CAN'T move (have to wait)" << std::endl;
 	  	return false;
+	  	}
   }
 
   (this->*tomove[a])(fx, fy, t);
 
+	std::cout << "Collision with other player" << std::endl;
   // Check collision with Player/ScreenEdge. If true, then do nothing
   if (g->checkCollisionObject("Player", this) != NULL)
     return true;
 
+	std::cout << "Collision with objects" << std::endl;
   // check collision with enemies/obstacle/missile . If true, then player dies
   if (g->checkCollisionObject("Objects", this) != NULL)
     {
@@ -162,6 +167,7 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
       return false;
     }
   // Collision with Missile : Takin Dmg
+  std::cout << "Collision with missile" << std::endl;
   AObject * o = g->checkCollisionObject("Missile", this);
   if (o != NULL)
     {
@@ -183,10 +189,12 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 	}
       o->die(g);
     }
+   std::cout << "Check out of zone" << std::endl;
   if (fx < ZONE - width)
 	  die(g);
   if (isDead())
     return false;
+   std::cout << "MOVE" << std::endl;
   // no collision, apply position
   x = fx;
   y = fy;
@@ -197,7 +205,7 @@ bool	AObject::move(Game * g, ACTION a, size_t t)
 
 void	AObject::die(Game *g)
 {
-	// create Packet die
+	std::cout << "[DIE] create Packet die" << std::endl;
 	_proto._createDeadEntityPacket(type, (Tools::getName(type, id)).c_str());
 	g->addPacketForClients(_proto._getLastPacket());
 	_dead = true;

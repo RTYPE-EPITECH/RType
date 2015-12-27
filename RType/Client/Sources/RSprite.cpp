@@ -31,7 +31,6 @@ RSprite::RSprite(EObject type, float x, float y)
 
   if (check)
     {
-		std::cout << "[Rsprite::RSprite] : check ok" << std::endl;
       gen[PLAYER] = player;
       gen[MISSILE] = missile;
       gen[OBSTACLE] = obstacle;
@@ -40,18 +39,11 @@ RSprite::RSprite(EObject type, float x, float y)
     }
   if (gen.count(type) > 0)
     {
-		std::cout << "[RSprite::RSprite] : gen[type][0] : " << (int)gen[type][0] << std::endl;
-		std::cout << "[RSprite::RSprite] : gen[type][1] : " << (int)gen[type][1] << std::endl;
-		std::cout << "[RSprite::RSprite] : gen[type][2] : " << (int)gen[type][2] << std::endl;
-		std::cout << "[RSprite::RSprite] : gen[type][3] : " << (int)gen[type][3] << std::endl;
+	
       this->_sprite.setTexture(this->_textureFactory->_stack.at(type)->_texture, false);
-	  std::cout << "[RSprite::RSprite] : Texture set" << std::endl;
 	  this->_sprite.setTextureRect(sf::IntRect(gen[type][0], gen[type][1], gen[type][2], gen[type][3]));
-	  std::cout << "[RSprite::RSprite] : TextureRect set" << std::endl;
       this->_sprite.setPosition(x, y);
-	  std::cout << "[RSprite::RSprite] : Position set" << std::endl;
       this->_sprite.setScale(2, 2);
-	  std::cout << "[RSprite::RSprite] : Scale set" << std::endl;
     }
   else
     throw std::runtime_error(std::string("Texture does not exist : " + Tools::NumberToString((int)type)) + " x : " + Tools::NumberToString((int)x) + " y " + Tools::NumberToString((int)y));

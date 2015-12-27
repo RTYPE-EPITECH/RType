@@ -287,7 +287,7 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 			_log->addLog(std::string("[Game::HandleClientConnexion] : headerOpcode = 0"));
 			_proto._setNewPacket(_initToClient[0]);
 			std::cout << "Send : " <<  _proto._getArrayPositionLenght() << " sprites" << std::endl;
-			sleep(1);
+			//sleep(1);
 			for (size_t i = 0; _initToClient.size() > i; i++)
 				c->addOutput(_initToClient[i]);
 			c->setState(ID_SET);

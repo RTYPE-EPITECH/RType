@@ -266,7 +266,7 @@ void				Network::writeClientUDP()
 					0,
 					&(_clients[j]->_adr));
 			}
-			sleep(5);
+		//	sleep(5);
 		}
 	}
 
@@ -293,7 +293,7 @@ void				Network::run(void)
 		setClient();
 		std::cout << YELLOW << "Select ... (Timeout : 5s)" << WHITE << std::endl;
 		int tmp = (int)(1.0 / 30.0 * 1000.0);
-		_socketConnexion->_select(0, tmp);
+		_socketConnexion->_select(3, tmp);
 		std::cout << YELLOW << "... Select over " << WHITE << std::endl;
 		_i->sendSignal();
 		if (_socketConnexion->_FD_ISSET('r') == true) {

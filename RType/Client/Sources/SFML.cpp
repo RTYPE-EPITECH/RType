@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Mon Dec 21 17:50:58 2015 Probola
+// Last update Sun Dec 27 17:51:52 2015 Probola
 //
 
 #include			"SFML.hpp"
@@ -64,37 +64,37 @@ ACTION				SFML::getInput()
     }
   if (win.pollEvent(Event))
     {
-        switch (Event.type)
-		 {
-		     // window closed
-		     case sf::Event::Closed:
-		         win.close();
-		         break;
+      switch (Event.type)
+	{
+	  // window closed
+	case sf::Event::Closed:
+	  win.close();
+	  break;
 
-		     // key pressed
-		     case sf::Event::KeyPressed:
-		         if (Event.key.code == sf::Keyboard::Escape)
-						{
-						  win.close();
-						  return UNKNOW_ACTION;
-						}
-		      	if (gen.count(Event.key.code) > 0)
-			  			return gen[Event.key.code];
+	  // key pressed
+	case sf::Event::KeyPressed:
+	  if (Event.key.code == sf::Keyboard::Escape)
+	    {
+	      win.close();
+	      return UNKNOW_ACTION;
+	    }
+	  if (gen.count(Event.key.code) > 0)
+	    return gen[Event.key.code];
 
-		     // we don't process other types of events
-		     default:
-		         break;
-		 }
+	  // we don't process other types of events
+	default:
+	  break;
+	}
     }
   return UNKNOW_ACTION;
 }
 
 void				SFML::update(const std::string &name, EObject type, float x, float y)
 {
-	if (this->_spritefactory->initialize(name, type, x, y) == true) {
-		//std::cout << "[SFML::update] : initialize" << std::endl;
-		this->_spritefactory->_stack[name]->setPosition(x, y);
-	}
+  if (this->_spritefactory->initialize(name, type, x, y) == true) {
+    //std::cout << "[SFML::update] : initialize" << std::endl;
+    this->_spritefactory->_stack[name]->_sprite->setPosition(x, y);
+  }
   win.draw(this->_spritefactory->_stack[name]->_sprite);
 }
 
@@ -116,13 +116,13 @@ void				SFML::Intro()
     {
       _clock.restart();
       if (win.pollEvent(event))
-		{
-			  if (event.type == sf::Event::KeyPressed)
-				 break;
-			   if (event.type == sf::Event::Closed)
+	{
+	  if (event.type == sf::Event::KeyPressed)
+	    break;
+	  if (event.type == sf::Event::Closed)
             win.close();
-		}
-		win.clear();
+	}
+      win.clear();
       win.draw(sprite);
       win.display();
     }
@@ -131,11 +131,11 @@ void				SFML::Intro()
 
 void				SFML::drawAll()
 {
-	std::vector<RSprite *> tmp = _spritefactory->getAllSprite();
-	for (unsigned int i = 0; i < tmp.size(); i++)
-	{
-		win.draw(tmp[i]->_sprite);
-	}
+  std::vector<RSprite *> tmp = _spritefactory->getAllSprite();
+  for (unsigned int i = 0; i < tmp.size(); i++)
+    {
+      win.draw(tmp[i]->_sprite);
+    }
 }
 
 float				SFML::getTimeElapsed()

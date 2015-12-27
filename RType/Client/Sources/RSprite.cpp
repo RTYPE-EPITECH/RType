@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Tue Dec  1 16:09:36 2015 Probola
-// Last update Sun Dec 27 21:47:39 2015 Probola
+// Last update Sun Dec 27 22:12:50 2015 Probola
 //
 
 #include			<string>
@@ -56,6 +56,5 @@ RSprite::~RSprite() {}
 
 void				RSprite::setPosition(float x, float y)
 {
-  std::cout << "SET POSITION : X: " << x << " Y: " << y << std::endl;
   this->_sprite.setPosition(x, y);
 }

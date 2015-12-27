@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Mon Dec  7 00:34:58 2015 Probola
-// Last update Sun Dec 27 21:26:41 2015 Probola
+// Last update Sun Dec 27 22:17:12 2015 Probola
 //
 
 #include			"TextureFactory.hpp"
@@ -25,21 +25,21 @@ TextureFactory *	TextureFactory::getInstance()
 
 bool			TextureFactory::initialize(EObject type, const std::string &file)
 {
-	if (!_exist(type))
+  if (!_exist(type))
+    {
+      try {
+	RTexture		*text = new RTexture(file);
+	if (text != NULL)
+	  this->_stack[type] = text;
+	else
+	  return false;
+      }
+      catch (const std::runtime_error & e)
 	{
-		try {
-			RTexture		*text = new RTexture(file);
-			if (text != NULL)
-				this->_stack[type] = text;
-			else
-				return false;
-		}
-		catch (const std::runtime_error & e)
-		{
-			std::cerr << e.what() << std::endl;
-			return false;
-		}
+	  std::cerr << e.what() << std::endl;
+	  return false;
 	}
+    }
   return true;
 }
 
@@ -63,30 +63,30 @@ bool			TextureFactory::setAssets()
     _tprintf(TEXT("[TextureFactory::setAssets] : getCurrentDirectorty : %s\n"), buffer);*/
   /*if (_access("C:\\Users\\dewael_a\\Documents\\RType\\RType\\Client\\Assets\\r-typesheet1.gif", 0) == -1)
     std::cout << "NIQUE TES PUTAINS DE MORT" << std::endl;*/
-  if (!initialize(PLAYER, "Assets/r-typesheet1.gif"))
+  if (!initialize(PLAYER, "Assets/r-typesheet1.png"))
     return false;
-  if (!initialize(MISSILE, "Assets/r-typesheet1.gif"))
+  if (!initialize(MISSILE, "Assets/r-typesheet1.png"))
     return false;
-  if (!initialize(OBSTACLE, "Assets/r-typesheet39.gif"))
+  if (!initialize(OBSTACLE, "Assets/r-typesheet39.png"))
     return false;
-  if (!initialize(MONSTER, "Assets/r-typesheet14.gif"))
+  if (!initialize(MONSTER, "Assets/r-typesheet14.png"))
     return false;
-  if (!initialize(MONSTER_SHIP, "Assets/r-typesheet27.gif"))
+  if (!initialize(MONSTER_SHIP, "Assets/r-typesheet27.png"))
     return false;
-  if (!initialize(LITTLE_MONSTER, "Assets/r-typesheet7.gif"))
+  if (!initialize(LITTLE_MONSTER, "Assets/r-typesheet7.png"))
     return false;
 #else
-  if (!initialize(PLAYER, "RType/Client/Assets/r-typesheet1.gif"))
+  if (!initialize(PLAYER, "RType/Client/Assets/r-typesheet1.png"))
     return false;
-  if (!initialize(MISSILE, "RType/Client/Assets/r-typesheet1.gif"))
+  if (!initialize(MISSILE, "RType/Client/Assets/r-typesheet1.png"))
     return false;
-  if (!initialize(OBSTACLE, "RType/Client/Assets/r-typesheet39.gif"))
+  if (!initialize(OBSTACLE, "RType/Client/Assets/r-typesheet39.png"))
     return false;
-  if (!initialize(MONSTER, "RType/Client/Assets/r-typesheet14.gif"))
+  if (!initialize(MONSTER, "RType/Client/Assets/r-typesheet14.png"))
     return false;
-  if (!initialize(MONSTER_SHIP, "RType/Client/Assets/r-typesheet27.gif"))
+  if (!initialize(MONSTER_SHIP, "RType/Client/Assets/r-typesheet27.png"))
     return false;
-  if (!initialize(LITTLE_MONSTER, "RType/Client/Assets/r-typesheet7.gif"))
+  if (!initialize(LITTLE_MONSTER, "RType/Client/Assets/r-typesheet7.png"))
     return false;
 #endif
   return true;

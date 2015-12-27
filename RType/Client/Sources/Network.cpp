@@ -97,7 +97,9 @@ bool				Network::readServerUDP(void)
 	try {
 		ISocket::tSocketAdress tmp;
 		char * header = NULL;
+		(void)header;
 		char * body = NULL;
+		(void)body;
 		char *test = new char[32000];
 		test = _socketGame->_recvfrom(32000, 0, &tmp);
 		if (test == NULL)

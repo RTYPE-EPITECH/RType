@@ -180,7 +180,10 @@ bool				Network::readClientTCP(unsigned int i) {
 bool				Network::readClientUDP()
 {
 	try {
-		char * header = NULL, * body = NULL;
+		char * header = NULL;
+		(void)header;
+		char * body = NULL;
+		(void)body;
 		char *test = new char[32000];
 		ISocket::tSocketAdress add;
 		std::cout << "Read UDP" << std::endl;

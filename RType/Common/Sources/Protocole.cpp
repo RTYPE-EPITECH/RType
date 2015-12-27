@@ -96,9 +96,11 @@ void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsign
 	this->_arrayPositionPacket.data[this->_posInArray].sprite.lenght = (uint8_t)(strlen(type));
 	this->_arrayPositionPacket.data[this->_posInArray].type = sprite;
 	this->_posInArray = this->_posInArray + 1;
+	std::cout << "[Potocole ADDINPUT] There are " << (int)this->_posInArray << std::endl;
 }
 
 void		Protocole::_putPositionPacketOnList(void) {
+	std::cout << "[Potocole putPOS] There are " << (int)this->_posInArray << std::endl;
 	char *result = new char[sizeof(headerPacket) + sizeof(arrayPositionPacket)];
 	memset(result, 0, sizeof(headerPacket) + sizeof(arrayPositionPacket));
 	memset(&(this->_header), 0, sizeof(headerPacket));
@@ -107,10 +109,10 @@ void		Protocole::_putPositionPacketOnList(void) {
 	this->_header.size = sizeof(arrayPositionPacket);
 	memcpy(result, &(this->_header), sizeof(headerPacket));
 	memcpy(result + sizeof(headerPacket), &(this->_arrayPositionPacket), sizeof(arrayPositionPacket));
-	this->_setNewPacket(result);
-	this->_posInArray = 0;
 	this->_listPacket.push_back(result);
-	//memset(&(this->_arrayPositionPacket), 0, sizeof(arrayPositionPacket));
+	//this->_setNewPacket(result);
+	this->_posInArray = 0;
+	memset(&(this->_arrayPositionPacket), 0, sizeof(arrayPositionPacket));
 }
 
 void		Protocole::_createPingPacket(void) {
@@ -228,31 +230,31 @@ void		Protocole::_setNewPacket(const char *packet) {
 		(this->*_generateData[this->_header.opcode])(packet + sizeof(headerPacket));
 }
 void		Protocole::_setResponseStruct(const char *packet) {
-	memcpy(&(this->_response), packet, sizeof(responsePacket));
+	memcpy(&(this->_response), packet , sizeof(responsePacket));
 }
 
 void		Protocole::_setParametersStruct(const char *packet) {
-	memcpy(&(this->_params), packet, sizeof(parametersPacket));
+	memcpy(&(this->_params), packet , sizeof(parametersPacket));
 }
 
 void		Protocole::_setActionStruct(const char *packet) {
-	memcpy(&(this->_action), packet, sizeof(actionPacket));
+	memcpy(&(this->_action), packet , sizeof(actionPacket));
 }
 
 void		Protocole::_setPositionStruct(const char *packet) {
-	memcpy(&(this->_arrayPositionPacket), packet, sizeof(arrayPositionPacket));
+	memcpy(&(this->_arrayPositionPacket), packet , sizeof(arrayPositionPacket));
 }
 
 void		Protocole::_setScrollingPacket(const char *packet) {
-	memcpy(&(this->_scroll), packet, sizeof(scrollingPacket));
+	memcpy(&(this->_scroll), packet , sizeof(scrollingPacket));
 }
 
 void		Protocole::_setIdentifiantPacket(const char *packet) {
-	memcpy(&(this->_identifiant), packet, sizeof(identifantPacket));
+	memcpy(&(this->_identifiant), packet , sizeof(identifantPacket));
 }
 
 void		Protocole::_setDeadEntityPacket(const char *packet) {
-	memcpy(&(this->_deadEntity), packet, sizeof(deadEntityPacket));
+	memcpy(&(this->_deadEntity), packet , sizeof(deadEntityPacket));
 }
 
 /*

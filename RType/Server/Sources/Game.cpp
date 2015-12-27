@@ -200,7 +200,8 @@ bool Game::loop()
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
-		if (timer->getElapsedTimeInMicroSec() == FPS * 1000 && getSizeAvailable() < MAX_PLAYER_GAME)
+		double tmp = timer->getElapsedTimeInSec();
+		if (tmp >= 1 && getSizeAvailable() < MAX_PLAYER_GAME)
 		{
 			_log->addLog("[Game::loop] Timer OK for scrolling");
 		  mutex->lock();
@@ -213,7 +214,7 @@ bool Game::loop()
 		  timer->start();
 		  _log->addLog("[Game::loop] End of Scrolling");
 		}
-		monstersShoot();
+		//monstersShoot();
 		if (isWaveEnded())
 		{
 			_log->addLog("[Game::loop] Next wave ...");
@@ -409,8 +410,8 @@ bool Game::conditionCollision(AObject * one, AObject * two) const
 		return true;
 	if (one->isDead() || two->isDead())
 		return true;
-	std::cout << " one x:" << one->getX() << " one y : " << one->getY() << " one width :" << one->getWidth() << " one height " << one->getHeight() << std::endl;
-	std::cout << " one x:" << two->getX() << " one y : " << two->getY() << " one width :" << two->getWidth() << " one height " << two->getHeight() << std::endl;
+	/*std::cout << " one x:" << one->getX() << " one y : " << one->getY() << " one width :" << one->getWidth() << " one height " << one->getHeight() << std::endl;
+	std::cout << " one x:" << two->getX() << " one y : " << two->getY() << " one width :" << two->getWidth() << " one height " << two->getHeight() << std::endl;*/
 	std::cout << std::endl;
 	if (
 			((one->getX() + one->getWidth() > two->getX() && one->getX() + one->getWidth() < two->getX() + two->getWidth())
@@ -448,7 +449,7 @@ AObject * Game::listObjects(AObject *obj) const
 AObject* Game::listMissiles(AObject * obj) const
 {
 	for (size_t i = 0; i < _clients.size(); i++)
-		for (size_t j = 0; i < _clients[i]->getPlayer()->missiles.size(); j++)
+		for (size_t j = 0; j < _clients[i]->getPlayer()->missiles.size(); j++)
 		if (conditionCollision(obj, _clients[i]->getPlayer()->missiles[j]) == false)
 			return _clients[i]->getPlayer()->missiles[j];
 	if (_objs != NULL)
@@ -457,7 +458,7 @@ AObject* Game::listMissiles(AObject * obj) const
 			if ((*_objs)[i]->getType() == MONSTER)
 			{
 				Monster * m = reinterpret_cast<Monster *>((*_objs)[i]);
-				for (size_t j = 0; i < m->missiles.size(); j++)
+				for (size_t j = 0; j < m->missiles.size(); j++)
 					if (conditionCollision(obj, m->missiles[j]) == false)
 						return m->missiles[j];
 			}
@@ -468,17 +469,17 @@ AObject* Game::listMissiles(AObject * obj) const
 void	Game::AllMove()
 {
 	for (size_t i = 0; i < _clients.size(); i++)
-		for (size_t j = 0; i < _clients[i]->getPlayer()->missiles.size(); j++)
+		for (size_t j = 0; j < _clients[i]->getPlayer()->missiles.size(); j++)
 			_clients[i]->getPlayer()->missiles[j]->move(this, RIGHT, SPEED_MISSILE);
 	if (_objs != NULL)
 	{
 		for (size_t i = 0; i < _objs->size(); i++)
 		{
-			(*_objs)[i]->move(this, LEFT, SPEED);
+			(*_objs)[i]->move(this, LEFT, SPEED_OTHER);
 			if ((*_objs)[i]->getType() == MONSTER)
 			{
 				Monster * m = reinterpret_cast<Monster *>((*_objs)[i]);
-				for (size_t j = 0; i < m->missiles.size(); j++)
+				for (size_t j = 0; j < m->missiles.size(); j++)
 					m->missiles[j]->move(this, LEFT, SPEED_MISSILE);
 			}
 		}

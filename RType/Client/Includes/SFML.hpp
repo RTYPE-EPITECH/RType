@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 18:53:48 2015 Probola
-// Last update Sun Dec 27 20:54:10 2015 Probola
+// Last update Sun Dec 27 21:46:11 2015 Probola
 //
 
 #ifndef				_SFML_HPP_
@@ -36,6 +36,7 @@ class				SFML
 public:
   sf::Sprite			background;
   sf::Texture			backText;
+  sf::Music			music;
 
   SFML();
   ~SFML();
@@ -48,6 +49,7 @@ public:
   void				Intro();
   float				getTimeElapsed();
   void				scroll();
+  void				playMusic();
 };
 
 #endif

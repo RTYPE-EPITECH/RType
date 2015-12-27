@@ -7,7 +7,9 @@ enum EObject
   PLAYER			= 1,
   MISSILE			= 2,
   OBSTACLE			= 3,
-  MONSTER			= 4
+  MONSTER			= 4,
+  LITTLE_MONSTER		= 5,
+  MONSTER_SHIP			= 6
 };
 
 #endif /* EOBJECT_HPP */

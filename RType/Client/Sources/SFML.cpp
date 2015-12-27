@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Thu Nov 26 19:08:36 2015 Probola
-// Last update Sun Dec 27 20:59:29 2015 Probola
+// Last update Sun Dec 27 21:51:16 2015 Probola
 //
 
 #include			"SFML.hpp"
@@ -19,12 +19,11 @@
 
 SFML::SFML()
 {
-	std::cout << "Windows SFML Laucnhed " << std::endl;
+  std::cout << "Windows SFML Laucnhed " << std::endl;
   _spritefactory = new SpriteFactory();
   _soundfactory = new SoundFactory();
   TextureFactory	*texturefactory = TextureFactory::getInstance();
   texturefactory->setAssets();
-//  (void)texturefactory;
   win.create(sf::VideoMode(800, 600), "RType");
   win.setFramerateLimit(60);
 }
@@ -159,4 +158,15 @@ void				SFML::scroll()
   this->back_x += 2;
   this->background.setPosition(0, 0);
   this->win.draw(this->background);
+}
+
+void				SFML::playMusic()
+{
+  if (!music.openFromFile("RType/Client/Assets/music.wav"))
+    {
+      std::string e = "Cannot load sound";
+      throw std::runtime_error(e);
+    }
+  music.setLoop(true);
+  music.play();
 }

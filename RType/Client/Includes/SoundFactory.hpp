@@ -5,7 +5,7 @@
 // Login   <Volto@epitech.net>
 // 
 // Started on  Fri Nov 20 13:22:47 2015 Probola
-// Last update Tue Dec 15 17:59:36 2015 Probola
+// Last update Sun Dec 27 21:40:44 2015 Probola
 //
 
 #ifndef					__SOUND_FACTORY_HPP__

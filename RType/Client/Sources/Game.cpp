@@ -5,9 +5,10 @@
 ** Login   <mathon_j@mathonj>
 ** 
 ** Started on  Wed Nov 25 11:48:33 2015 Jérémy MATHON
-// Last update Sun Dec 27 20:43:08 2015 Probola
+// Last update Sun Dec 27 21:44:36 2015 Probola
 */
 
+#include	"SoundFactory.hpp"
 #include	"Game.hpp"
 
 #ifdef	_WIN32
@@ -134,7 +135,7 @@ void	Game::initConnexion(void) {
 void	*Game::loop(void * arg)
 {
   std::cout << "Game is running ..." << std::endl;
-  Game *_this = reinterpret_cast<Game *>(arg);  
+  Game *_this = reinterpret_cast<Game *>(arg); 
   try {
     _this->initConnexion();
   }
@@ -145,6 +146,7 @@ void	*Game::loop(void * arg)
     }
   std::vector<const char *> _lastInput;
   _lastInput.clear();
+  _this->_display->playMusic();
   while (_this->_display->isOpen())
     {
       _lastInput = _this->getInput();

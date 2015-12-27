@@ -18,10 +18,10 @@ void WaveFactory::addItem(AObject * obj, size_t x, size_t y, size_t with, size_t
 {
 	if (_waves == NULL)
 		_waves = new std::vector<AObject *>;
-	obj->setX(x);
-	obj->setY(y);
 	obj->setWidth(with);
 	obj->setHeight(height);
+	obj->setX(x);
+	obj->setY(y);
 	_waves->push_back(obj);
 }
 
@@ -41,6 +41,7 @@ void WaveFactory::addItemNoPos(AObject * obj)
 			obj->getWidth(), obj->getHeight());
 	else
 		addItem(obj, SPAWN, 50, obj->getWidth(), obj->getHeight());
+	std::cout << "[WAVEFACTORY ] x: " << obj->getX() << std::endl;
 }
 
 void WaveFactory::addObstacle()

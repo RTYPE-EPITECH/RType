@@ -197,7 +197,7 @@ bool Game::loop()
 		}
 
 		// Check Scene :: Move Missile, Move scroll, Move enemies, Move Obstacles
-		if (timer->getElapsedTimeInMicroSec() == FPS * 1000)
+		if (timer->getElapsedTimeInMicroSec() == FPS * 1000 && getSizeAvailable() < MAX_PLAYER_GAME)
 		{
 			_log->addLog("[Game::loop] Timer OK for scrolling");
 		  mutex->lock();
@@ -341,6 +341,8 @@ std::cout << "Game::handleClientConnexion" << std::endl;
 					}
 					if ((*_objs)[j]->getType() == UNKNOWN_OBJECT)
 						std::cout << "Obj " << j << "is bad" << std::endl;
+						std::cout << "[OBJ] x : " << (unsigned int)(*_objs)[j]->getX() << std::endl;
+						std::cout << "[OBJ] y : " << (unsigned int)(*_objs)[j]->getY() << std::endl;
 					_proto._addPositionPacket(
 						(unsigned int)(*_objs)[j]->getX(),
 						(unsigned int)(*_objs)[j]->getY(),

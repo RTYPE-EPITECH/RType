@@ -49,7 +49,7 @@ typedef struct {
 }					deadEntityPacket;
 
 typedef struct {
-	uint8_t		pos_x;
+	uint16_t		pos_x;
 	uint16_t		pos_y;
 	uint16_t		size_x;
 	uint16_t		size_y;
@@ -146,7 +146,7 @@ public:
 	uint8_t					_getHeaderId(void) const;
 	uint16_t				_getHeaderSize(void) const;
 	uint32_t					_getArrayPositionLenght(void) const;
-	uint8_t				_getPositionPosX(size_t) const;
+	uint16_t				_getPositionPosX(size_t) const;
 	uint16_t				_getPositionPosY(size_t) const;
 	uint16_t				_getPositionSizeX(size_t) const;
 	uint16_t				_getPositionSizeY(size_t) const;

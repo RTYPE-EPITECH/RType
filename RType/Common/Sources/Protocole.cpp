@@ -82,7 +82,7 @@ void		Protocole::_createActionPacket(ACTION act) {
 
 void		Protocole::_addPositionPacket(unsigned int posX, unsigned int posY, unsigned int sizeX, unsigned int sizeY, unsigned int sprite, const char * path, const char * type) {
 	this->_arrayPositionPacket.lenght = static_cast<uint32_t>(this->_posInArray + 1);//static_cast<uint32_t>((this->_posInArray + 1) * sizeof(positionPacket));
-	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint8_t)posX;
+	this->_arrayPositionPacket.data[this->_posInArray].pos_x = (uint16_t)posX;
 	this->_arrayPositionPacket.data[this->_posInArray].pos_y = (uint16_t)posY;
 	this->_arrayPositionPacket.data[this->_posInArray].size_x = (uint16_t)sizeX;
 	this->_arrayPositionPacket.data[this->_posInArray].size_y = (uint16_t)sizeY;
@@ -285,7 +285,7 @@ uint32_t			Protocole::_getArrayPositionLenght(void) const {
 	return this->_arrayPositionPacket.lenght;
 }
 
-uint8_t		Protocole::_getPositionPosX(size_t pos) const {
+uint16_t		Protocole::_getPositionPosX(size_t pos) const {
 	return this->_arrayPositionPacket.data[pos].pos_x;
 }
 
